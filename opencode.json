@@ -1,30 +1,35 @@
 {
-  "$schema": "https://opencode.ai/schema.json",
-  "plugin": [],
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "icm": {
-      "command": "icm",
-      "args": ["serve"]
+      "type": "local",
+      "command": ["icm", "serve"],
+      "enabled": true
     },
     "gitnexus": {
-      "command": "npx",
-      "args": ["-y", "gitnexus@latest", "mcp"]
+      "type": "local",
+      "command": ["npx", "-y", "gitnexus@latest", "mcp"],
+      "enabled": true
     },
     "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
     },
     "grep-app": {
-      "command": "npx",
-      "args": ["-y", "grep-mcp"]
+      "type": "remote",
+      "url": "https://mcp.grep.app",
+      "enabled": true
     },
     "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--headless"]
+      "type": "local",
+      "command": ["npx", "@playwright/mcp@latest", "--headless"],
+      "enabled": true
     },
     "prisma": {
-      "command": "npx",
-      "args": ["-y", "prisma", "mcp"]
+      "type": "local",
+      "command": ["npx", "-y", "prisma", "mcp"],
+      "enabled": true
     }
   }
 }
