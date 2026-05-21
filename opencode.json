@@ -1,0 +1,30 @@
+{
+  "$schema": "https://opencode.ai/schema.json",
+  "plugin": [],
+  "mcp": {
+    "icm": {
+      "command": "icm",
+      "args": ["serve"]
+    },
+    "gitnexus": {
+      "command": "npx",
+      "args": ["-y", "gitnexus@latest", "mcp"]
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "grep-app": {
+      "command": "npx",
+      "args": ["-y", "grep-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--headless"]
+    },
+    "prisma": {
+      "command": "npx",
+      "args": ["-y", "prisma", "mcp"]
+    }
+  }
+}

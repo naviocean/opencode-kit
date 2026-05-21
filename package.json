@@ -1,0 +1,42 @@
+{
+  "name": "opencode-saas-kit",
+  "version": "1.0.0",
+  "description": "Multi-agent development team kit for OpenCode. 7 specialized AI agents work together to build SaaS products.",
+  "keywords": [
+    "opencode",
+    "ai-agents",
+    "saas",
+    "nextjs",
+    "nestjs",
+    "prisma",
+    "monorepo",
+    "nx"
+  ],
+  "homepage": "https://github.com/naviocean/opencode-kit",
+  "bugs": {
+    "url": "https://github.com/naviocean/opencode-kit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naviocean/opencode-kit.git"
+  },
+  "license": "MIT",
+  "author": "naviocean",
+  "bin": {
+    "opencode-saas-kit": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    ".opencode/",
+    "AGENTS.md",
+    "docs/",
+    "opencode.json",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node bin/cli.js --dry-run"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
