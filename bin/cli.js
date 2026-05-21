@@ -354,30 +354,6 @@ function initProject(projectDir, options = {}) {
     }
   }
 
-  // Sync custom skills to .agents/skills/ so sub-agents can load them
-  const customSkillsDir = path.join(projectDir, '.opencode', 'skills');
-  const agentSkillsDir = path.join(projectDir, '.agents', 'skills');
-  if (fs.existsSync(customSkillsDir)) {
-    if (dryRun) {
-      logInfo('Would sync custom skills to .agents/skills/ (for sub-agent access)');
-    } else {
-      fs.mkdirSync(agentSkillsDir, { recursive: true });
-      const customSkills = fs.readdirSync(customSkillsDir);
-      let synced = 0;
-      for (const skill of customSkills) {
-        const src = path.join(customSkillsDir, skill);
-        const dest = path.join(agentSkillsDir, skill);
-        if (fs.statSync(src).isDirectory() && !fs.existsSync(dest)) {
-          copyRecursive(src, dest);
-          synced++;
-        }
-      }
-      if (synced > 0) {
-        logSuccess(`.agents/skills/ — synced ${synced} custom skills (for sub-agent access)`);
-      }
-    }
-  }
-
   // 4. Install tools (optional)
   if (installToolsFlag) {
     installTools(projectDir, dryRun);
