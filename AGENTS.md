@@ -47,6 +47,39 @@ Multi-agent development team kit for building SaaS products. Seven specialized A
 - Use category-based delegation: `deep` (complex), `quick` (simple), `ultrabrain` (architecture)
 - Tech Lead has **final approval** on all changes
 
+### Task Delegation (task tool)
+
+When delegating work to another agent, use the `task()` tool with ALL required parameters:
+
+```
+task(
+  description: "Short 3-5 word description",
+  prompt: "Detailed task instructions...",
+  subagent_type: "general-purpose" or "explore"
+)
+```
+
+**Required parameters:**
+| Parameter | Type | Description |
+|---|---|---|
+| `description` | string | Short description (3-5 words) of the task |
+| `prompt` | string | Detailed task instructions for the agent |
+| `subagent_type` | string | `"general-purpose"` for implementation, `"explore"` for research |
+
+**Example:**
+```
+task(
+  description: "Create user auth module",
+  prompt: "Create a NestJS auth module with JWT authentication. Include login, register, and refresh endpoints. Use Prisma for database access. Write integration tests.",
+  subagent_type: "general-purpose"
+)
+```
+
+**Common mistakes:**
+- ❌ Missing `description` field
+- ❌ Using `category` instead of `subagent_type`
+- ❌ Not including enough context in `prompt`
+
 ## Development Workflow
 
 ### Phase 1: Plan (`/plan`)
