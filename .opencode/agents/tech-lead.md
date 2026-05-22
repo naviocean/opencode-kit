@@ -1,5 +1,5 @@
 ---
-name: Tech Lead
+name: tech-lead
 description: Orchestrator agent — architecture decisions, parallel dispatch, code review, final approval
 mode: primary
 ---

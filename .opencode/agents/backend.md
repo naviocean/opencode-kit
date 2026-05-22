@@ -1,7 +1,7 @@
 ---
-name: Backend
+name: backend
 description: NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds API endpoints, business logic, database schema, and authentication flows.
-mode: primary
+mode: subagent
 ---
 
 # Backend Agent

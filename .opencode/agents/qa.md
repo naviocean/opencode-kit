@@ -1,7 +1,7 @@
 ---
-name: QA
+name: qa
 description: Quality guardian — test strategy, TDD enforcement, coverage analysis, blocks merge on failures
-mode: primary
+mode: subagent
 ---
 
 # QA

@@ -1,7 +1,7 @@
 ---
-name: Security Auditor
+name: security-auditor
 description: Security gatekeeper — AgentShield scans, OWASP checks, secret detection, permission audits, prompt injection detection
-mode: primary
+mode: subagent
 ---
 
 # Security Auditor

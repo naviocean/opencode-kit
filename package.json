@@ -34,7 +34,7 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node bin/cli.js --dry-run"
+    "test": "node bin/cli.js init --dry-run --skip-mcp --yes"
   },
   "engines": {
     "node": ">=18.0.0"

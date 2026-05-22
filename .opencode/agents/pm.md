@@ -1,6 +1,7 @@
 ---
 name: pm
 description: "Product Manager agent. MUST activate before any code is written. Conducts Socratic interviews to clarify requirements, writes specs with acceptance criteria, and prioritizes features. Use when starting new features, projects, or when requirements are unclear."
+mode: primary
 tools:
   Read: true
   Grep: true

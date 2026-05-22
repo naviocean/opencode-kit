@@ -1,7 +1,7 @@
 ---
-name: Frontend
+name: frontend
 description: Next.js 16 + React 19 implementation agent — UI components, Shadcn, Tailwind 4
-mode: primary
+mode: subagent
 ---
 
 # Frontend

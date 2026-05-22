@@ -21,9 +21,9 @@ Most coding agent setups treat AI as a single generalist. Real product teams don
 
 OpenCode SaaS Kit brings that structure to AI-assisted development:
 
-- **PM** interviews you before any code is written (Socratic planning)
+- **PM** is the primary entrypoint for `/plan` and interviews you before any code is written
 - **Designer** creates UI Kit and UX flows before frontend implements
-- **Tech Lead** orchestrates, reviews, and makes architecture decisions
+- **Tech Lead** orchestrates `/build`, reviews, and makes architecture decisions
 - **Frontend/Backend** agents work in parallel on their domains
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
@@ -31,24 +31,26 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 ## Architecture
 
 ```
-                         ┌─────────────────┐
-                         │   Tech Lead     │
-                         │  (Orchestrator) │
-                         └────────┬────────┘
-                                  │
-            ┌─────────────────────┼─────────────────────┐
-            │                     │                     │
-            ▼                     ▼                     ▼
-     ┌────────────┐        ┌────────────┐        ┌────────────┐
-     │     PM     │        │  Designer  │        │  Security  │
-     │            │        │            │        │  Auditor   │
-     └─────┬──────┘        └─────┬──────┘        └─────┬──────┘
-           │                     │                     │
-           ▼                     ▼                     ▼
-     ┌────────────┐        ┌────────────┐        ┌────────────┐
-     │  Frontend  │        │  Backend   │        │     QA     │
-     │            │        │            │        │            │
-     └────────────┘        └────────────┘        └────────────┘
+     ┌────────────┐
+     │     PM     │  /plan entrypoint: Socratic interview + PRD
+     └─────┬──────┘
+           │
+           ▼
+     ┌────────────┐
+     │  Designer  │  /plan and /design: UI kit + UX flows
+     └─────┬──────┘
+           │
+           ▼
+     ┌─────────────────┐
+     │   Tech Lead     │  architecture, task breakdown, final approval
+     │  (Orchestrator) │
+     └────────┬────────┘
+              │
+     ┌────────┼────────┬─────────────────┐
+     │        │        │                 │
+     ▼        ▼        ▼                 ▼
+ Frontend  Backend    QA          Security Auditor
+ /build    /build   /test         /review + /ship
 ```
 
 ### Agent Responsibilities
@@ -56,7 +58,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | Agent | Role | Key Tools |
 |---|---|---|
 | **Tech Lead** | Orchestrator. Architecture decisions, code review, dispatch work to parallel agents. Final approval on all changes. | GitNexus (impact analysis), ICM (architectural memory) |
-| **PM** | Socratic interview before coding. Writes specs, defines priorities, sets acceptance criteria. | Stitch (ideation), ICM (decision memory) |
+| **PM** | Primary `/plan` entrypoint. Socratic interview before coding, writes specs, defines priorities, sets acceptance criteria. | Stitch (ideation), ICM (decision memory) |
 | **Designer** | UI/UX specialist. Creates UI Kit, UX flows, design tokens, prototypes before frontend implementation. | Stitch (AI design), Pencil (IDE-native canvas) |
 | **Frontend** | Next.js 16, React 19, Shadcn, Tailwind 4. Implements UI from Designer's specs. | GitNexus (code context), ICM (pattern memory) |
 | **Backend** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds API and business logic. | GitNexus (code context), ICM (pattern memory) |
@@ -467,7 +469,7 @@ export CONTEXT7_API_KEY=your_key_here
 
 | Skill | Agent | Purpose |
 |---|---|---|
-| `orchestrate` | Tech Lead | Task breakdown, sequential execution, code review |
+| `orchestrate` | Tech Lead | Task breakdown, subagent dispatch, dependency ordering, code review |
 | `socratic-planning` | PM | Interview before coding with HARD-GATE, scaling questions (from Superpowers brainstorming) |
 | `continuous-learning` | All | Auto-extract patterns with confidence scoring (from ECC instincts) |
 | `security-scan` | Security Auditor | AgentShield integration |
@@ -606,14 +608,16 @@ SOFTWARE.
 - ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
 - ✅ ICM memory integration
 - ✅ GitNexus code intelligence integration
+- ✅ AgentShield security scan workflow via Security Auditor
+- ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
 - ✅ CLI tool (npx opencode-saas-kit init/update/verify)
 
 ### v2.0 (Planned)
 
 - 🔄 **Continuous Learning** — Hook-based observation, background observer agent, instinct extraction with confidence scoring, `/evolve` and `/instinct-status` commands
 - 🔄 **RTK Token Compression** — Auto-rewrite Bash commands for 60-90% token reduction
-- 🔄 **AgentShield Integration** — Automated security scanning in `/review` and `/ship` workflows
-- 🔄 **Designer Agent Enhancement** — Full Stitch + Pencil workflow with DESIGN.md generation
+- 🔄 **AgentShield Integration** — Expand automated security gating and reporting in `/review` and `/ship`
+- 🔄 **Designer Agent Enhancement** — Standardize Stitch + Pencil handoff with richer DESIGN.md generation
 - 🔄 **Multi-project Support** — Project-scoped instincts, cross-project pattern sharing
 - 🔄 **CI/CD Integration** — GitHub Actions for automated /ship workflow
 - 🔄 **Team Collaboration** — Instinct export/import, shared team patterns
