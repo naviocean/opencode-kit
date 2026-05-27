@@ -12,13 +12,14 @@ All commands work via `npx` — no global install required.
 ### analyze — Build or refresh the index
 
 ```bash
-npx gitnexus analyze
+npx gitnexus analyze --skip-agents-md
 ```
 
 Run from the project root. This parses all source files, builds the knowledge graph, writes it to `.gitnexus/`, and generates CLAUDE.md / AGENTS.md context files.
 
 | Flag | Effect |
 |------|--------|
+| `--skip-agents-md` | Skip generating/updating AGENTS.md and CLAUDE.md (use when another tool manages these) |
 | `--force` | Force full re-index even if up to date |
 | `--embeddings` | Enable embedding generation for semantic search (off by default) |
 | `--drop-embeddings` | Drop existing embeddings on rebuild. By default, an `analyze` without `--embeddings` preserves them. |

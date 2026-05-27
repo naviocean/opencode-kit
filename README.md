@@ -97,7 +97,7 @@ Code intelligence engine. Indexes codebase into a knowledge graph, exposes via M
 
 ```bash
 npx gitnexus setup
-npx gitnexus analyze
+npx gitnexus analyze --skip-agents-md
 ```
 
 | MCP Tool | Agent Usage |
@@ -349,7 +349,7 @@ npm install -g gitnexus
 npx gitnexus setup
 
 # Index your codebase
-npx gitnexus analyze
+npx gitnexus analyze --skip-agents-md
 
 # Verify
 gitnexus --version
