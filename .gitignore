@@ -5,3 +5,6 @@ node_modules/
 dist/
 build/
 .opencode/memory/instincts.json
+.gitnexus/
+.claude/
+CLAUDE.md

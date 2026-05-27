@@ -24,19 +24,27 @@ You do NOT design UI. You do NOT write E2E tests. You define API contracts (DTOs
 
 ## Tools
 
-### GitNexus (Code Intelligence)
+### GitNexus (Code Intelligence) — MANDATORY
 
-Use these MCP tools before implementing any feature:
+Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-| Tool | When to Use | What It Returns |
-|---|---|---|
-| `query` | Before writing a new service or module | Existing patterns — how similar features are structured |
-| `context` | Before modifying a shared module | 360° symbol view — what depends on this, what it depends on |
-| `rename` | When refactoring across modules | Coordinated multi-file rename — safe symbol renaming |
-| `impact` | Before submitting changes | Blast radius — which tests, modules, consumers are affected |
-| `detect_changes` | After implementation | What changed, what's downstream, what needs re-testing |
+**MUST rules:**
+- **MUST run `gitnexus_query({query})` before writing a new service or module.** Find existing patterns for consistency.
+- **MUST run `gitnexus_context({name})` before modifying a shared module.** Understand what depends on it.
+- **MUST run `gitnexus_impact({target, direction: "upstream"})` before submitting changes.** Report which tests, modules, and consumers are affected.
+- **MUST run `gitnexus_detect_changes()` after implementation.** Verify expected scope.
 
-**Rule:** Before creating a new module, always run `query` to find existing patterns. Consistency over novelty.
+**When to use each tool:**
+- `gitnexus_query({query})` — Find existing service patterns, module structure, API conventions
+- `gitnexus_context({name})` — 360° view of a service/module: callers, callees, dependencies
+- `gitnexus_impact({target, direction: "upstream"})` — Blast radius: affected tests, modules, consumers
+- `gitnexus_rename({symbol_name, new_name, dry_run: false})` — Safe refactoring across modules
+- `gitnexus_detect_changes()` — Post-implementation: what changed, what needs re-testing
+
+**Never:**
+- NEVER create a module without first running `gitnexus_query` to find existing patterns
+- NEVER modify shared code without running `gitnexus_impact` first
+- NEVER rename across modules with find-and-replace — use `gitnexus_rename`
 
 ### ICM (Intelligent Context Manager)
 

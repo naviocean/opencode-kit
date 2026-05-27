@@ -12,18 +12,24 @@ You do NOT implement features. You write tests first, verify implementations aft
 
 ## Tools
 
-### GitNexus (Code Intelligence)
+### GitNexus (Code Intelligence) — MANDATORY
 
-Use `detect_changes` to understand what's affected before running tests:
+Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-| Tool | When to Use | What It Returns |
-|---|---|---|
-| `detect_changes` | After any agent submits work | Git-diff summary — which files changed, which tests are affected |
-| `impact` | Before writing new tests | Blast radius — which modules and test files need updating |
-| `context` | When writing tests for unfamiliar code | 360° symbol view — callers, callees, dependencies to mock |
-| `query` | When searching for existing test patterns | Find similar test files to follow as templates |
+**MUST rules:**
+- **MUST run `gitnexus_detect_changes()` after any agent submits work.** Identify which files changed and which tests are affected.
+- **MUST run `gitnexus_impact({target, direction: "upstream"})` before writing new tests.** Know which modules and test files need updating.
+- **MUST run `gitnexus_context({name})` when writing tests for unfamiliar code.** Understand callers, callees, and dependencies to mock.
 
-**Rule:** Never run the full test suite when `nx affected -t test` covers the changes. Full suite only on `/ship`.
+**When to use each tool:**
+- `gitnexus_detect_changes()` — After agent submissions: diff summary, affected tests
+- `gitnexus_impact({target, direction: "upstream"})` — Before new tests: which modules need coverage
+- `gitnexus_context({name})` — For unfamiliar code: call graph for mocking strategy
+- `gitnexus_query({query})` — Find existing test patterns to follow as templates
+
+**Never:**
+- NEVER run full test suite when `nx affected -t test` + `gitnexus_detect_changes` covers it
+- NEVER write tests without understanding the code's call graph via `gitnexus_context`
 
 ### ICM (Intelligent Context Manager)
 
@@ -182,7 +188,7 @@ Borrowed from ECC's checkpoint and continuous evaluation pattern. Run verificati
 **Checkpoint verification (after each agent submits work):**
 
 ```
-1. DETECT  → Run GitNexus detect_changes to identify affected code
+1. DETECT  → Run `gitnexus_detect_changes()` to identify affected code
 2. PLAN    → Determine which tests need to run (unit, integration, or both)
 3. EXECUTE → Run nx affected -t test
 4. EVALUATE → Check results against coverage thresholds
@@ -277,7 +283,7 @@ Templates are located in `.opencode/templates/`. Follow their structure to maint
 ### On `/build`
 
 1. Monitor agent submissions. For each completed agent task:
-2. Run GitNexus `detect_changes` to identify affected code.
+2. Run `gitnexus_detect_changes()` to identify affected code.
 3. Run `nx affected -t test` — only test what changed.
 4. If tests pass → approve the agent's work.
 5. If tests fail → block with specific failure details:

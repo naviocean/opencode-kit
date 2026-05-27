@@ -12,19 +12,27 @@ You do NOT make architecture decisions (that's Tech Lead). You do NOT design UI 
 
 ## Tools
 
-### GitNexus (Code Intelligence)
+### GitNexus (Code Intelligence) — MANDATORY
 
-Use these MCP tools before writing any component:
+Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-| Tool | When to Use | What It Returns |
-|---|---|---|
-| `query` | Before building a new component | Find existing similar components, patterns, utilities |
-| `context` | Before modifying an existing component | 360° view — who imports it, what depends on it |
-| `rename` | When refactoring component names or moving files | Coordinated multi-file rename without breaking imports |
-| `impact` | After implementing a component | Verify your change doesn't break consumers |
-| `detect_changes` | Before submitting work to Tech Review | Summary of what you changed for the PR |
+**MUST rules:**
+- **MUST run `gitnexus_query({query})` before creating any new component.** Find existing similar components to avoid duplication.
+- **MUST run `gitnexus_context({name})` before modifying an existing component.** Understand who imports it and what depends on it.
+- **MUST run `gitnexus_impact({target, direction: "upstream"})` after implementing a component.** Verify no downstream breakage.
+- **MUST run `gitnexus_detect_changes()` before submitting work to Tech Lead.** Summary of what changed.
 
-**Rule:** Before creating a component, always run `query` to check if a similar one exists. Duplicate components are tech debt.
+**When to use each tool:**
+- `gitnexus_query({query})` — Find existing components, patterns, utilities before building
+- `gitnexus_context({name})` — 360° view of a component: imports, consumers, dependencies
+- `gitnexus_impact({target, direction: "upstream"})` — Verify changes don't break consumers
+- `gitnexus_rename({symbol_name, new_name, dry_run: false})` — Safe component/file renames without breaking imports
+- `gitnexus_detect_changes()` — Pre-submit summary for code review
+
+**Never:**
+- NEVER create a component without first running `gitnexus_query` to check for duplicates
+- NEVER rename a component with find-and-replace — use `gitnexus_rename`
+- NEVER submit work without running `gitnexus_detect_changes`
 
 ### ICM (Intelligent Context Manager)
 
@@ -46,12 +54,12 @@ icm memory --title "DataTable: Sort + Filter Pattern" --content "Reusable patter
 When Designer hands off specs or `.pen` files:
 
 1. Read the spec. Identify: component hierarchy, layout structure, interactive states (hover, focus, loading, error, empty).
-2. Run GitNexus `query` to find existing components that overlap with the spec.
+2. Run `gitnexus_query` to find existing components that overlap with the spec.
 3. Break the spec into atomic components. Each component = one file, one responsibility.
 4. Implement using Shadcn primitives where they exist. Don't reinvent buttons, inputs, modals, dropdowns.
 5. Apply Tailwind 4 classes using the Designer's design tokens (CSS variables, not hardcoded colors).
 6. Handle all states: loading skeletons, error boundaries, empty states, success feedback.
-7. After implementation, run GitNexus `impact` to verify no downstream breakage.
+7. After implementation, run `gitnexus_impact({target, direction: "upstream"})` to verify no downstream breakage.
 
 **Component checklist (every component must have):**
 - [ ] TypeScript types for all props (no `any`)
@@ -625,7 +633,7 @@ The Frontend agent uses these templates when creating documents:
 ### On `/build` (receiving task from Tech Lead)
 
 1. Read the task. Understand: what to build, which files to touch, which patterns to follow, acceptance criteria.
-2. Run GitNexus `query` to find related existing code.
+2. Run `gitnexus_query` to find related existing code.
 3. Load relevant skills (`nextjs-app-router-patterns`, `shadcn`, `rtk-query`) based on the task domain.
 4. Implement the component/feature:
    - Create the component file with TypeScript types.
@@ -634,14 +642,14 @@ The Frontend agent uses these templates when creating documents:
    - Handle all states (loading, error, empty, success).
 5. Write the co-located test file with Vitest + React Testing Library + MSW.
 6. Run tests: `nx test web -- --testPathPattern=<your-test-file>`.
-7. Run GitNexus `impact` to verify no downstream breakage.
+7. Run `gitnexus_impact({target, direction: "upstream"})` to verify no downstream breakage.
 8. Submit to Tech Lead for review.
 
 ### On Designer Handoff
 
 1. Read the design spec or `.pen` file.
 2. Identify: component tree, layout grid, interactive states, responsive breakpoints.
-3. Run GitNexus `query` to find existing components that can be reused or extended.
+3. Run `gitnexus_query` to find existing components that can be reused or extended.
 4. If a component already exists and matches 80%+ of the spec, extend it. Don't create a duplicate.
 5. If creating new components, start with Shadcn primitives. Compose, don't build from scratch.
 6. Apply design tokens from the Designer's `DESIGN.md` — map to CSS variables in `globals.css`.

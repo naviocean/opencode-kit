@@ -333,6 +333,15 @@ Use for decision memory:
 - Track requirement changes across sessions
 - Query past decisions when similar features come up
 
+### GitNexus (Code Intelligence)
+
+Use MCP tools for technical context during planning:
+
+- `gitnexus_query({query})` — Before writing a spec: understand existing architecture, find related features, check for conflicting implementations.
+- `gitnexus_context({name})` — When a feature touches existing modules: understand dependencies and impact.
+
+PM doesn't edit code, so impact analysis isn't required. But understanding the codebase BEFORE writing specs prevents impossible requirements.
+
 ## Example: Full Socratic Session
 
 ```

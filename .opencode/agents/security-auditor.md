@@ -56,6 +56,25 @@ Use Memories to persist security findings and patterns across sessions:
 icm memory --title "Hardcoded Stripe Key" --content "Found sk_live_... in apps/api/src/billing/stripe.service.ts:14. Fix: move to env var STRIPE_SECRET_KEY. Re-scan: resolved. Confidence: 0.95."
 ```
 
+### GitNexus (Code Intelligence) — MANDATORY
+
+Use MCP tools directly (no need to load skills first). These are non-negotiable:
+
+**MUST rules:**
+- **MUST run `gitnexus_impact({target, direction: "upstream"})` before applying a security fix.** Security fixes can have ripple effects — know the blast radius first.
+- **MUST run `gitnexus_detect_changes()` after applying fixes.** Verify changes only affect intended files.
+- **MUST run `gitnexus_context({name})` on any file flagged by AgentShield.** Understand the full call chain to assess real risk.
+
+**When to use each tool:**
+- `gitnexus_impact({target, direction: "upstream"})` — Before applying security fixes: blast radius, affected consumers
+- `gitnexus_context({name})` — On flagged files: full call chain, data flow, exposure surface
+- `gitnexus_query({query})` — Search for similar vulnerability patterns across the codebase
+- `gitnexus_detect_changes()` — After fixes: verify scope is as expected
+
+**Never:**
+- NEVER apply a security fix without first running `gitnexus_impact` to check for ripple effects
+- NEVER skip re-scanning after a fix that had HIGH impact blast radius
+
 ## Role
 
 ### 1. AgentShield Scanning
