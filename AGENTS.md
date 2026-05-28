@@ -1,10 +1,10 @@
 # OpenCode SaaS Kit — Agent Instructions
 
-**Version:** 1.0.0 | **Agents:** 7 | **Skills:** 106 | **Commands:** 7
+**Version:** 1.1.0 | **Agents:** 8 | **Skills:** 111 | **Commands:** 7
 
 ## Overview
 
-Multi-agent development team kit for building SaaS products. Seven specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, QA, and Security Auditor — following structured workflows from spec to ship.
+Multi-agent development team kit for building SaaS products. Eight specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, Rustacean, QA, and Security Auditor — following structured workflows from spec to ship.
 
 ## Core Principles
 
@@ -19,14 +19,15 @@ Multi-agent development team kit for building SaaS products. Seven specialized A
 
 | Layer | Technology |
 |---|---|
-| Language | TypeScript (strict mode) |
+| Language | TypeScript (strict mode), Rust |
 | Monorepo | NX |
 | Frontend | Next.js 16 + React 19 + Shadcn + Tailwind 4 |
 | Backend | NestJS + Prisma + PostgreSQL |
+| Desktop | Tauri v2 + Rust + React/SolidJS |
 | API | REST or GraphQL (per-project decision) |
 | Auth | Custom JWT (NestJS Passport) |
 | State | React hooks + Context (or per-project choice) |
-| Testing | Vitest (unit/integration) + Playwright (E2E) |
+| Testing | Vitest (unit/integration) + Playwright (E2E) + cargo test |
 
 ## Agent Orchestration
 
@@ -35,14 +36,15 @@ Multi-agent development team kit for building SaaS products. Seven specialized A
 | **Tech Lead** | Orchestrator. Architecture decisions, task breakdown, code review (final). | Always. Coordinates workflow. |
 | **PM** | Socratic interview. Writes specs, defines priorities, acceptance criteria. | `/plan` — Before any feature work |
 | **Designer** | UI/UX specialist. UI Kit, UX flows, design tokens, prototypes. | `/plan`, `/design` — Before Frontend implementation |
-| **Frontend** | Next.js 16, React 19, Shadcn, Tailwind 4. | `/build` — Implements UI from Designer's specs |
+| **Frontend** | Next.js 16, React 19, Shadcn, Tailwind 4. | `/build` — Implements web app UI from Designer's specs |
 | **Backend** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. | `/build` — Implements API and business logic |
+| **Rustacean** | Rust, Tauri desktop apps, native integrations. Full stack desktop — Rust + UI. | `/build` — Implements Tauri desktop app end-to-end |
 | **QA** | Test strategy, Vitest, Playwright, coverage analysis, TDD enforcement. | `/build`, `/test` — Verifies quality |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection. | `/review`, `/ship` — Gates deployment |
 
 ### Dispatch Rules
 
-- Tech Lead dispatches work to Frontend + Backend **in parallel**
+- Tech Lead dispatches work to Frontend + Backend + Rustacean **in parallel**
 - Each agent owns their domain — don't cross boundaries
 - Use category-based delegation: `deep` (complex), `quick` (simple), `ultrabrain` (architecture)
 - Tech Lead has **final approval** on all changes
@@ -74,13 +76,13 @@ User Request → PM (Socratic) → Designer (UI/UX) → Tech Lead (Architecture)
 ### Phase 2: Build (`/build`)
 
 ```
-Tech Lead → Frontend + Backend (parallel) → QA → Security Auditor
-                ↓              ↓            ↓           ↓
-           Components      API/DB      Tests pass    Scan pass
+Tech Lead → Frontend + Backend + Rustacean (parallel) → QA → Security Auditor
+                ↓              ↓              ↓          ↓           ↓
+           Components      API/DB        Desktop      Tests pass   Scan pass
 ```
 
 - Tech Lead dispatches parallel tasks
-- Frontend implements UI, Backend implements API
+- Frontend implements web UI, Backend implements API, Rustacean implements desktop app
 - QA runs `nx affected -t test` after each change
 - Security Auditor scans for vulnerabilities
 
@@ -226,13 +228,16 @@ All documents follow templates in `.opencode/standards/`:
 - ❌ Deleting failing tests to "pass"
 - ❌ Hardcoded secrets
 - ❌ Console.log in production code
+- ❌ `.unwrap()` / `.expect()` in production Rust code
+- ❌ Holding `MutexGuard` across `.await` in Rust
+- ❌ Unnecessary `.clone()` to satisfy borrow checker
 
 **Workflow:**
 - ❌ Skipping the planning phase (`/plan`)
 - ❌ Writing code without tests
 - ❌ Committing directly to main
 - ❌ Skipping security scan before ship
-- ❌ Cross-domain code changes (Frontend touching Backend)
+- ❌ Cross-domain code changes (Frontend touching Backend, Rustacean touching web app)
 - ❌ Skipping design for "simple" requests (HARD-GATE applies to ALL requests)
 - ❌ Implementing without user approval on design
 - ❌ Single review (must be two-stage: spec compliance + code quality)
@@ -271,10 +276,14 @@ project/
 │   │   ├── e2e/
 │   │   ├── vitest.config.ts
 │   │   └── playwright.config.ts
-│   └── api/                 NestJS
-│       ├── src/
-│       ├── test/
-│       └── vitest.config.ts
+│   ├── api/                 NestJS
+│   │   ├── src/
+│   │   ├── test/
+│   │   └── vitest.config.ts
+│   └── desktop/             Tauri v2 + Rust
+│       ├── src-tauri/       Rust backend
+│       ├── src/             Desktop UI
+│       └── vite.config.ts
 │
 ├── libs/
 │   └── shared/
