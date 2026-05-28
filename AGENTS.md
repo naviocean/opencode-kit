@@ -8,7 +8,7 @@ Multi-agent development team kit for building SaaS products. Eight specialized A
 
 ## Core Principles
 
-1. **Plan Before Code** — PM interviews with Socratic method before any implementation
+1. **Plan Before Code** — PM interviews with Socratic method before new features. Small fixes/tweaks routed directly by Tech Lead via Task Triage (see Agent Orchestration)
 2. **Design Before Build** — Designer creates UI Kit + UX flows before Frontend implements
 3. **Test-Driven** — Write tests before code. RED → GREEN → REFACTOR. 80%+ coverage required
 4. **Security-First** — Never compromise on security. Scan before ship.
@@ -44,7 +44,8 @@ Multi-agent development team kit for building SaaS products. Eight specialized A
 
 ### Dispatch Rules
 
-- Tech Lead dispatches work to Frontend + Backend + Rustacean **in parallel**
+- Tech Lead is the **single entry point** for all requests. For plain-text requests (no slash command), Tech Lead classifies task size and dispatches a single agent directly for small tasks (see Task Triage Protocol in `.opencode/agents/tech-lead.md`)
+- For `/build`: Tech Lead dispatches work to Frontend + Backend + Rustacean **in parallel**
 - Each agent owns their domain — don't cross boundaries
 - Use category-based delegation: `deep` (complex), `quick` (simple), `ultrabrain` (architecture)
 - Tech Lead has **final approval** on all changes
@@ -68,7 +69,8 @@ User Request → PM (Socratic) → Designer (UI/UX) → Tech Lead (Architecture)
 **Note:** Socratic method applies to ALL requests, not just `/plan`. Even small requests get 1-2 clarifying questions before implementation.
 
 **Design Approval (HARD-GATE):**
-- Design approval is MANDATORY before implementation begins
+- Design approval is MANDATORY before UI implementation begins
+- Non-UI tasks (API, database, migrations, security audits, config) skip the Designer
 - Propose 2-3 approaches with trade-offs before settling on one
 - Present design in sections, get approval after each section
 - Spec self-review before presenting to user for approval
@@ -233,12 +235,12 @@ All documents follow templates in `.opencode/standards/`:
 - ❌ Unnecessary `.clone()` to satisfy borrow checker
 
 **Workflow:**
-- ❌ Skipping the planning phase (`/plan`)
+- ❌ Skipping the planning phase for new features (small fixes/tweaks dispatch via Tech Lead Triage)
 - ❌ Writing code without tests
 - ❌ Committing directly to main
 - ❌ Skipping security scan before ship
 - ❌ Cross-domain code changes (Frontend touching Backend, Rustacean touching web app)
-- ❌ Skipping design for "simple" requests (HARD-GATE applies to ALL requests)
+- ❌ Skipping design for UI tasks (non-UI tasks skip the Designer)
 - ❌ Implementing without user approval on design
 - ❌ Single review (must be two-stage: spec compliance + code quality)
 - ❌ Asking "should I continue?" between tasks (continuous execution)

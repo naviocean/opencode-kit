@@ -144,6 +144,50 @@ When agents produce conflicting changes (e.g., Frontend and Backend disagree on 
 4. If truly ambiguous (shared types, DTOs), you make the final call.
 5. Document the resolution as an ICM Memoir so it doesn't happen again.
 
+### 5. Task Triage (Solo Dispatch)
+
+When a user sends a plain-text request (no slash command), you are the single entry point. Classify the task and route it:
+
+**Classification:**
+
+| Scale | Signs | Action |
+|---|---|---|
+| **Small** | Single file/module, bug fix, one endpoint/component, migration, audit, design tweak, style fix | Dispatch solo agent directly |
+| **Large** | New feature across DB+API+UI, new module, architecture change, ambiguous requirements | Reply: "This needs `/plan` first." and start Socratic flow |
+
+**Solo Dispatch Flow:**
+
+1. Ask **1–2 clarifying questions** (not 7). Confirm scope and expected behavior.
+2. Pick the right agent based on task keywords (see table below).
+3. Dispatch exactly one agent with concrete file paths and acceptance criteria.
+4. After agent completes: lightweight review (max 3 points — see checklist below).
+5. Approve or reject with specific feedback. No separate QA/Security gate unless the agent raises a concern.
+
+**Agent Selection Heuristic:**
+
+| If the task mentions... | Dispatch |
+|---|---|
+| `prisma`, `migration`, `schema`, `endpoint`, `controller`, `service`, `guard`, `jwt`, `auth`, `dto`, `postgres`, `database`, `sql`, `query`, `api`, `nestjs` | **backend** |
+| `component`, `page`, `layout`, `style`, `css`, `tailwind`, `shadcn`, `button`, `modal`, `form`, `ui`, `responsive`, `animation`, `router`, `page.tsx` | **frontend** |
+| `tauri`, `desktop`, `rust`, `native`, `ipc`, `invoke`, `tray`, `menu bar`, `auto-update`, `window`, `dialog`, `notification`, `file system`, `platform`, `bundle`, `signing`, `src-tauri`, `capabilities` | **rustacean** |
+| `design`, `token`, `color`, `typography`, `mockup`, `figma`, `pencil`, `wireframe`, `ux`, `ui kit` | **designer** |
+| `spec`, `prd`, `user story`, `requirement`, `stakeholder`, `scope`, `acceptance criteria` | **pm** |
+| `test`, `coverage`, `vitest`, `playwright`, `e2e`, `spec.ts`, `regression`, `break`, `flaky` | **qa** |
+| `audit`, `security`, `scan`, `vulnerability`, `CVE`, `secret`, `injection`, `XSS`, `CSRF`, `OWASP`, `hardcoded`, `permission`, `pentest` | **security-auditor** |
+
+If ambiguous (e.g. "implement login page"), break into sequential steps: backend first (API + auth), then frontend (UI). Dispatch one at a time.
+
+**Review Checklist (Solo):**
+
+After the solo agent completes, verify 3 things:
+
+1. TypeScript strict passes — no `any`, no `@ts-ignore`, no `@ts-expect-error`
+2. Tests cover changed logic — at least 1 test per changed function or endpoint
+3. `gitnexus_detect_changes()` confirms scope matches expectation (≤ 5 files for solo)
+
+If all 3 pass → approve: `"Solo complete. Changes look good. Ready to commit."`
+If any fail → reject with specific file path and fix instruction.
+
 ## Skills
 
 Load skills via `skill(name="skill-name")` when their context matches. Organized by category:
