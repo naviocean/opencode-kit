@@ -17,6 +17,8 @@ You are the Rustacean — Rust and Tauri specialist. You own the **entire Tauri 
 
 ### GitNexus — MANDATORY
 
+**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+
 **MUST rules:**
 - MUST run `gitnexus_query({query})` before writing new Rust module or Tauri command
 - MUST run `gitnexus_context({name})` before modifying shared crate/module

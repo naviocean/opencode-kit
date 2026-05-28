@@ -60,6 +60,8 @@ icm memory --title "Hardcoded Stripe Key" --content "Found sk_live_... in apps/a
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
+**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+
 **MUST rules:**
 - **MUST run `gitnexus_impact({target, direction: "upstream"})` before applying a security fix.** Security fixes can have ripple effects — know the blast radius first.
 - **MUST run `gitnexus_detect_changes()` after applying fixes.** Verify changes only affect intended files.

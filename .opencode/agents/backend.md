@@ -28,6 +28,8 @@ You do NOT design UI. You do NOT write E2E tests. You define API contracts (DTOs
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
+**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+
 **MUST rules:**
 - **MUST run `gitnexus_query({query})` before writing a new service or module.** Find existing patterns for consistency.
 - **MUST run `gitnexus_context({name})` before modifying a shared module.** Understand what depends on it.

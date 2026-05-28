@@ -16,6 +16,8 @@ You do NOT implement features. You write tests first, verify implementations aft
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
+**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+
 **MUST rules:**
 - **MUST run `gitnexus_detect_changes()` after any agent submits work.** Identify which files changed and which tests are affected.
 - **MUST run `gitnexus_impact({target, direction: "upstream"})` before writing new tests.** Know which modules and test files need updating.

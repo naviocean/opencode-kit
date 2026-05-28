@@ -16,6 +16,8 @@ You do NOT make architecture decisions (that's Tech Lead). You do NOT design UI 
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
+**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+
 **MUST rules:**
 - **MUST run `gitnexus_query({query})` before creating any new component.** Find existing similar components to avoid duplication.
 - **MUST run `gitnexus_context({name})` before modifying an existing component.** Understand who imports it and what depends on it.

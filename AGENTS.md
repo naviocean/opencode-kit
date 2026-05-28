@@ -215,6 +215,16 @@ All documents follow templates in `.opencode/standards/`:
 | **Playwright** | Browser automation | Yes (MCP) |
 | **Prisma** | Database migrations & queries | Yes (MCP) |
 
+## GitNexus — Keep Index Fresh
+
+After committing significant code changes, re-index the knowledge graph:
+
+```bash
+npx gitnexus analyze --skip-agents-md
+```
+
+The `--skip-agents-md` flag prevents GitNexus from overwriting this manually curated AGENTS.md.
+
 ## Memory & Learning
 
 - **ICM memory**: `.icm/memory.db` — shared across all agents
