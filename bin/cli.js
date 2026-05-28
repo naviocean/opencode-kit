@@ -202,26 +202,56 @@ function verifyInstallation(projectDir) {
   return allPassed;
 }
 
+function isGitRepo(projectDir) {
+  return fs.existsSync(path.join(projectDir, '.git'));
+}
+
 function installTools(projectDir, dryRun = false) {
   logStep('Installing tools...');
 
-  const tools = [
-    { name: 'RTK (Rust Token Killer)', cmd: 'npm install -g rtk && rtk init --global', check: 'rtk' },
-    { name: 'GitNexus', cmd: 'npx gitnexus setup', check: 'gitnexus' },
-  ];
-
-  for (const tool of tools) {
-    if (commandExists(tool.check)) {
-      logSuccess(`${tool.name} — already installed`);
-    } else if (dryRun) {
-      logInfo(`${tool.name} — would install`);
+  // ─── RTK ─────────────────────────────────────────────────────────────
+  if (commandExists('rtk')) {
+    logSuccess('RTK (Rust Token Killer) — already installed');
+  } else if (dryRun) {
+    logInfo('RTK (Rust Token Killer) — would install');
+  } else {
+    log(`  ${ICONS.arrow} Installing RTK...`);
+    if (runCommand('npm install -g rtk && rtk init --global', { cwd: projectDir })) {
+      logSuccess('RTK (Rust Token Killer) — installed');
     } else {
-      log(`  ${ICONS.arrow} Installing ${tool.name}...`);
-      if (runCommand(tool.cmd, { cwd: projectDir })) {
-        logSuccess(`${tool.name} — installed`);
-      } else {
-        logWarn(`${tool.name} — failed (install manually)`);
-      }
+      logWarn('RTK (Rust Token Killer) — failed (install manually)');
+    }
+  }
+
+  // ─── GitNexus ─────────────────────────────────────────────────────────
+  if (commandExists('gitnexus')) {
+    logSuccess('GitNexus — already installed');
+  } else if (dryRun) {
+    logInfo('GitNexus — would install');
+  } else {
+    log(`  ${ICONS.arrow} Installing GitNexus...`);
+    if (!runCommand('npx gitnexus setup', { cwd: projectDir })) {
+      logWarn('GitNexus setup — failed (install manually)');
+      logInfo('ICM: Install manually via `brew install rtk-ai/tap/icm` or download from github.com/rtk-ai/icm');
+      return;
+    }
+    logSuccess('GitNexus — installed');
+  }
+
+  // Analyze project with GitNexus
+  if (!dryRun) {
+    log(`  ${ICONS.arrow} Indexing project with GitNexus...`);
+    const hasGit = isGitRepo(projectDir);
+    if (!hasGit) {
+      logInfo('No git repo detected, using --skip-git (indexing without version history)');
+    }
+    const analyzeCmd = hasGit
+      ? 'npx gitnexus analyze --skip-agents-md'
+      : 'npx gitnexus analyze --skip-agents-md --skip-git';
+    if (runCommand(analyzeCmd, { cwd: projectDir })) {
+      logSuccess('GitNexus — project indexed');
+    } else {
+      logWarn('GitNexus analyze — failed (run manually: npx gitnexus analyze --skip-agents-md)');
     }
   }
 
