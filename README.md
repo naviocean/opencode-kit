@@ -1,6 +1,6 @@
 # OpenCode SaaS Kit
 
-A multi-agent development team kit for OpenCode. Seven specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, QA, and Security Auditor — to build SaaS products from spec to ship.
+A multi-agent development team kit for OpenCode. Eight specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, Rustacean, QA, and Security Auditor — to build SaaS products from spec to ship.
 
 ## Quick Start
 
@@ -25,6 +25,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 - **Designer** creates UI Kit and UX flows before frontend implements
 - **Tech Lead** orchestrates `/build`, reviews, and makes architecture decisions
 - **Frontend/Backend** agents work in parallel on their domains
+- **Rustacean** owns the Tauri desktop stack end-to-end (`apps/desktop/`)
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
 
@@ -46,11 +47,11 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
      │  (Orchestrator) │
      └────────┬────────┘
               │
-     ┌────────┼────────┬─────────────────┐
-     │        │        │                 │
-     ▼        ▼        ▼                 ▼
- Frontend  Backend    QA          Security Auditor
- /build    /build   /test         /review + /ship
+     ┌────────┼────────┬────────┬─────────────────┐
+     │        │        │        │                 │
+     ▼        ▼        ▼        ▼                 ▼
+ Frontend  Backend  Rustacean   QA          Security Auditor
+ /build    /build   /build    /test         /review + /ship
 ```
 
 ### Agent Responsibilities
@@ -62,6 +63,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | **Designer** | UI/UX specialist. Creates UI Kit, UX flows, design tokens, prototypes before frontend implementation. | Stitch (AI design), Pencil (IDE-native canvas) |
 | **Frontend** | Next.js 16, React 19, Shadcn, Tailwind 4. Implements UI from Designer's specs. | GitNexus (code context), ICM (pattern memory) |
 | **Backend** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds API and business logic. | GitNexus (code context), ICM (pattern memory) |
+| **Rustacean** | Tauri v2 + Rust specialist. Owns the entire desktop app (`apps/desktop/`): Rust commands, IPC, AND the UI inside the Tauri webview. | GitNexus (code context), ICM (pattern memory) |
 | **QA** | Test strategy, Vitest unit tests, Playwright E2E, coverage analysis. Enforces TDD. | GitNexus (detect changes), ICM (test memory) |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection, permission audits. Gates deployment. | AgentShield CLI, ICM (security memory) |
 
@@ -79,7 +81,7 @@ Installs a PreToolUse hook that automatically rewrites Bash commands to RTK equi
 
 ### ICM (Intelligent Context Manager)
 
-Persistent memory across sessions. All 7 agents share one SQLite database per project.
+Persistent memory across sessions. All 8 agents share one SQLite database per project.
 
 ```bash
 icm init --project
@@ -141,6 +143,108 @@ IDE-native vector design tool. Runs inside VS Code/Cursor as an extension.
 - `.pen` files live in Git repo
 - Local MCP server for agent integration
 - Generates React, Next.js, Vue, Svelte, HTML/CSS
+
+## Model-per-Agent
+
+Each agent runs on its own model. Configure in `.opencode/agent-models.json`:
+
+```jsonc
+{
+  "default_fallback": ["my_xiaomi/mimo-v2.5"],
+  "agents": {
+    "tech-lead": { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
+    "pm":        { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
+    "designer":  { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
+    "frontend":  { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "backend":   { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "qa":        { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] }
+  }
+}
+```
+
+Model is enforced via YAML frontmatter in each agent `.md` file. Opencode reads `model:` and applies it when spawning the agent:
+
+```yaml
+---
+name: backend
+description: NestJS, Prisma, PostgreSQL
+mode: subagent
+model: my_xiaomi/mimo-v2.5
+---
+```
+
+### Fallback Chain
+
+When a model fails (403, 429, 500), the system automatically switches to the next available fallback via a **runtime state file** — agent source files (`.opencode/agents/*.md` and `agent-models.json`) are never mutated.
+
+```bash
+# Check model availability for a single agent
+node .opencode/scripts/model-health-check.mjs backend
+
+# Test primary + walk fallback chain; write override to runtime state
+node .opencode/scripts/model-fallback.mjs backend
+
+# List current overrides
+node .opencode/scripts/model-fallback.mjs --list
+
+# Clear a stale override (e.g., after primary recovery)
+node .opencode/scripts/model-fallback.mjs backend --reset
+```
+
+The `model-router.sh` hook runs on every `task()` dispatch. It reads the runtime override (if any) from `_workspace/.fallback-state.json` and exports it as `OMO_AGENT_MODEL` for the dispatched agent. Source of truth (`agent-models.json` + agent frontmatter) stays intact — git history stays clean.
+
+The override is auto-cleared on the next `model-fallback.mjs` invocation that finds the primary healthy.
+
+### Regenerate Registry
+
+After changing agent models or skills, regenerate the registry:
+
+```bash
+node .opencode/scripts/skill-registry.mjs
+```
+
+## Skill Auto-Load
+
+Agents automatically load their skills at startup — no need to pass `load_skills` manually.
+
+Each agent `.md` file has a `## Startup (AUTO-EXECUTE)` section that:
+
+1. Reads `.opencode/agent-registry.json`
+2. Loads all `skills.always` via `skill(name="...")`
+3. Loads `skills.conditional` when task context matches
+
+```markdown
+## Startup (AUTO-EXECUTE)
+
+Before doing ANYTHING else, load your mandatory skills:
+
+1. Read `.opencode/agent-registry.json`
+2. Find your agent name in `agents`
+3. Load ALL skills in `skills.always` — call `skill(name="...")` for each
+4. For `skills.conditional` — load when task context matches
+```
+
+### How It Works
+
+```
+Agent MD files (skills section)
+        │
+        ▼
+skill-registry.mjs → agent-registry.json
+        │
+        ▼
+Agent Startup section reads registry
+        │
+        ▼
+skill(name="nestjs-best-practices")  ← auto-loaded
+```
+
+### Verify Configuration
+
+```bash
+# Check all agents, models, skills, hooks
+node .opencode/scripts/verify.mjs
+```
 
 ## Tech Stack
 
@@ -529,24 +633,41 @@ Always-follow guidelines injected into every session.
 
 ```
 opencode-kit/
-├── README.md
-├── AGENTS.md                          # Project rules (injected every session)
+├── README.md                          # Human-facing docs (this file)
+├── AGENTS.md                          # Agent entry point (pointer pattern, ~80 lines)
 ├── skills-lock.json                   # Skills version lock
 │
 ├── .opencode/
-│   ├── agents/ (7)                    # Agent definitions
-│   ├── commands/ (7)                  # Slash commands
+│   ├── agents/ (8)                    # Agent definitions (pushy desc + WHY on MUST rules)
+│   ├── commands/ (7)                  # Slash commands (Phase 0 context check + Execution Mode)
 │   ├── rules/ (4)                     # Always-follow rules
-│   ├── standards/ (7)                 # Document templates
-│   ├── memory/ (2)                    # Continuous learning
-│   ├── skills/ (106)                  # All skills
-│   ├── hooks/                         # RTK hook
-│   │   └── rtk-hook.sh
-│   └── hooks.json                     # Hook configuration
-│       ├── 95 from skills.sh
-│       └── 11 custom
+│   ├── standards/ (8)                 # Document templates + conventions.md
+│   ├── memory/ (2)                    # Continuous learning + project-context
+│   ├── skills/ (106)                  # All skills (95 from skills.sh + 11 custom)
+│   ├── agent-models.json              # Model + fallback config per agent (source of truth)
+│   ├── agent-registry.json            # Auto-generated: skills + model mapping
+│   ├── hooks/
+│   │   ├── rtk-hook.sh               # RTK token compression (active)
+│   │   └── model-router.sh            # Reads runtime override, sets OMO_AGENT_MODEL
+│   ├── hooks.json                     # Hook configuration
+│   ├── scripts/
+│   │   ├── skill-registry.mjs         # Parse agent MD → registry
+│   │   ├── dispatch.mjs               # Dispatch prompt builder (--shell, --claude, --json)
+│   │   ├── model-health-check.mjs     # Test model availability
+│   │   ├── model-fallback.mjs         # Auto-switch via runtime state (no MD mutation)
+│   │   ├── verify.mjs                 # E2E verification (92 checks)
+│   │   └── __tests__/                 # node:test + bash tests
+│   │       ├── skill-registry.test.mjs
+│   │       └── rtk-hook.test.sh
+│   └── standards/
+│       ├── conventions.md             # Coding/Security/Testing/Git/Anti-patterns (400 lines)
+│       └── *.md                       # Document templates
 │
-└── docs/                              # Document output
+├── _workspace/                        # Runtime state (gitignored)
+│   ├── .fallback-state.json           # Model fallback overrides
+│   └── README.md                      # What's runtime vs committed
+│
+└── docs/                              # Document output (committed)
     ├── prds/                          # PRDs from /plan
     ├── designs/                       # Design docs
     ├── plans/                         # Implementation plans
@@ -599,7 +720,24 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.0 (Current)
+### v1.2 (Current)
+
+- ✅ 8 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, Rustacean, QA, Security Auditor)
+- ✅ 106 skills (95 from skills.sh + 11 custom)
+- ✅ 7 commands (/plan, /build, /review, /ship, /design, /security, /test) — each with Phase 0 context check, pushy descriptions, Execution Mode
+- ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
+- ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`
+- ✅ GitNexus MUST rules with "because X, if skipped Y" annotations on all 8 agents
+- ✅ Runtime model fallback (`_workspace/.fallback-state.json`) — no more MD mutation, no git pollution
+- ✅ Test suite: `verify.mjs` (92 checks) + `skill-registry.test.mjs` (20) + `rtk-hook.test.sh` (17)
+- ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
+- ✅ ICM memory integration
+- ✅ GitNexus code intelligence integration
+- ✅ AgentShield security scan workflow via Security Auditor
+- ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
+- ✅ CLI tool (npx opencode-saas-kit init/update/verify)
+
+### v1.0 (Previous)
 
 - ✅ 7 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, QA, Security Auditor)
 - ✅ 106 skills (95 from skills.sh + 11 custom)
@@ -615,7 +753,7 @@ SOFTWARE.
 ### v2.0 (Planned)
 
 - 🔄 **Continuous Learning** — Hook-based observation, background observer agent, instinct extraction with confidence scoring, `/evolve` and `/instinct-status` commands
-- 🔄 **RTK Token Compression** — Auto-rewrite Bash commands for 60-90% token reduction
+- 🔄 **RTK Token Compression** — Auto-rewrite Bash commands for 60-90% token reduction (hook present, default wiring pending)
 - 🔄 **AgentShield Integration** — Expand automated security gating and reporting in `/review` and `/ship`
 - 🔄 **Designer Agent Enhancement** — Standardize Stitch + Pencil handoff with richer DESIGN.md generation
 - 🔄 **Multi-project Support** — Project-scoped instincts, cross-project pattern sharing

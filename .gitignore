@@ -5,6 +5,13 @@ node_modules/
 dist/
 build/
 .opencode/memory/instincts.json
+.opencode/agent-registry.json
+.opencode/model-health.json
 .gitnexus/
 .claude/
 CLAUDE.md
+# Runtime state — model fallback overrides, harness checkpoints
+_workspace/.fallback-state.json
+_workspace/.harness-state.json
+_workspace/0[1-9]_*.md
+_workspace/*_*.md.tmp

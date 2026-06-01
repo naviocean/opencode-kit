@@ -9,6 +9,15 @@
             "command": ".opencode/hooks/rtk-hook.sh"
           }
         ]
+      },
+      {
+        "matcher": "task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".opencode/hooks/model-router.sh"
+          }
+        ]
       }
     ]
   }

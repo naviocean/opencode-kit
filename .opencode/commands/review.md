@@ -1,6 +1,19 @@
 # /review
 
-Code review and security audit.
+Code review + security audit before merge. Use after `/build` completes, before `/ship`. Do NOT use for: implementation (`/build`), final deploy gate (`/ship`), security-only audit (`/security`).
+
+**HARD-GATE:** Only run on actual changes. If `gitnexus_detect_changes()` shows no diff, return: "No changes to review."
+
+## Execution Mode: Subagents in Parallel
+
+| Phase | Mode | Why |
+|---|---|---|
+| Phase 0: Context Check | (orchestrator) | Verify diff exists, no wasted scan |
+| Phase 1: Code Review | **Subagent** (Tech Lead) | Reads files, evaluates patterns |
+| Phase 2: Security Audit | **Subagent** (Security Auditor) | AgentShield + OWASP, independent of code review |
+| Phase 3: Verdict | (orchestrator) | Synthesize both reports |
+
+Parallel (not sequential) because code review and security audit look at different concerns. Code review = patterns/quality. Security = vulnerabilities. They don't depend on each other's findings.
 
 ## Agent Flow
 
@@ -8,68 +21,71 @@ Code review and security audit.
 Tech Lead + Security Auditor (parallel)
 ```
 
-## Steps
+## Phase 0: Context Check
 
-### 1. Tech Lead — Code Review
+1. Run `gitnexus_detect_changes()` — confirm there ARE changes
+2. If no changes → return HARD-GATE error
+3. List changed files for review scope
 
-The Tech Lead reviews all changes:
+## Phase 1: Tech Lead — Code Review
 
-**Review Checklist:**
-- [ ] Code follows coding standards
-- [ ] No `any` types or type suppressions
-- [ ] Functions are focused and small
-- [ ] Error handling is proper
-- [ ] No hardcoded values
-- [ ] Imports are organized
-- [ ] Naming is clear and consistent
+Two-stage review (Superpowers pattern):
 
-**Architecture Review:**
-- Uses GitNexus `impact` to analyze blast radius
-- Uses GitNexus `context` to understand affected areas
-- Verifies changes match the plan from `/plan`
-- Checks for unintended side effects
+**Stage 1 — Automated:**
+1. `gitnexus_impact({target, direction: "upstream"})` — blast radius per change
+2. Scope check: Does diff match the assigned task? Scope creep = reject.
+3. Pattern check: New patterns without justification = reject.
 
-**Pattern Review:**
-- NestJS patterns followed (modules, guards, etc.)
-- Next.js patterns followed (App Router, RSC, etc.)
-- Prisma patterns followed (schema, queries, etc.)
-- Test patterns followed (TDD, coverage, etc.)
+**Stage 2 — Deep:**
+- Read changed files. Evaluate against:
+  - Patterns: follow codebase conventions
+  - Architecture: respect module boundaries
+  - Quality: no `any`, no `@ts-ignore`, no disabled lint
+  - Testing: business logic has tests
+  - Security: no hardcoded secrets, proper input validation
 
-### 2. Security Auditor — Security Review
+**Why two stages?** Stage 1 catches mechanical issues fast. Stage 2 catches design issues. One-stage review misses 40%+ of issues (industry data).
 
-Runs in parallel with Tech Lead review:
+## Phase 2: Security Auditor — Security Review
 
-- AgentShield scan on agent configs
+Runs in parallel:
+
+- AgentShield scan: `npx ecc-agentshield scan`
 - Secret detection in changed files
 - Permission boundary validation
-- Input validation check
-- SQL injection risk assessment
-- XSS risk assessment
+- OWASP checks: A01 (access control), A03 (injection), A07 (XSS)
+- Prompt injection in agent configs
 
-### 3. Verdict
+**Why in parallel?** Security scan takes time (full project scan). Running after code review doubles wall-clock. They look at different concerns anyway.
 
-**Approved:** All checks pass, no critical issues
-**Changes Requested:** Issues found with specific fix instructions
-**Blocked:** Critical security findings, must fix before merge
+## Phase 3: Verdict
+
+| Tech Lead | Security | Verdict |
+|---|---|---|
+| ✅ | ✅ (A or B) | **Approved** |
+| ⚠️ Changes Requested | ✅ | **Changes Requested** (with fix list) |
+| ✅ | ⚠️ Medium | **Approved with notes** |
+| ❌ | ❌ Critical | **Blocked** |
 
 ## Output
 
 After `/review`:
-
-1. ✅ Code review feedback (from Tech Lead)
-2. ✅ Security findings (from Security Auditor)
+1. ✅ Code review feedback (`_workspace/05_review_code.md`)
+2. ✅ Security findings (`_workspace/05_review_security.md`)
 3. ✅ Verdict: Approved / Changes Requested / Blocked
 
-Run `/ship` if approved.
+**Next:** If Approved, run `/ship`. If Changes Requested, fix and re-run `/build` then `/review`.
 
 ## Document Standards
 
-This command produces security review documents using the specified template:
+| Output | Path | Template |
+|---|---|---|
+| Code review | `_workspace/05_review_code.md` | — |
+| Security review | `_workspace/05_review_security.md` | `.opencode/standards/security-review-template.md` |
 
-| Template | Output Path |
-|---|---|
-| `security-review-template.md` | `docs/` |
+## Anti-patterns (BLOCKING)
 
-- **Security Review**: Saves to `docs/{feature-name}-security-review.md`
-
-All review documents must follow the template in `.opencode/templates/`. Do not skip required sections.
+- ❌ Reviewing unchanged code (waste, HARD-GATE)
+- ❌ Approving without running `gitnexus_impact` (incomplete review)
+- ❌ Approving Critical security findings (block)
+- ❌ Sequential code + security review (slower, no benefit)

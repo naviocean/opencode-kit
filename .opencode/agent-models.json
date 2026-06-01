@@ -1,0 +1,56 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "my_xiaomi/mimo-v2.5"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "my_xiaomi/mimo-v2.5-pro",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5"
+      ]
+    },
+    "pm": {
+      "model": "my_xiaomi/mimo-v2.5-pro",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5"
+      ]
+    },
+    "designer": {
+      "model": "my_xiaomi/mimo-v2.5-pro",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5"
+      ]
+    },
+    "frontend": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5-pro"
+      ]
+    },
+    "backend": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5-pro"
+      ]
+    },
+    "rustacean": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5-pro"
+      ]
+    },
+    "qa": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5-pro"
+      ]
+    },
+    "security-auditor": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5-pro"
+      ]
+    }
+  }
+}
