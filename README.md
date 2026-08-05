@@ -548,9 +548,9 @@ export CONTEXT7_API_KEY=your_key_here
 
 ## Skills
 
-106 skills total — 95 from [skills.sh](https://skills.sh) registry + 11 custom skills unique to this kit.
+116 skills total — 105 from [skills.sh](https://skills.sh) registry + 11 custom skills unique to this kit.
 
-### From skills.sh (95 skills)
+### From skills.sh (105 skills)
 
 | Category | Skills | Source |
 |---|---|---|
@@ -560,11 +560,12 @@ export CONTEXT7_API_KEY=your_key_here
 | **Next.js** | `nextjs-app-router-patterns` | [wshobson/agents](https://github.com/wshobson/agents) |
 | **React** | `react-components`, `react-state-management`, `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
 | **NestJS** | `nestjs-best-practices` | [kadajett/agent-nestjs-skills](https://github.com/kadajett/agent-nestjs-skills) |
-| **Prisma** | `prisma-database-setup`, `prisma-client-api`, `prisma-cli`, `prisma-postgres`, `prisma-postgres-setup` | [prisma/skills](https://github.com/prisma/skills) |
+| **Prisma** | `prisma-database-setup`, `prisma-client-api`, `prisma-cli`, `prisma-postgres`, `prisma-postgres-setup`, `prisma-upgrade-v7` | [prisma/skills](https://github.com/prisma/skills) |
 | **TypeScript** | `typescript-advanced-types` | [wshobson/agents](https://github.com/wshobson/agents) |
 | **Testing** | `vitest`, `tdd`, `test-driven-development`, `playwright-best-practices`, `e2e-testing-patterns`, `javascript-testing-patterns` | [antfu/skills](https://github.com/antfu/skills), [mattpocock/skills](https://github.com/mattpocock/skills), [currents-dev](https://github.com/currents-dev/playwright-best-practices-skill) |
-| **Design** | `shadcn`, `tailwind-design-system`, `design-md`, `stitch-loop`, `pencil-design`, `taste-design`, `design-taste-frontend`, `minimalist-ui`, `information-architecture`, `frontend-design`, `responsive-design`, `visual-design-foundations` | [shadcn/ui](https://github.com/shadcn/ui), [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills), [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill) |
+| **Design** | `shadcn`, `tailwind-design-system`, `design-md`, `design-flow`, `design-brief`, `design-tokens`, `design-system-patterns`, `design-review`, `interaction-design`, `high-end-visual-design`, `industrial-brutalist-ui`, `redesign-existing-projects`, `stitch-loop`, `stitch-manage-design-system`, `pencil-design`, `taste-design`, `design-taste-frontend`, `minimalist-ui`, `information-architecture`, `frontend-design`, `responsive-design`, `visual-design-foundations` | [shadcn/ui](https://github.com/shadcn/ui), [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills), [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill), [julianoczkowski/designer-skills](https://github.com/julianoczkowski/designer-skills) |
 | **RTK** | `rtk-tdd`, `code-simplifier`, `design-patterns` | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) |
+| **Rust / Tauri** | `tauri-v2`, `rust-daily`, `rust-debugging` | [nodnarbnitram/claude-code-extensions](https://github.com/nodnarbnitram/claude-code-extensions), [zhanghandong/rust-skills](https://github.com/zhanghandong/rust-skills), [mohitmishra786/low-level-dev-skills](https://github.com/mohitmishra786/low-level-dev-skills) |
 | **Architecture** | `architecture-decision-records`, `architecture-patterns`, `api-design-principles`, `monorepo-management`, `database-migration`, `openapi-spec-generation`, `sql-optimization-patterns`, `postgresql-table-design` | Various |
 | **Security** | `security-requirement-extraction`, `secrets-management`, `auth-implementation-patterns` | Various |
 | **Workflow** | `triage`, `issue-triage`, `pr-triage`, `handoff`, `brief-to-tasks`, `to-prd`, `to-issues`, `review-agent-setup`, `scan`, `diagnose`, `prototype`, `stripe-integration`, `billing-automation`, `changelog-automation`, `track-management`, `find-skills` | Various |
@@ -643,7 +644,7 @@ opencode-kit/
 │   ├── rules/ (4)                     # Always-follow rules
 │   ├── standards/ (8)                 # Document templates + conventions.md
 │   ├── memory/ (2)                    # Continuous learning + project-context
-│   ├── skills/ (106)                  # All skills (95 from skills.sh + 11 custom)
+│   ├── skills/ (116)                  # All skills (105 from skills.sh + 11 custom)
 │   ├── agent-models.json              # Model + fallback config per agent (source of truth)
 │   ├── agent-registry.json            # Auto-generated: skills + model mapping
 │   ├── hooks/
@@ -723,7 +724,7 @@ SOFTWARE.
 ### v1.2 (Current)
 
 - ✅ 8 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, Rustacean, QA, Security Auditor)
-- ✅ 106 skills (95 from skills.sh + 11 custom)
+- ✅ 116 skills (105 from skills.sh + 11 custom)
 - ✅ 7 commands (/plan, /build, /review, /ship, /design, /security, /test) — each with Phase 0 context check, pushy descriptions, Execution Mode
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`
@@ -740,7 +741,7 @@ SOFTWARE.
 ### v1.0 (Previous)
 
 - ✅ 7 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, QA, Security Auditor)
-- ✅ 106 skills (95 from skills.sh + 11 custom)
+- ✅ 116 skills (105 from skills.sh + 11 custom)
 - ✅ 7 commands (/plan, /build, /review, /ship, /design, /security, /test)
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates)
 - ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)

@@ -109,7 +109,7 @@ The Designer loads these skills based on task context:
 | `stitch-extract-design-md` | Extract structured DESIGN.md specifications from Stitch-generated designs. | Converting Stitch outputs to implementable specs |
 | `stitch-generate-design` | Advanced Stitch generation with design system awareness — generates UI respecting existing tokens and components. | Creating new designs from requirements |
 | `stitch-manage-design-system` | Manage and evolve the design system within Stitch — component library, token updates, theme variants. | Maintaining design system consistency across Stitch outputs |
-| `stitch-generate` | Text/image → UI via Stitch API. Generation prompts, iteration patterns, export workflows. | Creating new designs from requirements |
+| `stitch-generate-design` | Text/image → UI via Stitch API. Generation prompts, iteration patterns, export workflows. | Creating new designs from requirements |
 | `enhance-prompt` | Transforms vague UI ideas into polished, Stitch-optimized prompts with UI/UX keywords and design system context. | Before Stitch generation to improve output quality |
 | `taste-design` | Design taste evaluation — aesthetic quality assessment, visual hierarchy analysis, refinement recommendations. | Reviewing any design output for visual quality |
 
@@ -154,7 +154,7 @@ The Designer loads these skills based on task context:
 |---|---|---|
 | `ux-flow` | User journey mapping, wireframe → prototype conversion, interaction documentation. | Mapping user flows from PM requirements |
 | `design-tokens` | DESIGN.md ↔ CSS Variables ↔ Tailwind config mapping. Color, spacing, typography systems. | Defining the design system foundation |
-| `stitch-generate` | Text/image → UI via Stitch API. Generation prompts, iteration patterns, export workflows. | Creating new designs from requirements |
+| `stitch-generate-design` | Text/image → UI via Stitch API. Generation prompts, iteration patterns, export workflows. | Creating new designs from requirements |
 | `pencil-design` | IDE-native design, .pen file management, bidirectional sync, code generation. | Refining designs, creating component specs |
 
 ### Shared Skills

@@ -109,7 +109,7 @@ Load these skills when their context matches:
 |---|---|
 | `api-design-principles` | When designing new API endpoints — RESTful conventions, versioning, HATEOAS, content negotiation. |
 | `openapi-spec-generation` | When generating or updating OpenAPI/Swagger specs — schema definitions, endpoint documentation. |
-| `api-design` | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering. |
+| `api-design-principles` | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering. |
 
 ### Authentication & Security
 
@@ -147,7 +147,7 @@ Load these skills when their context matches:
 | `nestjs-best-practices` | Always — your core framework. Modules, controllers, services, guards, interceptors, pipes, decorators. |
 | `prisma-database-setup` | When working with database — schema design, migrations, relations, transactions, seeding, query optimization. |
 | `jwt-auth` | When implementing authentication or authorization — Passport JWT strategy, guards, token refresh, RBAC. |
-| `api-design` | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering. |
+| `api-design-principles` | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering. |
 | `coding-standards` | When writing code — TypeScript strict, naming conventions, import order, error handling. |
 | `continuous-learning` | When a pattern repeats 3+ times — auto-extract as instinct with confidence scoring. |
 
@@ -714,5 +714,5 @@ The user service gets the user from the database.
 - **ECC nestjs-best-practices**: Module architecture, guard/interceptor/pipe patterns, decorator conventions.
 - **ECC prisma-database-setup**: Schema design, relation patterns, query optimization, migration strategy.
 - **ECC jwt-auth**: Passport JWT strategy, refresh token rotation, RBAC guard implementation.
-- **ECC api-design**: REST conventions, GraphQL schema design, error envelope format, pagination patterns.
+- **ECC api-design-principles**: REST conventions, GraphQL schema design, error envelope format, pagination patterns.
 - **ECC continuous-learning**: Pattern extraction with confidence scoring for repeated implementations.

@@ -105,7 +105,7 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .opencode/    7 agents, 7 commands, 4 rules, 106 skills, 7 doc templates
+  .opencode/    8 agents, 7 commands, 4 rules, 116 skills, 7 doc templates
   AGENTS.md     Project rules (injected every session)
   docs/         Document output directories (prds, designs, plans, adr, tasks)
 
@@ -145,7 +145,7 @@ function verifyInstallation(projectDir) {
 
   // Check agents
   const agentsDir = path.join(opencodeDir, 'agents');
-  const expectedAgents = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'qa', 'security-auditor'];
+  const expectedAgents = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor'];
   for (const agent of expectedAgents) {
     checks.push({ name: `.opencode/agents/${agent}.md`, pass: fs.existsSync(path.join(agentsDir, `${agent}.md`)) });
   }
@@ -287,9 +287,10 @@ function configureMcp(projectDir, dryRun = false) {
   // Add MCP servers
   if (!config.mcp) config.mcp = {};
 
+  // OpenCode expects { type, command: [...], enabled } per server.
   const mcpServers = {
-    icm: { command: 'icm', args: ['serve'] },
-    gitnexus: { command: 'npx', args: ['-y', 'gitnexus@latest', 'mcp'] },
+    icm: { type: 'local', command: ['icm', 'serve'], enabled: true },
+    gitnexus: { type: 'local', command: ['npx', '-y', 'gitnexus@latest', 'mcp'], enabled: true },
   };
 
   let added = [];
@@ -349,7 +350,7 @@ function initProject(projectDir, options = {}) {
   const kitDir = path.dirname(__filename);
 
   const copyTasks = [
-    { src: '.opencode', dest: '.opencode', desc: '7 agents, 7 commands, 4 rules, 106 skills, 8 doc templates, RTK hook' },
+    { src: '.opencode', dest: '.opencode', desc: '8 agents, 7 commands, 4 rules, 116 skills, 8 doc templates, RTK hook' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
     { src: 'docs', dest: 'docs', desc: 'Document output directories' },
   ];
@@ -398,10 +399,10 @@ function initProject(projectDir, options = {}) {
   logStep('Installation complete!');
   log(`
 ${COLORS.bold}What was installed:${COLORS.reset}
-  .opencode/agents/         7 agent definitions
+  .opencode/agents/         8 agent definitions
   .opencode/commands/       7 slash commands
   .opencode/rules/          4 always-follow rules
-  .opencode/skills/         106 skills (95 from skills.sh + 11 custom)
+  .opencode/skills/         116 skills (105 from skills.sh + 11 custom)
   .opencode/standards/      7 document templates
   .opencode/memory/         Continuous learning config
   AGENTS.md                 Project rules
@@ -445,7 +446,7 @@ function updateProject(projectDir, options = {}) {
   logStep('Updating kit files...');
 
   const updateTasks = [
-    { src: '.opencode/agents', dest: '.opencode/agents', desc: '7 agent definitions' },
+    { src: '.opencode/agents', dest: '.opencode/agents', desc: '8 agent definitions' },
     { src: '.opencode/commands', dest: '.opencode/commands', desc: '7 slash commands' },
     { src: '.opencode/rules', dest: '.opencode/rules', desc: '4 rules' },
     { src: '.opencode/standards', dest: '.opencode/standards', desc: '7 document templates' },
@@ -509,6 +510,9 @@ function updateProject(projectDir, options = {}) {
         'julianoczkowski/designer-skills',
         'chiroro-jr/pencil-design-skill',
         'vercel-labs/skills',
+        'zhanghandong/rust-skills',
+        'mohitmishra786/low-level-dev-skills',
+        'nodnarbnitram/claude-code-extensions',
       ];
 
       for (const source of skillSources) {

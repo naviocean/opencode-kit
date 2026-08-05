@@ -905,7 +905,7 @@
       "source": "prisma/skills",
       "sourceType": "github",
       "skillPath": "prisma-upgrade-v7/SKILL.md",
-      "computedHash": "2e4d54a4c7a0fc2476e81686718a765f5eb2cacfb2fb0822f3109c76bf4a9bb0"
+      "computedHash": "0e07dc2831f86cf27627df914db43d862b0fc75d72c1f9070434aab7940bad7c"
     },
     "projection-patterns": {
       "source": "wshobson/agents",
@@ -1129,6 +1129,18 @@
       "skillPath": "plugins/systems-programming/skills/rust-async-patterns/SKILL.md",
       "computedHash": "1e68b5edfa95069e54af75acf2a34634a5d0266021fa4af3b9706eaec5b6207e"
     },
+    "rust-daily": {
+      "source": "zhanghandong/rust-skills",
+      "sourceType": "github",
+      "skillPath": "skills/rust-daily/SKILL.md",
+      "computedHash": "016d958078944cba2cbd3a7beff9c328abd22aebd9f3206c95fdaedac4d7103a"
+    },
+    "rust-debugging": {
+      "source": "mohitmishra786/low-level-dev-skills",
+      "sourceType": "github",
+      "skillPath": "skills/rust/rust-debugging/SKILL.md",
+      "computedHash": "70002eabb81f25ffdf84ba7203b6d0069cfe976dea30d17a3b558d335458488f"
+    },
     "saga-orchestration": {
       "source": "wshobson/agents",
       "sourceType": "github",
@@ -1289,7 +1301,7 @@
       "source": "google-labs-code/stitch-skills",
       "sourceType": "github",
       "skillPath": "plugins/stitch-design/skills/manage-design-system/SKILL.md",
-      "computedHash": "2e41f6f54d65303b8961150c3bcb31f3cb0c4f28d35332dde47b3a4d4cffde0a"
+      "computedHash": "e55ef1adf10175b9ce3915f0bc7208904805ff14ce954349365dc5aabaa8359b"
     },
     "stitch::upload-to-stitch": {
       "source": "google-labs-code/stitch-skills",
@@ -1338,6 +1350,12 @@
       "sourceType": "github",
       "skillPath": "plugins/stitch-utilities/skills/taste-design/SKILL.md",
       "computedHash": "1891625787d6f0f3bc45d4a9437c187277af66c219e3ec799b1b4e67822b6146"
+    },
+    "tauri-v2": {
+      "source": "nodnarbnitram/claude-code-extensions",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/tauri-v2/SKILL.md",
+      "computedHash": "377c61c46cf48c35b942042bc8abb9a039049a47f37d7f12b4f491d012777490"
     },
     "tdd": {
       "source": "mattpocock/skills",

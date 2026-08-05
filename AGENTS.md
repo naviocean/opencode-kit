@@ -40,7 +40,7 @@
 | **Agent definitions** (frontmatter, skills, MUST rules) | `.opencode/agents/<name>.md` |
 | **Slash commands** (`/plan`, `/build`, etc.) | `.opencode/commands/<name>.md` |
 | **Workflow rules** (always-on) | `.opencode/rules/*.md` |
-| **Skill library** (111 skills) | `.opencode/skills/<category>/SKILL.md` |
+| **Skill library** (116 skills) | `.opencode/skills/<category>/SKILL.md` |
 | **Scripts + tests** | `.opencode/scripts/`, `.opencode/scripts/__tests__/` |
 | **Runtime state** (gitignored) | `_workspace/.fallback-state.json` |
 | **End-user docs** (humans installing the kit) | `README.md` |
@@ -79,5 +79,6 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 | Version | Date | Change |
 |---|---|---|
 | 1.2.0 | 2026-06-01 | Refactor to pointer pattern. Detail moved to `.opencode/standards/conventions.md`. GitNexus MUST rules now have WHY annotations. Pushy descriptions on all 8 agents. Model-fallback uses runtime state (no MD mutation). Added test suite. |
+| 1.2.1 | 2026-08-05 | Fix CLI MCP config to OpenCode format (`{type, command, enabled}`). Add `rustacean` to CLI verify. Install 10 missing skills (116 total). Fix stale skill references. |
 | 1.1.0 | prior | Initial 8-agent / 111-skill / 7-command structure |
 | 1.0.0 | prior | First release |

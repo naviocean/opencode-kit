@@ -601,7 +601,7 @@ Load these skills when their context matches:
 |---|---|
 | `code-simplifier` | Code simplification — reducing complexity, removing duplication, extracting utilities, improving readability. |
 | `design-patterns` | Implementation design patterns — repository pattern, service layer, facade, strategy, observer for frontend architecture. |
-| `rtk-query` | When defining API slices, mutations, cache invalidation. Contains endpoint patterns, optimistic updates, prefetching strategies. |
+| `react-state-management` | When defining API slices, mutations, cache invalidation. Contains endpoint patterns (RTK Query), optimistic updates, prefetching strategies. |
 
 ### Testing Skills
 
@@ -619,7 +619,7 @@ Load these skills when their context matches:
 | `nextjs-app-router-patterns` | When working with App Router, Server Components, route handlers, middleware. Contains RSC patterns, data fetching strategies, caching rules. |
 | `react-components` | When building components, hooks, managing state. Contains composition patterns, performance optimization, memoization rules. |
 | `shadcn` | When installing, customizing, or theming Shadcn components. Contains component list, customization guide, theming with CSS variables. |
-| `rtk-query` | When defining API slices, mutations, cache invalidation. Contains endpoint patterns, optimistic updates, prefetching strategies. |
+| `react-state-management` | When defining API slices, mutations, cache invalidation. Contains endpoint patterns (RTK Query), optimistic updates, prefetching strategies. |
 | `coding-standards` | When writing any code. Contains TypeScript strict rules, naming conventions, import order, error handling. |
 | `continuous-learning` | When a frontend pattern repeats 3+ times. Auto-extract it as an instinct with confidence scoring. |
 
@@ -648,7 +648,7 @@ The Frontend agent uses these templates when creating documents:
 
 1. Read the task. Understand: what to build, which files to touch, which patterns to follow, acceptance criteria.
 2. Run `gitnexus_query` to find related existing code.
-3. Load relevant skills (`nextjs-app-router-patterns`, `shadcn`, `rtk-query`) based on the task domain.
+3. Load relevant skills (`nextjs-app-router-patterns`, `shadcn`, `react-state-management`) based on the task domain.
 4. Implement the component/feature:
    - Create the component file with TypeScript types.
    - Apply Shadcn primitives and Tailwind styling with design tokens.

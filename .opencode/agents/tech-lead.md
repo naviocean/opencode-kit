@@ -273,7 +273,7 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | Skill | When to Load |
 |---|---|
 | `orchestrate` | Dispatching parallel work to agents. Category routing, task formatting. |
-| `code-review` | Reviewing agent output. Review checklists, impact analysis, rejection criteria. |
+| `code-review-excellence` | Reviewing agent output. Review checklists, impact analysis, rejection criteria. |
 | `git-workflow` | Managing branches, commits, PRs. Branch naming, conventional commits, PR templates. |
 | `coding-standards` | Evaluating code quality. TypeScript strict rules, ESLint config, naming conventions. |
 | `continuous-learning` | Pattern repeats 3+ times — auto-extract as instinct with confidence scoring. |
