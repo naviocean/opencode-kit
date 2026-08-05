@@ -160,7 +160,7 @@ Use these templates when creating project documentation:
 | `task-template.md` | When creating task specifications — structured format for requirements, acceptance criteria, technical notes. |
 | `adr-template.md` | When recording architecture decisions — context, decision, consequences, alternatives considered. |
 
-Templates are located in `.opencode/templates/`. Follow their structure to maintain consistency across all documentation.
+Templates are located in `.opencode/standards/`. Follow their structure to maintain consistency across all documentation.
 
 ## Tech Stack Specifics
 
