@@ -308,12 +308,12 @@ Run `npx ecc-agentshield scan` before every `/ship` and `/review`. 102 rules acr
 
 ### Permission Audits
 
-When reviewing a PR that changes `.opencode/agents/*.md` or `hooks.json`:
+When reviewing a PR that changes `.opencode/agents/*.md`:
 
 - Reject `allowedTools: ["*"]` — too broad
 - Reject new `Bash()` patterns that allow destructive commands
 - Reject missing `--deny` lists when `allowedTools` includes `Bash`
-- Reject new hook commands without source attribution
+- Reject unverified model changes in agent frontmatter
 
 ---
 

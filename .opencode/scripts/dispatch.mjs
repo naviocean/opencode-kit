@@ -86,7 +86,7 @@ ${description}
 
 ### Model Assignment
 \`${modelHint}\`
-You are running as agent "${agentName}". The orchestrator has already set OMO_AGENT_MODEL=${model}.
+You are running as agent "${agentName}" with model ${model}. Opencode enforces this via the agent's frontmatter \`model:\` field.
 
 ### Skill Loading
 ${skillHint}
@@ -103,8 +103,7 @@ ${taskDesc}
 // ──────────────────────────────────────────────
 if (flags.includes('--shell')) {
   // Build shell command for `opencode run`
-  // The model-router.sh hook will re-read OMO_AGENT_MODEL from the registry,
-  // so we don't need to pass --model explicitly (it will be injected).
+  // opencode reads the agent's model from frontmatter `model:` — no --model needed.
   const escapedTask = taskDesc.replace(/'/g, "'\\''");
   const cmd = `opencode run --agent ${agentName} '${escapedTask}'`;
   console.log(cmd);

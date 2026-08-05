@@ -10,8 +10,7 @@ build/
 .gitnexus/
 .claude/
 CLAUDE.md
-# Runtime state — model fallback overrides, harness checkpoints
-_workspace/.fallback-state.json
+# Runtime state — harness checkpoints
 _workspace/.harness-state.json
 _workspace/0[1-9]_*.md
 _workspace/*_*.md.tmp

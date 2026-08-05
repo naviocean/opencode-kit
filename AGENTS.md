@@ -42,7 +42,7 @@
 | **Workflow rules** (always-on) | `.opencode/rules/*.md` |
 | **Skill library** (116 skills) | `.opencode/skills/<category>/SKILL.md` |
 | **Scripts + tests** | `.opencode/scripts/`, `.opencode/scripts/__tests__/` |
-| **Runtime state** (gitignored) | `_workspace/.fallback-state.json` |
+| **Runtime state** (gitignored) | `_workspace/` (harness checkpoints) |
 | **End-user docs** (humans installing the kit) | `README.md` |
 
 ## Workflow Shortcuts

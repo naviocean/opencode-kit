@@ -116,46 +116,18 @@ const dispatchScript = join(ROOT, '.opencode', 'scripts', 'disptach.mjs');
 const dispatchScript2 = join(ROOT, '.opencode', 'scripts', 'dispatch.mjs');
 check('dispatch.mjs exists', existsSync(dispatchScript2));
 
-// 6. Check hooks
-console.log('\n6. Hooks');
+// 6. Check no Claude Code hook config lingers
+// (invariant: opencode routes subagent models via frontmatter `model:`,
+//  so the Claude Code hooks.json / model-router.sh mechanism must NOT exist)
+console.log('\n6. No Claude Code hooks (opencode-native model routing)');
 const hooksFile = join(ROOT, '.opencode', 'hooks.json');
-check('hooks.json exists', existsSync(hooksFile));
-
-if (existsSync(hooksFile)) {
-  const hooks = JSON.parse(readFileSync(hooksFile, 'utf-8'));
-  const taskHooks = hooks.hooks?.['tool.execute.before']?.find(h => h.matcher === 'task');
-  check('task hook registered', !!taskHooks);
-}
+check('hooks.json absent', !existsSync(hooksFile));
 
 const modelRouterHook = join(ROOT, '.opencode', 'hooks', 'model-router.sh');
-check('model-router.sh exists', existsSync(modelRouterHook));
+check('model-router.sh absent', !existsSync(modelRouterHook));
 
-// 6b. Check model-fallback.mjs does NOT mutate agent .md files
-// (invariant: the only way to change effective model is via _workspace/.fallback-state.json)
 const modelFallbackScript = join(ROOT, '.opencode', 'scripts', 'model-fallback.mjs');
-if (existsSync(modelFallbackScript)) {
-  const fbSrc = readFileSync(modelFallbackScript, 'utf-8');
-  const mutatesAgentFile = /writeFileSync\([^)]*AGENTS_DIR/.test(fbSrc)
-    || /writeFileSync\([^)]*agents\/.*\.md/.test(fbSrc)
-    || /writeFileSync\([^)]*\$\{.*agent.*\}\.md/.test(fbSrc);
-  check('model-fallback.mjs: does NOT mutate .opencode/agents/*.md',
-    !mutatesAgentFile,
-    mutatesAgentFile ? 'detected writeFileSync targeting agent .md — use _workspace/.fallback-state.json' : 'uses runtime state file');
-  const writesStateFile = /writeFileSync\([^)]*[Ss]tate/.test(fbSrc)
-    || /_workspace\/.fallback-state\.json/.test(fbSrc);
-  check('model-fallback.mjs: writes to _workspace/.fallback-state.json',
-    writesStateFile,
-    'fallback state must live in gitignored _workspace/');
-}
-
-// 6c. Check model-router.sh reads the runtime override
-if (existsSync(modelRouterHook)) {
-  const routerSrc = readFileSync(modelRouterHook, 'utf-8');
-  const readsState = /fallback-state\.json/.test(routerSrc) || /\[Ss\]tate/.test(routerSrc);
-  check('model-router.sh: reads _workspace/.fallback-state.json',
-    readsState,
-    'router must read runtime override to honor fallbacks');
-}
+check('model-fallback.mjs absent', !existsSync(modelFallbackScript));
 
 // 7. Cross-check: models.json matches frontmatter
 console.log('\n7. Cross-check: models.json ↔ frontmatter');
@@ -189,7 +161,6 @@ if (failed === 0) {
   console.log('  2. Type: implement a REST endpoint for user profiles');
   console.log('  3. Verify backend agent uses mimo-v2.5 (not mimo-v2.5-pro)');
   console.log('  4. Verify backend agent calls skill(name="nestjs-best-practices")');
-  console.log('  5. Check hook log: [model-router] Dispatching backend → model: mimo-v2.5');
 } else {
   console.log('\n⚠️ Some checks failed. Fix them before E2E test.\n');
   process.exit(1);

@@ -163,27 +163,17 @@ model: my_xiaomi/mimo-v2.5
 ---
 ```
 
-### Fallback Chain
+### Model Routing
 
-When a model fails (403, 429, 500), the system automatically switches to the next available fallback via a **runtime state file** — agent source files (`.opencode/agents/*.md` and `agent-models.json`) are never mutated.
+Opencode routes each subagent to its configured model via the `model:` field in
+each agent's frontmatter (enforced by `verify.mjs` § 7 cross-check). No runtime
+override layer is used — the frontmatter IS the source of truth.
 
 ```bash
-# Check model availability for a single agent
-node .opencode/scripts/model-health-check.mjs backend
-
-# Test primary + walk fallback chain; write override to runtime state
-node .opencode/scripts/model-fallback.mjs backend
-
-# List current overrides
-node .opencode/scripts/model-fallback.mjs --list
-
-# Clear a stale override (e.g., after primary recovery)
-node .opencode/scripts/model-fallback.mjs backend --reset
+# Diagnostic: test model availability (read-only, does not change config)
+node .opencode/scripts/model-health-check.mjs        # all agents
+node .opencode/scripts/model-health-check.mjs backend # single agent
 ```
-
-The `model-router.sh` hook runs on every `task()` dispatch. It reads the runtime override (if any) from `_workspace/.fallback-state.json` and exports it as `OMO_AGENT_MODEL` for the dispatched agent. Source of truth (`agent-models.json` + agent frontmatter) stays intact — git history stays clean.
-
-The override is auto-cleared on the next `model-fallback.mjs` invocation that finds the primary healthy.
 
 ### Regenerate Registry
 
@@ -610,15 +600,11 @@ opencode-kit/
 │   ├── skills/ (116)                  # All skills (105 from skills.sh + 11 custom)
 │   ├── agent-models.json              # Model + fallback config per agent (source of truth)
 │   ├── agent-registry.json            # Auto-generated: skills + model mapping
-│   ├── hooks/
-│   │   └── model-router.sh            # Reads runtime override, sets OMO_AGENT_MODEL
-│   ├── hooks.json                     # Hook configuration
 │   ├── scripts/
 │   │   ├── skill-registry.mjs         # Parse agent MD → registry
 │   │   ├── dispatch.mjs               # Dispatch prompt builder (--shell, --claude, --json)
-│   │   ├── model-health-check.mjs     # Test model availability
-│   │   ├── model-fallback.mjs         # Auto-switch via runtime state (no MD mutation)
-│   │   ├── verify.mjs                 # E2E verification (92 checks)
+│   │   ├── model-health-check.mjs     # Test model availability (read-only)
+│   │   ├── verify.mjs                 # E2E verification (89 checks)
 │   │   └── __tests__/                 # node:test + bash tests
 │   │       └── skill-registry.test.mjs
 │   └── standards/
@@ -626,7 +612,6 @@ opencode-kit/
 │       └── *.md                       # Document templates
 │
 ├── _workspace/                        # Runtime state (gitignored)
-│   ├── .fallback-state.json           # Model fallback overrides
 │   └── README.md                      # What's runtime vs committed
 │
 └── docs/                              # Document output (committed)
@@ -689,8 +674,8 @@ SOFTWARE.
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`
 - ✅ GitNexus MUST rules with "because X, if skipped Y" annotations on all 8 agents
-- ✅ Runtime model fallback (`_workspace/.fallback-state.json`) — no more MD mutation, no git pollution
-- ✅ Test suite: `verify.mjs` (92 checks) + `skill-registry.test.mjs` (20)
+- ✅ Model-per-agent via frontmatter `model:` (opencode-native routing, verified by `verify.mjs` § 7)
+- ✅ Test suite: `verify.mjs` (89 checks) + `skill-registry.test.mjs` (20)
 - ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
 - ✅ ICM memory integration
 - ✅ GitNexus code intelligence integration
