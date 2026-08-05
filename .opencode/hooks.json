@@ -2,15 +2,6 @@
   "hooks": {
     "tool.execute.before": [
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".opencode/hooks/rtk-hook.sh"
-          }
-        ]
-      },
-      {
         "matcher": "task",
         "hooks": [
           {

@@ -17,7 +17,7 @@ const { execSync } = require('child_process');
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.0.0';
+const VERSION = '1.2.1';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -91,14 +91,14 @@ ${COLORS.dim}Multi-agent development team kit for OpenCode${COLORS.reset}
 
 ${COLORS.bold}Usage:${COLORS.reset}
   npx ${KIT_NAME} init            Install kit to current project
-  npx ${KIT_NAME} init --tools    Install kit + tools (rtk, gitnexus)
+  npx ${KIT_NAME} init --tools    Install kit + tools (gitnexus)
   npx ${KIT_NAME} update          Update kit files (preserves your docs)
   npx ${KIT_NAME} update --skills Update kit + refresh skills from registry
   npx ${KIT_NAME} verify          Verify installation
   npx ${KIT_NAME} --help          Show this help
 
 ${COLORS.bold}Options:${COLORS.reset}
-  --tools       Install tools (rtk, gitnexus) globally
+  --tools       Install tools (gitnexus) globally
   --skills      Update skills from skills.sh registry
   --skip-mcp    Skip opencode.json MCP configuration
   --dry-run     Show what would be done without making changes
@@ -208,20 +208,6 @@ function isGitRepo(projectDir) {
 
 function installTools(projectDir, dryRun = false) {
   logStep('Installing tools...');
-
-  // ─── RTK ─────────────────────────────────────────────────────────────
-  if (commandExists('rtk')) {
-    logSuccess('RTK (Rust Token Killer) — already installed');
-  } else if (dryRun) {
-    logInfo('RTK (Rust Token Killer) — would install');
-  } else {
-    log(`  ${ICONS.arrow} Installing RTK...`);
-    if (runCommand('npm install -g rtk && rtk init --global', { cwd: projectDir })) {
-      logSuccess('RTK (Rust Token Killer) — installed');
-    } else {
-      logWarn('RTK (Rust Token Killer) — failed (install manually)');
-    }
-  }
 
   // ─── GitNexus ─────────────────────────────────────────────────────────
   if (commandExists('gitnexus')) {

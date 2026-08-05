@@ -69,16 +69,6 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 
 ## Tools Integration
 
-### RTK (Rust Token Killer)
-
-Compresses CLI command output before it reaches the AI context window. 60-90% token reduction.
-
-```bash
-rtk init --global
-```
-
-Installs a PreToolUse hook that automatically rewrites Bash commands to RTK equivalents. Zero config after install.
-
 ### ICM (Intelligent Context Manager)
 
 Persistent memory across sessions. All 8 agents share one SQLite database per project.
@@ -260,7 +250,6 @@ node .opencode/scripts/verify.mjs
 | Testing | Vitest (unit/integration) + Playwright (E2E) |
 | Memory | ICM (Intelligent Context Manager) |
 | Code Intelligence | GitNexus |
-| Token Optimization | RTK (Rust Token Killer) |
 | Security | AgentShield |
 
 ### Why Vitest Over Jest
@@ -395,7 +384,7 @@ User: /ship
 ### Quick Start (Recommended)
 
 ```bash
-# One command — installs kit + RTK + GitNexus
+# One command — installs kit + GitNexus
 npx opencode-saas-kit init --tools
 ```
 
@@ -403,7 +392,6 @@ This will:
 - Copy agents, commands, rules, skills, standards to `.opencode/`
 - Copy AGENTS.md and docs/ to your project
 - Create opencode.json with MCP servers
-- Install RTK and set up global hook
 - Set up GitNexus for code intelligence
 
 ### Prerequisites
@@ -415,31 +403,6 @@ This will:
 ### Manual Tool Setup
 
 If you prefer to install tools manually:
-
-#### RTK (Rust Token Killer)
-
-Token compression — reduces CLI output by 60-90% before it reaches the AI context.
-
-```bash
-# Install
-npm install -g rtk
-
-# Initialize global hook (auto-rewrites commands)
-rtk init --global
-
-# Verify
-rtk --version
-```
-
-**What it does:**
-- `rtk git status` → compact output ("clean" instead of 3 lines)
-- `rtk tsc` → TypeScript errors grouped by file (83% savings)
-- `rtk next build` → build output with route metrics (87% savings)
-- `rtk git diff` → only changed lines
-
-**How it works:** RTK rewrites commands to produce compact output. When installed as a hook, it automatically prefixes Bash commands with `rtk`.
-
-**OpenCode Hook:** The kit includes a pre-configured RTK hook at `.opencode/hooks/rtk-hook.sh`. This hook automatically rewrites Bash commands before execution. The hook configuration is in `.opencode/hooks.json`.
 
 #### GitNexus
 
@@ -648,7 +611,6 @@ opencode-kit/
 │   ├── agent-models.json              # Model + fallback config per agent (source of truth)
 │   ├── agent-registry.json            # Auto-generated: skills + model mapping
 │   ├── hooks/
-│   │   ├── rtk-hook.sh               # RTK token compression (active)
 │   │   └── model-router.sh            # Reads runtime override, sets OMO_AGENT_MODEL
 │   ├── hooks.json                     # Hook configuration
 │   ├── scripts/
@@ -658,8 +620,7 @@ opencode-kit/
 │   │   ├── model-fallback.mjs         # Auto-switch via runtime state (no MD mutation)
 │   │   ├── verify.mjs                 # E2E verification (92 checks)
 │   │   └── __tests__/                 # node:test + bash tests
-│   │       ├── skill-registry.test.mjs
-│   │       └── rtk-hook.test.sh
+│   │       └── skill-registry.test.mjs
 │   └── standards/
 │       ├── conventions.md             # Coding/Security/Testing/Git/Anti-patterns (400 lines)
 │       └── *.md                       # Document templates
@@ -692,7 +653,6 @@ This kit stands on the shoulders of these open-source projects:
 | ECC | Verification loops | Checkpoint and continuous evaluation |
 | ECC | AgentShield integration | Security scanning |
 | [GitNexus](https://github.com/abhigyanpatwari/GitNexus) | Code intelligence | Knowledge graph for agents |
-| [RTK](https://github.com/rtk-ai/rtk) | Token compression | 60-90% CLI output reduction |
 | [ICM](https://github.com/rtk-ai/icm) | Persistent memory | Cross-session knowledge retention |
 
 ## License
@@ -730,7 +690,7 @@ SOFTWARE.
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`
 - ✅ GitNexus MUST rules with "because X, if skipped Y" annotations on all 8 agents
 - ✅ Runtime model fallback (`_workspace/.fallback-state.json`) — no more MD mutation, no git pollution
-- ✅ Test suite: `verify.mjs` (92 checks) + `skill-registry.test.mjs` (20) + `rtk-hook.test.sh` (17)
+- ✅ Test suite: `verify.mjs` (92 checks) + `skill-registry.test.mjs` (20)
 - ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
 - ✅ ICM memory integration
 - ✅ GitNexus code intelligence integration
@@ -754,7 +714,6 @@ SOFTWARE.
 ### v2.0 (Planned)
 
 - 🔄 **Continuous Learning** — Hook-based observation, background observer agent, instinct extraction with confidence scoring, `/evolve` and `/instinct-status` commands
-- 🔄 **RTK Token Compression** — Auto-rewrite Bash commands for 60-90% token reduction (hook present, default wiring pending)
 - 🔄 **AgentShield Integration** — Expand automated security gating and reporting in `/review` and `/ship`
 - 🔄 **Designer Agent Enhancement** — Standardize Stitch + Pencil handoff with richer DESIGN.md generation
 - 🔄 **Multi-project Support** — Project-scoped instincts, cross-project pattern sharing
@@ -771,4 +730,4 @@ SOFTWARE.
 
 Built with patterns from [Superpowers](https://github.com/obra/superpowers) and [ECC](https://github.com/affaan-m/ECC).
 
-Tools: [RTK](https://github.com/rtk-ai/rtk), [ICM](https://github.com/rtk-ai/icm), [GitNexus](https://github.com/abhigyanpatwari/GitNexus), [AgentShield](https://github.com/affaan-m/agentshield), [Stitch](https://stitch.withgoogle.com), [Pencil](https://pencil.dev).
+Tools: [ICM](https://github.com/rtk-ai/icm), [GitNexus](https://github.com/abhigyanpatwari/GitNexus), [AgentShield](https://github.com/affaan-m/agentshield), [Stitch](https://stitch.withgoogle.com), [Pencil](https://pencil.dev).
