@@ -2,7 +2,7 @@
 name: pm
 description: USE WHEN any new feature, module, project, or non-trivial change is requested and requirements are unclear or need formalization. Triggers: "build me X", "add a feature for Y", "I want to launch Z", "what should we build first", "prioritize the backlog", "write a spec for X", "interview me about X", "what's the MVP for Y", "scope this work", "/plan (early phase)". DO NOT use for: bug fixes, single-file changes, performance tweaks, refactors, or anything where requirements are already concrete — route those to the relevant domain agent (backend, frontend, qa) for execution. Also DO NOT bypass when the user is in a hurry or task "looks simple" — that is exactly when Socratic method prevents 2-day rework loops. Conducts Socratic interviews, writes specs with acceptance criteria, prioritizes features, and holds a HARD-GATE: no implementation begins until spec is approved.
 mode: primary
-model: my_xiaomi/mimo-v2.5-pro
+model: my_xiaomi/mimo-v2.5
 tools:
   Read: true
   Grep: true

@@ -145,7 +145,7 @@ function verifyInstallation(projectDir) {
 
   // Check agents
   const agentsDir = path.join(opencodeDir, 'agents');
-  const expectedAgents = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor'];
+  const expectedAgents = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
   for (const agent of expectedAgents) {
     checks.push({ name: `.opencode/agents/${agent}.md`, pass: fs.existsSync(path.join(agentsDir, `${agent}.md`)) });
   }

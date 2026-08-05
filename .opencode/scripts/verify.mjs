@@ -63,7 +63,7 @@ if (existsSync(modelsFile)) {
 
 // 2. Check agent MD files have model in frontmatter
 console.log('\n2. Agent YAML frontmatter (model field)');
-const agentFiles = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor'];
+const agentFiles = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
 
 for (const name of agentFiles) {
   const file = join(AGENTS_DIR, `${name}.md`);

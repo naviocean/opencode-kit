@@ -9,6 +9,7 @@ build/
 .opencode/model-health.json
 .gitnexus/
 .claude/
+.agents/
 CLAUDE.md
 # Runtime state — harness checkpoints
 _workspace/.harness-state.json

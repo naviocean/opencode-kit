@@ -11,7 +11,7 @@
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
 6. **One logical change per commit.** Squash before merge. Never force-push to main.
 7. **GitNexus MUST rules are not negotiable.** Each has a documented "if skipped, X risk" rationale.
-8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. Backend does not touch `apps/web/`. Rustacean does not touch web. Escalate to Tech Lead.
+8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. Backend does not touch `apps/web/`. Rustacean does not touch web. `python` owns `.py` files everywhere but escalates when a `.py` file lives inside another agent's app directory. Escalate to Tech Lead.
 
 ## Agent Trigger Map
 
@@ -23,6 +23,7 @@
 | Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** |
 | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **backend** |
 | Tauri, Rust, `apps/desktop/`, `src-tauri/`, IPC, system tray, native | **rustacean** |
+| Python, `.py`, LLM agent, LangChain, LangGraph, ML, scraping, FastAPI, uv, pydantic, ruff, pytest | **python** |
 | Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** |
 | Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** |
 
@@ -40,7 +41,7 @@
 | **Agent definitions** (frontmatter, skills, MUST rules) | `.opencode/agents/<name>.md` |
 | **Slash commands** (`/plan`, `/build`, etc.) | `.opencode/commands/<name>.md` |
 | **Workflow rules** (always-on) | `.opencode/rules/*.md` |
-| **Skill library** (116 skills) | `.opencode/skills/<category>/SKILL.md` |
+| **Skill library** (skills) | `.opencode/skills/<category>/SKILL.md` |
 | **Scripts + tests** | `.opencode/scripts/`, `.opencode/scripts/__tests__/` |
 | **Runtime state** (gitignored) | `_workspace/` (harness checkpoints) |
 | **End-user docs** (humans installing the kit) | `README.md` |
@@ -78,6 +79,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.2 | 2026-08-05 | Add 9th agent `python` (senior Python dev for AI apps). Install 21 Python/AI skills (19 wshobson + pydantic-ai-harness + langchain). Fix pm/tech-lead `.pro` model. |
 | 1.2.0 | 2026-06-01 | Refactor to pointer pattern. Detail moved to `.opencode/standards/conventions.md`. GitNexus MUST rules now have WHY annotations. Pushy descriptions on all 8 agents. Model-fallback uses runtime state (no MD mutation). Added test suite. |
 | 1.2.1 | 2026-08-05 | Fix CLI MCP config to OpenCode format (`{type, command, enabled}`). Add `rustacean` to CLI verify. Install 10 missing skills (116 total). Fix stale skill references. |
 | 1.1.0 | prior | Initial 8-agent / 111-skill / 7-command structure |

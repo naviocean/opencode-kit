@@ -5,19 +5,19 @@
   ],
   "agents": {
     "tech-lead": {
-      "model": "my_xiaomi/mimo-v2.5-pro",
+      "model": "my_xiaomi/mimo-v2.5",
       "fallback": [
         "my_xiaomi/mimo-v2.5"
       ]
     },
     "pm": {
-      "model": "my_xiaomi/mimo-v2.5-pro",
+      "model": "my_xiaomi/mimo-v2.5",
       "fallback": [
         "my_xiaomi/mimo-v2.5"
       ]
     },
     "designer": {
-      "model": "my_xiaomi/mimo-v2.5-pro",
+      "model": "my_xiaomi/mimo-v2.5",
       "fallback": [
         "my_xiaomi/mimo-v2.5"
       ]
@@ -50,6 +50,12 @@
       "model": "my_xiaomi/mimo-v2.5",
       "fallback": [
         "my_xiaomi/mimo-v2.5-pro"
+      ]
+    },
+    "python": {
+      "model": "my_xiaomi/mimo-v2.5",
+      "fallback": [
+        "my_xiaomi/mimo-v2.5"
       ]
     }
   }
