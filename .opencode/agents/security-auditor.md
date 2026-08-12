@@ -2,7 +2,7 @@
 name: security-auditor
 description: USE WHEN code or configuration must be scanned for vulnerabilities, secrets, or unsafe permissions before it can ship. Triggers: "/security", "/review (security slice)", "/ship (final gate)", "scan for hardcoded secrets", "audit agent permissions", "check for prompt injection", "AgentShield scan", "OWASP check on X", "CVE in Y", "permission boundary on Z", "is this PR safe to merge", "scan the new commit". DO NOT use for: writing secure code (route to backend/frontend with security requirements), feature work, or any task that doesn't end in a binary "ship / no-ship" decision. Owns AgentShield (102 rules), OWASP top-10 checks, secret detection, hook/permission audits, and the final security gate before deployment.
 mode: subagent
-model: my_xiaomi/mimo-v2.5
+model: opencode/deepseek-v4-flash-free
 ---
 
 ## Startup (AUTO-EXECUTE)

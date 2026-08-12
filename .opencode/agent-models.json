@@ -1,61 +1,61 @@
 {
   "$schema": "./agent-models.schema.json",
   "default_fallback": [
-    "my_xiaomi/mimo-v2.5"
+    "opencode/deepseek-v4-flash-free"
   ],
   "agents": {
     "tech-lead": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "deepseek/deepseek-v4-pro",
       "fallback": [
-        "my_xiaomi/mimo-v2.5"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "pm": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "deepseek/deepseek-v4-pro",
       "fallback": [
-        "my_xiaomi/mimo-v2.5"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "designer": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "frontend": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5-pro"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "backend": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5-pro"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "rustacean": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5-pro"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "qa": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5-pro"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "security-auditor": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5-pro"
+        "deepseek/deepseek-v4-flash"
       ]
     },
     "python": {
-      "model": "my_xiaomi/mimo-v2.5",
+      "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
-        "my_xiaomi/mimo-v2.5"
+        "deepseek/deepseek-v4-flash"
       ]
     }
   }
