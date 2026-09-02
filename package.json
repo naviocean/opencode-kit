@@ -34,7 +34,15 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node bin/cli.js init --dry-run --skip-mcp --yes"
+    "test": "node .opencode/scripts/__tests__/skill-registry.test.mjs && node .opencode/scripts/__tests__/dispatch.test.mjs && node .opencode/scripts/__tests__/verify.test.mjs",
+    "test:registry": "node .opencode/scripts/__tests__/skill-registry.test.mjs",
+    "test:dispatch": "node .opencode/scripts/__tests__/dispatch.test.mjs",
+    "test:verify": "node .opencode/scripts/__tests__/verify.test.mjs",
+    "verify": "node .opencode/scripts/verify.mjs",
+    "verify:cli": "node bin/cli.js verify",
+    "registry": "node .opencode/scripts/skill-registry.mjs",
+    "health": "node .opencode/scripts/model-health-check.mjs",
+    "test:all": "npm test && npm run verify && npm run verify:cli"
   },
   "engines": {
     "node": ">=18.0.0"

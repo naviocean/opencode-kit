@@ -143,9 +143,19 @@ function verifyInstallation(projectDir) {
   const opencodeDir = path.join(projectDir, '.opencode');
   checks.push({ name: '.opencode/ directory', pass: fs.existsSync(opencodeDir) });
 
-  // Check agents
+  // Check agents — derive from agent-models.json (single source of truth)
   const agentsDir = path.join(opencodeDir, 'agents');
-  const expectedAgents = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
+  const modelsJsonPath = path.join(opencodeDir, 'agent-models.json');
+  let expectedAgents;
+  try {
+    const modelsJson = JSON.parse(fs.readFileSync(modelsJsonPath, 'utf8'));
+    expectedAgents = Object.keys(modelsJson.agents || {}).sort();
+  } catch {
+    // Fallback: scan agents directory for .md files
+    expectedAgents = fs.existsSync(agentsDir)
+      ? fs.readdirSync(agentsDir).filter(f => f.endsWith('.md')).map(f => f.replace('.md', '')).sort()
+      : [];
+  }
   for (const agent of expectedAgents) {
     checks.push({ name: `.opencode/agents/${agent}.md`, pass: fs.existsSync(path.join(agentsDir, `${agent}.md`)) });
   }
@@ -322,12 +332,9 @@ function initProject(projectDir, options = {}) {
 
   // 2. Detect existing installation
   const opencodeDir = path.join(projectDir, '.opencode');
-  if (fs.existsSync(opencodeDir) && !yes) {
+  if (fs.existsSync(opencodeDir)) {
     logWarn('.opencode/ directory already exists');
     logInfo('Files will be merged (existing files overwritten)');
-    if (!yes) {
-      // In non-interactive mode, just proceed
-    }
   }
 
   // 3. Copy kit files

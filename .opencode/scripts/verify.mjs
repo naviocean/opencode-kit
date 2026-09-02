@@ -7,14 +7,20 @@
  * Usage: node .opencode/scripts/verify.mjs
  */
 
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import {
+  getAgentNames,
+  getAgentsDir,
+  getModelsFile,
+  getRegistryFile,
+  getSkillsDir,
+  loadRegistry,
+  ROOT,
+} from './lib/config.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..', '..');
-const AGENTS_DIR = join(ROOT, '.opencode', 'agents');
+const AGENTS_DIR = getAgentsDir();
 
 const PASS = '✅';
 const FAIL = '❌';
@@ -45,7 +51,7 @@ console.log('\n📋 E2E Verification: Model-per-Agent + Skill Auto-Load\n');
 
 // 1. Check agent-models.json
 console.log('1. agent-models.json');
-const modelsFile = join(ROOT, '.opencode', 'agent-models.json');
+const modelsFile = getModelsFile();
 check('File exists', existsSync(modelsFile));
 
 if (existsSync(modelsFile)) {
@@ -62,8 +68,9 @@ if (existsSync(modelsFile)) {
 }
 
 // 2. Check agent MD files have model in frontmatter
+// H1: Agent list derived from agent-models.json (single source of truth)
 console.log('\n2. Agent YAML frontmatter (model field)');
-const agentFiles = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
+const agentFiles = getAgentNames();
 
 for (const name of agentFiles) {
   const file = join(AGENTS_DIR, `${name}.md`);
@@ -93,7 +100,7 @@ console.log('\n4. Skill Registry');
 const registryScript = join(ROOT, '.opencode', 'scripts', 'skill-registry.mjs');
 check('skill-registry.mjs exists', existsSync(registryScript));
 
-const registryFile = join(ROOT, '.opencode', 'agent-registry.json');
+const registryFile = getRegistryFile();
 check('agent-registry.json exists', existsSync(registryFile));
 
 if (existsSync(registryFile)) {
@@ -112,9 +119,8 @@ if (existsSync(registryFile)) {
 
 // 5. Check dispatch script
 console.log('\n5. Dispatch Script');
-const dispatchScript = join(ROOT, '.opencode', 'scripts', 'disptach.mjs');
-const dispatchScript2 = join(ROOT, '.opencode', 'scripts', 'dispatch.mjs');
-check('dispatch.mjs exists', existsSync(dispatchScript2));
+const dispatchScript = join(ROOT, '.opencode', 'scripts', 'dispatch.mjs');
+check('dispatch.mjs exists', existsSync(dispatchScript));
 
 // 6. Check no Claude Code hook config lingers
 // (invariant: opencode routes subagent models via frontmatter `model:`,
@@ -151,6 +157,37 @@ if (existsSync(modelsFile)) {
   }
 }
 
+// 8. Skill existence validation (H2)
+// Cross-check: every skill referenced in agent-registry.json must exist in .opencode/skills/
+console.log('\n8. Skill existence validation');
+const skillsDir = getSkillsDir();
+if (existsSync(registryFile) && existsSync(skillsDir)) {
+  const registry = loadRegistry();
+  const availableSkills = new Set(readdirSync(skillsDir));
+  let totalSkillRefs = 0;
+  let missingSkills = 0;
+
+  for (const [agentName, agent] of Object.entries(registry.agents || {})) {
+    const allSkills = [
+      ...(agent.skills?.always || []),
+      ...(agent.skills?.conditional || []).map(c => c.skill),
+    ];
+    for (const skill of allSkills) {
+      totalSkillRefs++;
+      const exists = availableSkills.has(skill);
+      if (!exists) {
+        check(`  ${agentName} → ${skill}`, false, 'skill directory not found');
+        missingSkills++;
+      }
+    }
+  }
+  if (missingSkills === 0) {
+    check(`All ${totalSkillRefs} skill references resolve to .opencode/skills/`, true);
+  }
+} else {
+  warn('Skill validation skipped', 'registry or skills dir missing');
+}
+
 // ──────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log(`Results: ${passed} passed, ${failed} failed, ${warnings} warnings`);
@@ -159,7 +196,7 @@ if (failed === 0) {
   console.log('Next steps:');
   console.log('  1. Open opencode');
   console.log('  2. Type: implement a REST endpoint for user profiles');
-  console.log('  3. Verify backend agent uses mimo-v2.5 (not mimo-v2.5-pro)');
+  console.log('  3. Verify backend agent uses the model from agent-models.json');
   console.log('  4. Verify backend agent calls skill(name="nestjs-best-practices")');
 } else {
   console.log('\n⚠️ Some checks failed. Fix them before E2E test.\n');

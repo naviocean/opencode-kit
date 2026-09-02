@@ -31,11 +31,9 @@
  */
 
 import { readFileSync } from 'fs';
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { join } from 'path';
+import { getAgentNames, loadRegistry, ROOT } from './lib/config.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, '..', '..');
 const REGISTRY_FILE = join(ROOT, '.opencode', 'agent-registry.json');
 
 const agentName = process.argv[2];
@@ -43,8 +41,9 @@ const taskDesc = process.argv.slice(3).filter(a => !a.startsWith('--')).join(' '
 const flags = process.argv.filter(a => a.startsWith('--'));
 
 if (!agentName) {
+  const names = getAgentNames().join(', ');
   console.error('Usage: node dispatch.mjs <agent-name> [task-description] [--json|--shell|--claude]');
-  console.error('Agents: tech-lead, pm, designer, frontend, backend, rustacean, qa, security-auditor');
+  console.error(`Agents: ${names}`);
   process.exit(1);
 }
 
