@@ -243,8 +243,10 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `gitnexus-refactoring` | Safe refactoring — cross-reference validation, rename propagation |
 | `gitnexus-debugging` | Root cause tracing — execution flow, data flow, error paths |
 | `gitnexus-pr-review` | PR review workflow — diff analysis, pattern matching, impact scoring |
+| `gitnexus-cli` | Administering GitNexus CLI commands, status, and local index health |
+| `gitnexus-guide` | Complete reference and overview of GitNexus capabilities |
 
-### Superpowers
+### Superpowers & Worktrees
 
 | Skill | When to Load |
 |---|---|
@@ -254,6 +256,8 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `verification-before-completion` | Final verification checklist before approving work |
 | `subagent-driven-development` | Dispatching focused agents for isolated tasks |
 | `dispatching-parallel-agents` | Coordinating multiple agents working simultaneously |
+| `using-git-worktrees` | Creating and managing isolated git worktrees for clean parallel branch work |
+| `finishing-a-development-branch` | Systematic guide for branch completion, rebasing, and merge preparation |
 
 ### Code Review
 
@@ -263,13 +267,24 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `receiving-code-review` | When processing feedback from review agents |
 | `code-review-excellence` | Review standards, checklists, and quality gates |
 
-### Architecture
+### Architecture & Standards
 
 | Skill | When to Load |
 |---|---|
 | `architecture-decision-records` | Documenting decisions as ADRs with rationale and alternatives |
 | `architecture-patterns` | Proven patterns for SaaS architecture (CQRS, event sourcing, etc.) |
 | `api-design-principles` | REST/GraphQL contract design, versioning, error handling |
+| `coding-standards` | Evaluating code quality — TypeScript strict rules, ESLint config, naming conventions |
+| `continuous-learning` | Pattern repeats 3+ times — auto-extract as instinct with confidence scoring |
+| `orchestrate` | Dispatching parallel work to agents — category routing, task formatting |
+
+### Git & Releases
+
+| Skill | When to Load |
+|---|---|
+| `git-workflow` | Managing branches, commits, PRs. Branch naming, conventional commits, PR templates |
+| `git-advanced-workflows` | Advanced Git operations — interactive rebase, reflog recovery, bisect |
+| `changelog-automation` | Generating Keep a Changelog releases from conventional commits and PRs |
 
 ### RTK
 
@@ -278,17 +293,7 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `code-simplifier` | Simplifying complex code before review — reduce cognitive load |
 | `design-patterns` | Applying Gang-of-Four and modern patterns appropriately |
 
-### Custom
-
-| Skill | When to Load |
-|---|---|
-| `orchestrate` | Dispatching parallel work to agents. Category routing, task formatting. |
-| `code-review-excellence` | Reviewing agent output. Review checklists, impact analysis, rejection criteria. |
-| `git-workflow` | Managing branches, commits, PRs. Branch naming, conventional commits, PR templates. |
-| `coding-standards` | Evaluating code quality. TypeScript strict rules, ESLint config, naming conventions. |
-| `continuous-learning` | Pattern repeats 3+ times — auto-extract as instinct with confidence scoring. |
-
-### Workflow
+### Workflow & Skills
 
 | Skill | When to Load |
 |---|---|
@@ -300,6 +305,9 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `review-agent-setup` | Configuring review agents with appropriate context and scope |
 | `scan` | Running security or quality scans on codebase sections |
 | `diagnose` | Diagnosing build failures, test failures, or integration issues |
+| `track-management` | Creating and managing Conductor tracks, specs, and execution units |
+| `find-skills` | Finding and installing community skills from skills.sh registry |
+| `writing-skills` | Authoring, testing, and formatting new SKILL.md specifications |
 
 ## Document Standards
 

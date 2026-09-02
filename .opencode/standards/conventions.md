@@ -39,6 +39,11 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Direct `prisma.findMany()` without pagination | OOM on large tables | Always pass `take` and `skip` or cursor |
 | `await` inside a `for` loop for I/O | Serial when could be parallel | `Promise.all` or `Promise.allSettled` |
 | Mutations of imported objects | Cross-module side effects | Clone first, or use immutable pattern |
+| Python: bare `except:` | Swallows SystemExit, KeyboardInterrupt, hides bugs | Catch specific `Exception` subclass |
+| Python: mutable default args `def f(x=[])` | Shared state across function calls | `x: list | None = None` and init inside |
+| Python: `import *` | Pollutes namespace, breaks static analysis | Explicit imports only |
+| Rust: `.unwrap()` / `.expect()` in production | Panics crash process/webview | Return `Result<T, E>` and handle with `?` |
+| Rust: gratuitous `.clone()` | Hides bad ownership architecture, wastes memory | Pass references (`&str`, `&[T]`) |
 
 ### Process
 
@@ -61,6 +66,8 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Frontend agent editing `apps/api/` | Breaks domain ownership; backend can't review | Escalate to Tech Lead; backend does the edit |
 | Backend agent editing `apps/web/` | Same | Same |
 | Rustacean editing web code | Same | Same |
+| Python editing non-.py files in `apps/` | Breaks domain ownership; app agent must review | Escalate to Tech Lead; app owner edits |
+| DevOps editing business logic in `apps/` | DevOps owns infra/CI/CD, not business logic | Escalate to Tech Lead; feature agent edits |
 | Designer writing production logic | Design owns spec, not code | Designer → handoff → Frontend implements |
 | QA skipping test review on a "trivial" PR | Trivial PRs have 30% of bugs | Always run affected tests |
 

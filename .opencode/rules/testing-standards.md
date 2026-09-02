@@ -4,14 +4,18 @@ All agents follow these testing conventions.
 
 ## Stack
 
-| Layer | Tool | Purpose |
-|---|---|---|
-| Unit tests | Vitest 4 | Isolated function/class testing |
-| Component tests | Vitest + React Testing Library | React component testing |
-| Integration tests | Vitest + Supertest | API endpoint testing |
-| E2E tests | Playwright | Full user flow testing |
-| Mocking | MSW (Mock Service Worker) | API mocking for frontend |
-| Test utils | Custom fakes in `libs/shared/test-utils` | Shared test doubles |
+| Ecosystem | Layer | Tool | Purpose |
+|---|---|---|---|
+| **TypeScript / Web / API** | Unit & Integration | Vitest 4 + Supertest | Function, class, and API endpoint testing |
+| | Component | Vitest + React Testing Library | React component behavior and DOM rendering |
+| | E2E | Playwright | Full user flows across browsers |
+| | Mocking | MSW (Mock Service Worker) | API network mocking |
+| **Python / AI** | Unit & Integration | `pytest` + `pytest-asyncio` | Service, model, agent, and LangGraph pipeline tests |
+| | Test Doubles | `pytest-mock` / `unittest.mock` | External API and LLM call mocking |
+| | Coverage | `pytest-cov` | Statement/branch coverage reporting |
+| **Rust / Desktop** | Unit & Integration | `cargo test` | Module unit tests (`#[test]`) & integration tests (`tests/`) |
+| | Mocking | `mockall` | Trait-based mocking for native systems |
+| | Coverage | `cargo-llvm-cov` / `cargo-tarpaulin` | Line/branch coverage verification |
 
 ## Test Pyramid
 
@@ -22,13 +26,11 @@ All agents follow these testing conventions.
      ╱──────╲       - Auth, billing, core CRUD
     ╱        ╲
    ╱ Integration╲   Integration (some)
-  ╱──────────────╲  - API endpoints
- ╱                ╲ - Database operations
+  ╱──────────────╲  - API endpoints, DB queries, LLM pipelines
+ ╱                ╲ - Desktop IPC, service boundaries
 ╱    Unit Tests    ╲ Unit (many)
 ╱────────────────────╲
-- Business logic
-- Utilities
-- Component rendering
+- Business logic, utilities, components, pure algorithms
 ```
 
 ## TDD Workflow (RED-GREEN-REFACTOR)
@@ -57,7 +59,9 @@ Borrowed from Superpowers (obra/superpowers):
 | Lines | 80% | 90% |
 
 **Enforcement:**
-- `nx affected -t test` runs only affected tests
+- TypeScript: `nx affected -t test` runs only affected tests
+- Python: `pytest --cov --cov-fail-under=80` enforced on `.py` changes
+- Rust: `cargo test` 100% pass required on `src-tauri/`
 - Coverage report generated on every test run
 - PR blocked if coverage drops below minimum
 

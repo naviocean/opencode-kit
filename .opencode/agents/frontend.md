@@ -606,25 +606,23 @@ Load these skills when their context matches:
 
 | Skill                        | When to Load                                                                                                                                 |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `nextjs-app-router-patterns` | Advanced App Router patterns — parallel routes, intercepting routes, route groups, streaming SSR, partial prerendering.                      |
-| `nextjs-app-router-patterns` | When working with App Router, Server Components, route handlers, middleware. Contains RSC patterns, data fetching strategies, caching rules. |
+| `nextjs-app-router-patterns` | Advanced App Router patterns — Server Components, parallel routes, route groups, streaming SSR, partial prerendering, data fetching.        |
 
-### React Skills
+### React & TypeScript Skills
 
 | Skill                         | When to Load                                                                                                                 |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `react-components`            | Component architecture — composition patterns, compound components, render props, component API design.                      |
-| `react-state-management`      | State management patterns — local state, context, Redux integration, URL state, derived state.                               |
+| `react-components`            | Component architecture — composition patterns, compound components, render props, memoization, performance optimization.     |
+| `react-state-management`      | State management patterns — local state, context, Redux Toolkit / RTK Query, URL state, optimistic updates, cache.           |
 | `vercel-react-best-practices` | Vercel's React best practices — Server Components optimization, streaming, Suspense boundaries, caching strategies.          |
-| `react-components`            | When building components, hooks, managing state. Contains composition patterns, performance optimization, memoization rules. |
+| `typescript-advanced-types`   | Advanced TypeScript patterns — discriminated unions, generics, template literals, strict component prop typing.              |
 
-### Shadcn Skills
+### UI & Styling Skills
 
 | Skill                    | When to Load                                                                                                                          |
 | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `shadcn`                 | Shadcn component library — installation, customization, theming, composition patterns, Radix UI primitives.                           |
 | `tailwind-design-system` | Tailwind-first design system — utility class patterns, theme configuration, responsive tokens, CSS variable mapping.                  |
-| `shadcn`                 | When installing, customizing, or theming Shadcn components. Contains component list, customization guide, theming with CSS variables. |
 
 ### Design Skills
 
@@ -642,13 +640,12 @@ Load these skills when their context matches:
 | `gitnexus-refactoring` | Code refactoring with GitNexus — safe renames, extract component, move file, impact analysis before changes.                         |
 | `gitnexus-exploring`   | Codebase exploration with GitNexus — find patterns, trace dependencies, understand component relationships, knowledge graph queries. |
 
-### RTK Skills
+### Architecture & Optimization Skills
 
 | Skill                    | When to Load                                                                                                                                 |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `code-simplifier`        | Code simplification — reducing complexity, removing duplication, extracting utilities, improving readability.                                |
 | `design-patterns`        | Implementation design patterns — repository pattern, service layer, facade, strategy, observer for frontend architecture.                    |
-| `react-state-management` | When defining API slices, mutations, cache invalidation. Contains endpoint patterns (RTK Query), optimistic updates, prefetching strategies. |
 
 ### Testing Skills
 

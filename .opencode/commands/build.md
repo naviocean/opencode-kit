@@ -17,7 +17,7 @@ Activate the full team for parallel implementation. Use ONLY when an approved pl
 ## Agent Flow
 
 ```
-Tech Lead → Frontend + Backend (parallel) → QA → Security Auditor
+Tech Lead → Dynamic Specialists (Frontend / Backend / Python / Rustacean / DevOps in parallel) → QA → Security Auditor
 ```
 
 ## Phase 0: Context Check (enables resume)
@@ -44,6 +44,7 @@ Proceed? (y/n)
 ## Phase 1: Tech Lead — Dispatch
 
 - Reads the approved plan from `docs/plans/`
+- Identifies affected domains (Web, API, AI/Python, Desktop/Rust, DevOps/Infra)
 - Breaks work into parallel tasks → `docs/tasks/{name}-task.md`
 - Assigns each task with category:
   - `deep` — complex autonomous work, multi-file/multi-system (uses opus/pro)
@@ -52,36 +53,61 @@ Proceed? (y/n)
 
 **Why categories?** They map to model cost. Mis-categorize and you either burn tokens on trivial work or produce bad output on hard work. When unsure, default to `deep`.
 
-## Phase 2: Frontend + Backend — Parallel Execution
+## Phase 2: Dynamic Specialist Parallel Execution
 
 **Mode: Subagents in parallel** (`run_in_background: true`)
 
-Both agents read disjoint slices of the plan and write to `_workspace/02_{agent}_*.{ext}` so they don't conflict. Orchestrator reads both and produces final files at the end.
+Tech Lead dispatches only the specialists whose domains are touched by the approved plan. All agents read disjoint slices of the plan and write to `_workspace/02_{agent}_*.{ext}` so they don't conflict. Orchestrator coordinates final merging.
 
-**Frontend Agent:**
+**Frontend Agent (Web UI):**
 - Reads tasks from `docs/tasks/frontend-*.md`
 - Implements React components, RTK Query endpoints, Shadcn/Tailwind styling
 - Follows design tokens from Designer
-- Writes component tests
+- Writes component tests (Vitest + RTL)
 - Outputs to `_workspace/02_frontend_*.{tsx,ts,test.ts}`
 
-**Backend Agent:**
+**Backend Agent (Server API & DB):**
 - Reads tasks from `docs/tasks/backend-*.md`
 - Implements NestJS modules, Prisma models/migrations, API endpoints, auth guards
-- Writes integration tests
+- Writes integration tests (Supertest)
 - Outputs to `_workspace/02_backend_*.{ts,test.ts}`
 
-**Integration seam:** API contract from the plan. QA verifies in Phase 3 that Backend's response shape matches Frontend's RTK Query types — this catches shape drift at the boundary.
+**Python Agent (AI & ML Services):**
+- Reads tasks from `docs/tasks/python-*.md`
+- Implements FastAPI endpoints, LangGraph state graphs, LLM agents, Pydantic schemas
+- Writes async unit & pipeline tests (`pytest`, `pytest-asyncio`)
+- Outputs to `_workspace/02_python_*.{py,test.py}`
 
-## Phase 3: QA Agent — Verification
+**Rustacean Agent (Desktop & Native):**
+- Reads tasks from `docs/tasks/rustacean-*.md`
+- Implements Tauri v2 commands, native IPC handlers, Rust business logic
+- Writes Rust tests (`cargo test`)
+- Outputs to `_workspace/02_rustacean_*.rs`
+
+**DevOps Agent (Infra, CI/CD & Containers):**
+- Reads tasks from `docs/tasks/devops-*.md`
+- Implements Dockerfiles, docker-compose, GitHub Actions workflows, Terraform, K8s manifests
+- Configures Prometheus metrics and Grafana alerts
+- Outputs to `_workspace/02_devops_*.{yml,yaml,tf,Dockerfile}`
+
+**Integration seams:**
+- Web ↔ Backend: DTO contracts from plan verified in Phase 3.
+- Web / Backend ↔ Python AI: HTTP/event contracts verified in Phase 3.
+- Desktop ↔ Native Rust: Tauri IPC invoke schema verified in Phase 3.
+- Services ↔ DevOps: Container ports, health probes (`/health/live`, `/health/ready`), environment variables verified in Phase 3.
+
+## Phase 3: QA Agent — Multi-Stack Verification
 
 **Why after Phase 2?** QA needs actual implementation to verify. Parallel-with-impl would test against nothing.
 
 - Reads `_workspace/02_*` outputs
-- Runs `nx affected -t test` — only affected tests (faster, regression-focused)
+- **Full multi-stack test run:**
+  - TypeScript/Web/API: `nx affected -t test`
+  - Python/AI: `pytest --cov` (when `.py` files affected)
+  - Rust/Desktop: `cargo test` (when `src-tauri/` affected)
 - Checks coverage thresholds (80% statements / 75% branches per AGENTS.md)
 - Runs Playwright E2E for critical flows listed in plan
-- **Boundary check:** compares Backend response shape vs Frontend RTK Query types
+- **Boundary checks:** verifies contract compatibility across all communicating agents
 - Reports failures with `file:line` context, not just "test failed"
 - Writes `_workspace/03_qa_report.md`
 

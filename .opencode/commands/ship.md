@@ -30,14 +30,21 @@ QA → Security Auditor → Tech Lead
 ## Phase 1: QA Agent — Full Test Suite
 
 ```bash
+# TypeScript / Web / API
 nx run-many -t test --coverage
 npx playwright test
+
+# Python / AI (when .py present)
+pytest --cov
+
+# Rust / Desktop (when src-tauri present)
+cargo test
 ```
 
 **Why full suite (not affected)?** Ship is the last gate. Any test that has ever failed in any branch must pass now. Affected-only would miss regressions in unrelated code.
 
 **Checks:**
-- All tests pass
+- All tests pass across all active language stacks
 - Coverage: 80% statements, 75% branches (per AGENTS.md)
 - No skipped tests without linked issues
 - E2E critical flows verified
@@ -72,15 +79,19 @@ The Tech Lead:
 ## Output
 
 After `/ship`:
-1. ✅ All tests passing
+1. ✅ All tests passing across active stacks
 2. ✅ Security gate passed (grade ≥ B)
 3. ✅ Acceptance criteria met
 4. ✅ Tech Lead final approval
 5. ✅ Ready to deploy
 
-## Deployment
+## Deployment & Release
 
-After Tech Lead approval, deployment is YOUR DevOps team's responsibility. This kit does not deploy.
+After Tech Lead approval, hand off to `devops` agent to execute release pipeline:
+1. Build and tag production container images (`Dockerfile`).
+2. Run database migrations with zero-downtime strategy.
+3. Deploy manifests to staging/production clusters (`k8s/`, `terraform/`).
+4. Verify Prometheus / Grafana health check and SLO error budget.
 
 ## Document Standards
 

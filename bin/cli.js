@@ -17,7 +17,7 @@ const { execSync } = require('child_process');
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.2.3';
+const VERSION = '1.2.4';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -105,7 +105,7 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .opencode/    9 agents, 8 commands, 4 rules, 142 skills, 7 doc templates
+  .opencode/    10 agents, 8 commands, 4 rules, 152 skills, 7 doc templates
   AGENTS.md     Project rules (injected every session)
   docs/         Document output directories (prds, designs, plans, adr, tasks)
 
@@ -343,7 +343,7 @@ function initProject(projectDir, options = {}) {
   const kitDir = path.dirname(__filename);
 
   const copyTasks = [
-    { src: '.opencode', dest: '.opencode', desc: '9 agents, 8 commands, 4 rules, 142 skills, 8 doc templates, RTK hook' },
+    { src: '.opencode', dest: '.opencode', desc: '10 agents, 8 commands, 4 rules, 152 skills, 8 doc templates, RTK hook' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
     { src: 'docs', dest: 'docs', desc: 'Document output directories' },
   ];
@@ -392,10 +392,10 @@ function initProject(projectDir, options = {}) {
   logStep('Installation complete!');
   log(`
 ${COLORS.bold}What was installed:${COLORS.reset}
-  .opencode/agents/         9 agent definitions
+  .opencode/agents/         10 agent definitions
   .opencode/commands/       8 slash commands
   .opencode/rules/          4 always-follow rules
-  .opencode/skills/         142 skills (131 from skills.sh + 11 custom)
+  .opencode/skills/         152 skills (141 from skills.sh + 11 custom)
   .opencode/standards/      7 document templates
   .opencode/memory/         Continuous learning config
   AGENTS.md                 Project rules
@@ -440,7 +440,7 @@ function updateProject(projectDir, options = {}) {
   logStep('Updating kit files...');
 
   const updateTasks = [
-    { src: '.opencode/agents', dest: '.opencode/agents', desc: '9 agent definitions' },
+    { src: '.opencode/agents', dest: '.opencode/agents', desc: '10 agent definitions' },
     { src: '.opencode/commands', dest: '.opencode/commands', desc: '8 slash commands' },
     { src: '.opencode/rules', dest: '.opencode/rules', desc: '4 rules' },
     { src: '.opencode/standards', dest: '.opencode/standards', desc: '7 document templates' },

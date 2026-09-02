@@ -103,12 +103,6 @@
       "skillPath": "plugins/before-you-build/skills/before-you-build/SKILL.md",
       "computedHash": "50cb4ca6cab765ac8192d16c8a9cd882fd1416931a2b67ce917b09b754c7e17b"
     },
-    "billing-automation": {
-      "source": "wshobson/agents",
-      "sourceType": "github",
-      "skillPath": "plugins/payment-processing/skills/billing-automation/SKILL.md",
-      "computedHash": "7dcc75b7090d6d0e9905b4eccf82ee2be58977b9d521ffad70bdd1ec299933c2"
-    },
     "binary-analysis-patterns": {
       "source": "wshobson/agents",
       "sourceType": "github",
@@ -1489,12 +1483,6 @@
       "skillPath": "plugins/security-scanning/skills/stride-analysis-patterns/SKILL.md",
       "computedHash": "208b0c83469f6d2a7bddf034ec7a3343672e6b3d27219670deb9027e79728a65"
     },
-    "stripe-integration": {
-      "source": "wshobson/agents",
-      "sourceType": "github",
-      "skillPath": "plugins/payment-processing/skills/stripe-integration/SKILL.md",
-      "computedHash": "4621fa0a1ee27f92961628115f1a2dd305569acb777f4933bcbffcda3037bd53"
-    },
     "subagent-driven-development": {
       "source": "obra/superpowers",
       "sourceType": "github",
@@ -1656,12 +1644,6 @@
       "sourceType": "github",
       "skillPath": "skills/using-git-worktrees/SKILL.md",
       "computedHash": "bd10bc57c23040630b17c877a9bc7b4be40c35161a2e2f110d770d78e3b0a4ff"
-    },
-    "using-superpowers": {
-      "source": "obra/superpowers",
-      "sourceType": "github",
-      "skillPath": "skills/using-superpowers/SKILL.md",
-      "computedHash": "de10fd3ff46d797acc92b9df6b3ea456a5cd1d095b73c90bc921e83cce4c5bb9"
     },
     "uv-package-manager": {
       "source": "wshobson/agents",

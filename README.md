@@ -1,6 +1,6 @@
 # OpenCode SaaS Kit
 
-A multi-agent development team kit for OpenCode. Nine specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, QA, and Security Auditor — to build SaaS products from spec to ship.
+A multi-agent development team kit for OpenCode. Ten specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
 
 ## Quick Start
 
@@ -27,6 +27,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 - **Frontend/Backend** agents work in parallel on their domains
 - **Rustacean** owns the Tauri desktop stack end-to-end (`apps/desktop/`)
 - **Python** builds AI agents, data pipelines, and Python services (`.py`, uv, LangChain)
+- **DevOps** owns CI/CD, Docker, Kubernetes, Terraform, and Observability
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
 
@@ -48,11 +49,11 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
      │  (Orchestrator) │
      └────────┬────────┘
               │
-     ┌────────┼────────┬───────────┬─────────┬────────┬─────────────────┐
-     │        │        │           │         │        │                 │
-     ▼        ▼        ▼           ▼         ▼        ▼                 ▼
- Frontend  Backend  Rustacean    Python     QA   Security Auditor
- /build    /build   /build       /build    /test  /review + /ship
+     ┌────────┼────────┬───────────┬─────────┬───────────┬────────┬─────────────────┐
+     │        │        │           │         │           │        │                 │
+     ▼        ▼        ▼           ▼         ▼           ▼        ▼                 ▼
+ Frontend  Backend  Rustacean    Python    DevOps       QA   Security Auditor
+ /build    /build   /build       /build    /build      /test  /review + /ship
 ```
 
 ### Agent Responsibilities
@@ -66,6 +67,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | **Backend** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds API and business logic. | GitNexus (code context), ICM (pattern memory) |
 | **Rustacean** | Tauri v2 + Rust specialist. Owns the entire desktop app (`apps/desktop/`): Rust commands, IPC, AND the UI inside the Tauri webview. | GitNexus (code context), ICM (pattern memory) |
 | **Python** | AI agents, LLM pipelines, ML, scraping, FastAPI. Owns Python services and `.py` files. | uv, pydantic, pytest, GitNexus |
+| **DevOps** | CI/CD pipelines, Docker, Kubernetes/Helm, Terraform, Prometheus/Grafana observability. | GitHub Actions, Docker, Helm, Prometheus, Grafana |
 | **QA** | Test strategy, Vitest unit tests, Playwright E2E, coverage analysis. Enforces TDD. | GitNexus (detect changes), ICM (test memory) |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection, permission audits. Gates deployment. | AgentShield CLI, ICM (security memory) |
 
@@ -73,7 +75,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 
 ### ICM (Intelligent Context Manager)
 
-Persistent memory across sessions. All 9 agents share one SQLite database per project.
+Persistent memory across sessions. All 10 agents share one SQLite database per project.
 
 ```bash
 icm init --project
@@ -508,9 +510,9 @@ export CONTEXT7_API_KEY=your_key_here
 
 ## Skills
 
-142 skills total — 131 from [skills.sh](https://skills.sh) registry (including 26 Python/AI skills) + 11 custom skills unique to this kit.
+152 skills total — 141 from [skills.sh](https://skills.sh) registry (including 26 Python/AI skills and 13 DevOps skills) + 11 custom skills unique to this kit.
 
-### From skills.sh (131 skills)
+### From skills.sh (141 skills)
 
 | Category | Skills | Source |
 |---|---|---|
@@ -523,13 +525,14 @@ export CONTEXT7_API_KEY=your_key_here
 | **Prisma** | `prisma-database-setup`, `prisma-client-api`, `prisma-cli`, `prisma-postgres`, `prisma-postgres-setup`, `prisma-upgrade-v7` | [prisma/skills](https://github.com/prisma/skills) |
 | **TypeScript** | `typescript-advanced-types` | [wshobson/agents](https://github.com/wshobson/agents) |
 | **Python / AI & LangGraph** | `langgraph-fundamentals`, `langgraph-persistence`, `langgraph-human-in-the-loop`, `langgraph-python-quickstart`, `langgraph-cli`, `langchain-architecture`, `pydantic-ai-harness`, `deepagents-python-quickstart`, `uv-package-manager`, `fastapi-templates`, `async-python-patterns`, `python-code-style`, `python-testing-patterns`, `python-type-safety`, `python-resilience`, `python-error-handling`, `python-observability`, `python-background-jobs`, `python-performance-optimization`, `python-resource-management`, `python-anti-patterns` | [langchain-ai/langchain-skills](https://github.com/langchain-ai/langchain-skills), [wshobson/agents](https://github.com/wshobson/agents) |
+| **DevOps & Infrastructure** | `github-actions-templates`, `gitlab-ci-patterns`, `terraform-module-library`, `k8s-manifest-generator`, `k8s-security-policies`, `helm-chart-scaffolding`, `prometheus-configuration`, `grafana-dashboards`, `slo-implementation`, `cost-optimization`, `gitops-workflow`, `deployment-pipeline-design`, `incident-runbook-templates` | [wshobson/agents](https://github.com/wshobson/agents) |
 | **Testing** | `vitest`, `tdd`, `test-driven-development`, `playwright-best-practices`, `e2e-testing-patterns`, `javascript-testing-patterns` | [antfu/skills](https://github.com/antfu/skills), [mattpocock/skills](https://github.com/mattpocock/skills), [currents-dev](https://github.com/currents-dev/playwright-best-practices-skill) |
 | **Design** | `shadcn`, `tailwind-design-system`, `design-md`, `design-flow`, `design-brief`, `design-tokens`, `design-system-patterns`, `design-review`, `interaction-design`, `high-end-visual-design`, `industrial-brutalist-ui`, `redesign-existing-projects`, `stitch-loop`, `stitch-manage-design-system`, `pencil-design`, `taste-design`, `design-taste-frontend`, `minimalist-ui`, `information-architecture`, `frontend-design`, `responsive-design`, `visual-design-foundations` | [shadcn/ui](https://github.com/shadcn/ui), [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills), [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill), [julianoczkowski/designer-skills](https://github.com/julianoczkowski/designer-skills) |
 | **RTK** | `rtk-tdd`, `code-simplifier`, `design-patterns` | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) |
 | **Rust / Tauri** | `tauri-v2`, `rust-daily`, `rust-debugging` | [nodnarbnitram/claude-code-extensions](https://github.com/nodnarbnitram/claude-code-extensions), [zhanghandong/rust-skills](https://github.com/zhanghandong/rust-skills), [mohitmishra786/low-level-dev-skills](https://github.com/mohitmishra786/low-level-dev-skills) |
 | **Architecture** | `architecture-decision-records`, `architecture-patterns`, `api-design-principles`, `monorepo-management`, `database-migration`, `openapi-spec-generation`, `sql-optimization-patterns`, `postgresql-table-design` | Various |
 | **Security** | `security-requirement-extraction`, `secrets-management`, `auth-implementation-patterns` | Various |
-| **Workflow** | `triage`, `issue-triage`, `pr-triage`, `handoff`, `brief-to-tasks`, `to-prd`, `to-issues`, `review-agent-setup`, `scan`, `diagnose`, `prototype`, `stripe-integration`, `billing-automation`, `changelog-automation`, `track-management`, `find-skills` | Various |
+| **Workflow** | `triage`, `issue-triage`, `pr-triage`, `handoff`, `brief-to-tasks`, `to-prd`, `to-issues`, `review-agent-setup`, `scan`, `diagnose`, `prototype`, `changelog-automation`, `track-management`, `find-skills` | Various |
 
 ### Custom Skills (11 skills)
 
@@ -600,12 +603,12 @@ opencode-kit/
 ├── skills-lock.json                   # Skills version lock
 │
 ├── .opencode/
-│   ├── agents/ (9)                    # Agent definitions (pushy desc + WHY on MUST rules)
+│   ├── agents/ (10)                   # Agent definitions (pushy desc + WHY on MUST rules)
 │   ├── commands/ (8)                  # Slash commands (Phase 0 context check + Execution Mode)
 │   ├── rules/ (4)                     # Always-follow rules
 │   ├── standards/ (8)                 # Document templates + conventions.md
 │   ├── memory/ (2)                    # Continuous learning + project-context
-│   ├── skills/ (142)                  # All skills (131 from skills.sh + 11 custom)
+│   ├── skills/ (152)                  # All skills (141 from skills.sh + 11 custom)
 │   ├── agent-models.json              # Model + fallback config per agent (source of truth)
 │   ├── agent-registry.json            # Auto-generated: skills + model mapping
 │   ├── scripts/
@@ -676,8 +679,8 @@ SOFTWARE.
 
 ### v1.2 (Current)
 
-- ✅ 9 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, QA, Security Auditor)
-- ✅ 142 skills (131 from skills.sh + 11 custom)
+- ✅ 10 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, DevOps, QA, Security Auditor)
+- ✅ 152 skills (141 from skills.sh + 11 custom)
 - ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix) — each with Phase 0 context check, pushy descriptions, Execution Mode
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`

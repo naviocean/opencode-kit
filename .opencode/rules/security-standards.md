@@ -200,6 +200,42 @@ export class RolesGuard implements CanActivate {
 async deleteUser(@Param('id') id: string) { ... }
 ```
 
+## Multi-Tenant Data Isolation (SaaS Security)
+
+Cross-tenant data leaks are the #1 vulnerability in SaaS platforms.
+
+- **Mandatory Tenant Scoping:** Every database query touching multi-tenant tables MUST filter by `tenantId` / `organizationId`.
+- **JWT-Derived Context:** ALWAYS extract `tenantId` from verified JWT claims on the server. NEVER trust a `tenantId` passed in query parameters or request body from the client.
+- **Prisma Client Extensions:** Use Prisma client extensions or middleware to automatically apply `{ where: { tenantId } }` on find, update, and delete queries.
+- **Row-Level Security (RLS):** When using PostgreSQL, implement Row Level Security (RLS) policies as defense-in-depth against application bugs.
+- **Vector DB Isolation:** Vector queries (Pinecone, Qdrant, pgvector) MUST apply a metadata filter `{ tenantId: session.tenantId }` to prevent cross-tenant knowledge leaks.
+
+```typescript
+// Good: tenantId strictly enforced from JWT
+@Get('projects')
+async getProjects(@CurrentUser() user: JwtUserPayload) {
+  return this.projectService.findAll({
+    where: { tenantId: user.tenantId },
+  });
+}
+
+// Bad: IDOR vulnerability — trusting route parameter without tenant check
+@Get('projects/:id')
+async getProject(@Param('id') id: string) {
+  return this.prisma.project.findUnique({ where: { id } }); // LEAKS OTHER TENANTS' DATA!
+}
+```
+
+## LLM & AI Application Security (OWASP Top 10 for LLMs)
+
+When developing AI pipelines, LangGraph workflows, and tool integrations (owned by `python` agent):
+
+- **Prompt Injection Defense:** Untrusted user input must never be interpolated directly into system prompts. Treat all external content (scraped data, user inputs, file contents) as untrusted user role text.
+- **Tool Least-Privilege:** Agent tools must only have the minimum required scopes. Destructive actions (data deletion, financial transactions, mass emails) require human-in-the-loop confirmation.
+- **No Raw Code Execution:** Never pass LLM-generated strings directly to `eval()`, `exec()`, or raw SQL interpreters without validation against a strict Pydantic model.
+- **Sensitive Data Redaction:** Filter PII, auth tokens, and internal server IPs before passing prompts to external LLM providers.
+- **Output Validation:** Always parse LLM structured output through Pydantic v2 schemas (`model_validate`) before downstream consumption.
+
 ## File Upload Security
 
 - Validate file type (whitelist allowed extensions)
@@ -236,13 +272,15 @@ async deleteUser(@Param('id') id: string) { ... }
 Before deploying, verify:
 
 - [ ] No hardcoded secrets in codebase
-- [ ] All inputs validated at API boundary
-- [ ] Auth tokens are short-lived with rotation
+- [ ] All inputs validated at API boundary (DTO / Pydantic / Zod)
+- [ ] Multi-tenant isolation verified (all queries scoped by JWT tenantId, no IDOR)
+- [ ] Auth tokens are short-lived with rotation (httpOnly cookies)
 - [ ] Rate limiting on auth endpoints
 - [ ] CORS configured for specific origins
 - [ ] Security headers set (Helmet)
-- [ ] SQL injection prevention (Prisma)
+- [ ] SQL injection prevention (Prisma parameterized queries / RLS)
 - [ ] XSS prevention (React default escaping)
-- [ ] File upload validation
+- [ ] File upload validation (type, size, content)
+- [ ] LLM defenses enforced (prompt injection boundaries, tool least-privilege)
 - [ ] Dependencies audited (`npm audit`)
 - [ ] AgentShield scan passed (grade A-B)

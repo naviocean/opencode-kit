@@ -11,7 +11,7 @@
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
 6. **One logical change per commit.** Squash before merge. Never force-push to main.
 7. **GitNexus MUST rules are not negotiable.** Each has a documented "if skipped, X risk" rationale.
-8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. Backend does not touch `apps/web/`. Rustacean does not touch web. `python` owns `.py` files everywhere but escalates when a `.py` file lives inside another agent's app directory. Escalate to Tech Lead.
+8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. Backend does not touch `apps/web/`. Rustacean does not touch web. `python` owns `.py` files everywhere but escalates when a `.py` file lives inside another agent's app directory. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
 
 ## Agent Trigger Map
 
@@ -24,6 +24,7 @@
 | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **backend** |
 | Tauri, Rust, `apps/desktop/`, `src-tauri/`, IPC, system tray, native | **rustacean** |
 | Python, `.py`, LLM agent, LangChain, LangGraph, ML, scraping, FastAPI, uv, pydantic, ruff, pytest | **python** |
+| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** |
 | Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** |
 | Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** |
 
@@ -80,7 +81,8 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
-| 1.2.3 | 2026-09-02 | Add 8th command `/hotfix` (fast-track bugfix pipeline with TDD + QA + Security). Add 5 LangGraph skills to `python` agent. Synchronize docs and CLI to 9 agents, 8 commands, 142 skills. |
+| 1.2.4 | 2026-09-02 | Add 10th agent `devops` (SRE & Cloud Infrastructure). Install 13 DevOps skills (CI/CD, Docker, K8s, Helm, Terraform, Prometheus, Grafana, SLO). Synchronize docs and CLI to 10 agents, 8 commands, 152 skills. |
+| 1.2.3 | 2026-09-02 | Add 8th command `/hotfix` (fast-track bugfix pipeline with TDD + QA + Security). Add 5 LangGraph skills to `python` agent. Synchronize docs and CLI to 9 agents, 8 commands, 140 skills. |
 | 1.2.2 | 2026-08-05 | Add 9th agent `python` (senior Python dev for AI apps). Install 21 Python/AI skills (19 wshobson + pydantic-ai-harness + langchain). Fix pm/tech-lead `.pro` model. |
 | 1.2.0 | 2026-06-01 | Refactor to pointer pattern. Detail moved to `.opencode/standards/conventions.md`. GitNexus MUST rules now have WHY annotations. Pushy descriptions on all 8 agents. Model-fallback uses runtime state (no MD mutation). Added test suite. |
 | 1.2.1 | 2026-08-05 | Fix CLI MCP config to OpenCode format (`{type, command, enabled}`). Add `rustacean` to CLI verify. Install 10 missing skills (116 total). Fix stale skill references. |

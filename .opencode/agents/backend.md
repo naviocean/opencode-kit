@@ -88,31 +88,29 @@ Load these skills when their context matches:
 
 | Skill                   | When to Load                                                                                           |
 | ----------------------- | ------------------------------------------------------------------------------------------------------ |
-| `nestjs-best-practices` | When building NestJS modules, controllers, services — official best practices and patterns.            |
 | `nestjs-best-practices` | Always — your core framework. Modules, controllers, services, guards, interceptors, pipes, decorators. |
 
 ### Prisma & Database
 
-| Skill                       | When to Load                                                                                                  |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `prisma-database-setup`     | When configuring Prisma for the first time — datasource, generators, client setup.                            |
-| `prisma-client-api`         | When writing Prisma queries — CRUD, filtering, pagination, relations, transactions.                           |
-| `prisma-cli`                | When running Prisma CLI commands — migrate, generate, studio, db push, seed.                                  |
-| `prisma-postgres`           | When working with PostgreSQL-specific features — enums, indexes, raw queries.                                 |
-| `prisma-postgres-setup`     | When setting up PostgreSQL + Prisma from scratch — connection pooling, SSL, environment config.               |
-| `prisma-upgrade-v7`         | When upgrading Prisma versions — breaking changes, migration guides, new features.                            |
-| `prisma-database-setup`     | When working with database — schema design, migrations, relations, transactions, seeding, query optimization. |
-| `postgresql-table-design`   | When designing PostgreSQL table structures — normalization, constraints, indexes, partitioning.               |
-| `sql-optimization-patterns` | When optimizing slow queries — EXPLAIN analysis, index strategies, query rewriting.                           |
-| `database-migration`        | When planning or executing database migrations — zero-downtime strategies, rollback plans.                    |
+| Skill                       | When to Load                                                                                    |
+| --------------------------- | ----------------------------------------------------------------------------------------------- |
+| `prisma-database-setup`     | When configuring Prisma or working with schema design, relations, transactions, and migrations. |
+| `prisma-client-api`         | When writing Prisma queries — CRUD, filtering, pagination, relations, transactions.             |
+| `prisma-cli`                | When running Prisma CLI commands — migrate, generate, studio, db push, seed.                    |
+| `prisma-postgres`           | When working with PostgreSQL-specific features — enums, indexes, raw queries.                   |
+| `prisma-postgres-setup`     | When setting up PostgreSQL + Prisma from scratch — connection pooling, SSL, environment config. |
+| `prisma-upgrade-v7`         | When upgrading Prisma versions — breaking changes, migration guides, new features.              |
+| `postgresql-table-design`   | When designing PostgreSQL table structures — normalization, constraints, indexes, partitioning. |
+| `sql-optimization-patterns` | When optimizing slow queries — EXPLAIN analysis, index strategies, query rewriting.             |
+| `database-migration`        | When planning or executing database migrations — zero-downtime strategies, rollback plans.      |
 
-### API Design
+### API Design & Types
 
-| Skill                     | When to Load                                                                                         |
-| ------------------------- | ---------------------------------------------------------------------------------------------------- |
-| `api-design-principles`   | When designing new API endpoints — RESTful conventions, versioning, HATEOAS, content negotiation.    |
-| `openapi-spec-generation` | When generating or updating OpenAPI/Swagger specs — schema definitions, endpoint documentation.      |
-| `api-design-principles`   | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering. |
+| Skill                        | When to Load                                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| `api-design-principles`      | When designing API endpoints — RESTful conventions, versioning, pagination, filtering, errors.     |
+| `openapi-spec-generation`    | When generating or updating OpenAPI/Swagger specs — schema definitions, endpoint documentation.    |
+| `typescript-advanced-types`  | When modeling complex DTOs, generics, utility types, and strict type transformations.              |
 
 ### Authentication & Security
 
@@ -143,16 +141,12 @@ Load these skills when their context matches:
 | `vitest`                      | When writing unit or integration tests — Vitest configuration, mocking, assertion patterns.      |
 | `javascript-testing-patterns` | When writing any JavaScript/TypeScript tests — general testing patterns, fixtures, fakes, spies. |
 
-### Custom (Project-Specific)
+### Standards & Learning
 
-| Skill                   | When to Load                                                                                                  |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `nestjs-best-practices` | Always — your core framework. Modules, controllers, services, guards, interceptors, pipes, decorators.        |
-| `prisma-database-setup` | When working with database — schema design, migrations, relations, transactions, seeding, query optimization. |
-| `jwt-auth`              | When implementing authentication or authorization — Passport JWT strategy, guards, token refresh, RBAC.       |
-| `api-design-principles` | When defining API surface — REST conventions, GraphQL schema, error handling, pagination, filtering.          |
-| `coding-standards`      | When writing code — TypeScript strict, naming conventions, import order, error handling.                      |
-| `continuous-learning`   | When a pattern repeats 3+ times — auto-extract as instinct with confidence scoring.                           |
+| Skill                   | When to Load                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------- |
+| `coding-standards`      | When writing code — TypeScript strict, naming conventions, import order, error handling. |
+| `continuous-learning`   | When a pattern repeats 3+ times — auto-extract as instinct with confidence scoring.       |
 
 ## Document Standards
 

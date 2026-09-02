@@ -57,6 +57,12 @@
       "fallback": [
         "deepseek/deepseek-v4-flash"
       ]
+    },
+    "devops": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
     }
   }
 }
