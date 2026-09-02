@@ -6,18 +6,18 @@ Activate the full team for parallel implementation. Use ONLY when an approved pl
 
 ## Execution Mode: Hybrid
 
-| Phase | Mode | Why |
+| Phase | Execution Mode | Rationale |
 |---|---|---|
 | Phase 0: Context Check | (orchestrator) | Decide resume vs initial — avoids redoing completed work |
-| Phase 1: Dispatch | (orchestrator) | Plan + break into tasks |
-| Phase 2: Implementation | **Subagents in parallel** | Frontend + Backend loosely coupled via API contract; parallel = max(fe,be), not sum |
-| Phase 3: QA | **Sequential** | Needs actual implementation to verify, not promises |
-| Phase 4: Security | **Sequential** | Fast check (regex + config); run last to fail-fast on expensive QA first |
+| Phase 1: Planning & Architecture | **Foreground (Tech Lead)** | Architecture decisions require full context; cannot delegate |
+| Phase 2: Implementation | **Subagents in parallel** | Specialists loosely coupled via API/data contracts; parallel = max(times), not sum |
+| Phase 3: Verification | **Foreground (QA)** | Must see all changes across all domains to test integration |
+| Phase 4: Security Gate | **Foreground (Security)** | Go/no-go gate cannot be parallelized |
 
 ## Agent Flow
 
 ```
-Tech Lead → Dynamic Specialists (Frontend / Backend / Python / Rustacean / DevOps in parallel) → QA → Security Auditor
+Tech Lead → Dynamic Specialists (Frontend / NestJS / AI Engineer / Python Backend / Rustacean / DevOps in parallel) → QA → Security Auditor
 ```
 
 ## Phase 0: Context Check (enables resume)
@@ -66,17 +66,24 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - Writes component tests (Vitest + RTL)
 - Outputs to `_workspace/02_frontend_*.{tsx,ts,test.ts}`
 
-**Backend Agent (Server API & DB):**
-- Reads tasks from `docs/tasks/backend-*.md`
+**NestJS Agent (NestJS API & Prisma):**
+- Reads tasks from `docs/tasks/nestjs-*.md`
 - Implements NestJS modules, Prisma models/migrations, API endpoints, auth guards
 - Writes integration tests (Supertest)
-- Outputs to `_workspace/02_backend_*.{ts,test.ts}`
+- Outputs to `_workspace/02_nestjs_*.{ts,test.ts}`
 
-**Python Agent (AI & ML Services):**
-- Reads tasks from `docs/tasks/python-*.md`
-- Implements FastAPI endpoints, LangGraph state graphs, LLM agents, Pydantic schemas
-- Writes async unit & pipeline tests (`pytest`, `pytest-asyncio`)
-- Outputs to `_workspace/02_python_*.{py,test.py}`
+**AI Engineer Agent (AI & LLM Services):**
+- Reads tasks from `docs/tasks/ai-engineer-*.md`
+- Implements LangGraph state graphs, LLM agents, tool definitions, RAG queries, prompt templates
+- Writes evaluation & regression tests (`pytest`, `pytest-asyncio`)
+- Outputs to `_workspace/02_ai-engineer_*.py`
+
+**Python Backend Agent (Python APIs & Microservices):**
+- Reads tasks from `docs/tasks/python-backend-*.md`
+- Implements FastAPI endpoints, SQLAlchemy models/migrations, async handlers, background workers
+- Wraps AI models/graphs in HTTP/SSE streaming endpoints
+- Writes async integration tests (`pytest`, `httpx.AsyncClient`)
+- Outputs to `_workspace/02_python-backend_*.py`
 
 **Rustacean Agent (Desktop & Native):**
 - Reads tasks from `docs/tasks/rustacean-*.md`
@@ -91,8 +98,9 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - Outputs to `_workspace/02_devops_*.{yml,yaml,tf,Dockerfile}`
 
 **Integration seams:**
-- Web ↔ Backend: DTO contracts from plan verified in Phase 3.
-- Web / Backend ↔ Python AI: HTTP/event contracts verified in Phase 3.
+- Web ↔ NestJS: DTO contracts from plan verified in Phase 3.
+- Web / NestJS ↔ Python Backend: HTTP/event/SSE contracts verified in Phase 3.
+- AI Engineer ↔ Python Backend: Graph state schema and tool invocation contracts verified in Phase 3.
 - Desktop ↔ Native Rust: Tauri IPC invoke schema verified in Phase 3.
 - Services ↔ DevOps: Container ports, health probes (`/health/live`, `/health/ready`), environment variables verified in Phase 3.
 
@@ -107,7 +115,7 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
   - Rust/Desktop: `cargo test` (when `src-tauri/` affected)
 - Checks coverage thresholds (80% statements / 75% branches per AGENTS.md)
 - Runs Playwright E2E for critical flows listed in plan
-- **Boundary checks:** verifies contract compatibility across all communicating agents
+- **Boundary checks:** verifies contract compatibility across all communicating agents (e.g. NestJS DTOs vs Frontend types)
 - Reports failures with `file:line` context, not just "test failed"
 - Writes `_workspace/03_qa_report.md`
 
@@ -147,5 +155,5 @@ All task docs must follow the template. Do not skip required sections.
 
 - ❌ Running before `/plan` (HARD-GATE)
 - ❌ Skipping Phase 0 — redoing completed work is silent waste
-- ❌ Frontend/Backend writing to same path (use `_workspace/` for intermediates)
+- ❌ Multiple agents writing to same path (use `_workspace/` for intermediates)
 - ❌ Marking complete when QA has any CRITICAL/FAIL

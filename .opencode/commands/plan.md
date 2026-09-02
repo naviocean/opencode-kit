@@ -78,7 +78,7 @@ Only if feature has UI. Non-UI features (API, migrations, config) skip this phas
 - Data model (Prisma schema outline)
 - API design (endpoints or GraphQL schema)
 - Task breakdown with dependencies
-- Parallel execution opportunities (frontend/backend can be parallel?)
+- Parallel execution opportunities (frontend/nestjs/python/rustacean/devops can be parallel?)
 - Output: `docs/plans/{feature-name}-plan.md`
 
 **Why Tech Lead last?** Tech Lead synthesizes PM intent + Design complexity into executable plan. Running architect before designer = spec'd into a corner by decisions designer would have flagged.

@@ -311,8 +311,8 @@ test('updateFrontmatterModel: appends model to frontmatter if missing', () => {
 // ──────────────────────────────────────────────
 // Integration: real agent files
 // ──────────────────────────────────────────────
-test('integration: all 9 real agent files parse without error', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
+test('integration: all 11 real agent files parse without error', () => {
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops'];
   for (const name of expected) {
     const file = join(ROOT, '.opencode', 'agents', `${name}.md`);
     assert.ok(existsSync(file), `${name}.md must exist`);
@@ -326,7 +326,7 @@ test('integration: all 9 real agent files parse without error', () => {
 });
 
 test('integration: every agent has a unique skill set (no two agents share 100%)', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops'];
   const allSkills = {};
   for (const name of expected) {
     const file = join(ROOT, '.opencode', 'agents', `${name}.md`);
@@ -338,8 +338,10 @@ test('integration: every agent has a unique skill set (no two agents share 100%)
   // Sanity: tech-lead and pm are different roles → different skill sets
   assert.notDeepEqual([...allSkills['tech-lead']].sort(), [...allSkills['pm']].sort(),
     'tech-lead and pm must have different skill profiles');
-  assert.notDeepEqual([...allSkills['frontend']].sort(), [...allSkills['backend']].sort(),
-    'frontend and backend must have different skill profiles');
+  assert.notDeepEqual([...allSkills['frontend']].sort(), [...allSkills['nestjs']].sort(),
+    'frontend and nestjs must have different skill profiles');
+  assert.notDeepEqual([...allSkills['ai-engineer']].sort(), [...allSkills['python-backend']].sort(),
+    'ai-engineer and python-backend must have different skill profiles');
 });
 
 test('integration: agent-registry.json (generated) matches the schema', () => {

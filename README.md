@@ -1,6 +1,6 @@
 # OpenCode SaaS Kit
 
-A multi-agent development team kit for OpenCode. Ten specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
+A multi-agent development team kit for OpenCode. Eleven specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
 
 ## Quick Start
 
@@ -24,9 +24,10 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 - **PM** is the primary entrypoint for `/plan` and interviews you before any code is written
 - **Designer** creates UI Kit and UX flows before frontend implements
 - **Tech Lead** orchestrates `/build`, reviews, and makes architecture decisions
-- **Frontend/Backend** agents work in parallel on their domains
+- **Frontend / NestJS / AI Engineer / Python Backend / Rustacean** specialist agents work in parallel on their domains
+- **AI Engineer** builds LangGraph multi-agent workflows, RAG pipelines, and LLM evaluation suites
+- **Python Backend** builds FastAPI microservices, SQLAlchemy data layers, and async workers
 - **Rustacean** owns the Tauri desktop stack end-to-end (`apps/desktop/`)
-- **Python** builds AI agents, data pipelines, and Python services (`.py`, uv, LangChain)
 - **DevOps** owns CI/CD, Docker, Kubernetes, Terraform, and Observability
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
@@ -49,11 +50,11 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
      │  (Orchestrator) │
      └────────┬────────┘
               │
-     ┌────────┼────────┬───────────┬─────────┬───────────┬────────┬─────────────────┐
-     │        │        │           │         │           │        │                 │
-     ▼        ▼        ▼           ▼         ▼           ▼        ▼                 ▼
- Frontend  Backend  Rustacean    Python    DevOps       QA   Security Auditor
- /build    /build   /build       /build    /build      /test  /review + /ship
+     ┌────────┼────────┬───────────────┬────────────────┬───────────┬─────────┬────────┬─────────────────┐
+     │        │        │               │                │           │         │        │                 │
+     ▼        ▼        ▼               ▼                ▼           ▼         ▼        ▼                 ▼
+ Frontend   NestJS   AI Engineer  Python Backend   Rustacean    DevOps       QA   Security Auditor
+ /build     /build   /build       /build           /build       /build      /test  /review + /ship
 ```
 
 ### Agent Responsibilities
@@ -64,9 +65,10 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | **PM** | Primary `/plan` entrypoint. Socratic interview before coding, writes specs, defines priorities, sets acceptance criteria. | Stitch (ideation), ICM (decision memory) |
 | **Designer** | UI/UX specialist. Creates UI Kit, UX flows, design tokens, prototypes before frontend implementation. | Stitch (AI design), Pencil (IDE-native canvas) |
 | **Frontend** | Next.js 16, React 19, Shadcn, Tailwind 4. Implements UI from Designer's specs. | GitNexus (code context), ICM (pattern memory) |
-| **Backend** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds API and business logic. | GitNexus (code context), ICM (pattern memory) |
+| **NestJS** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds apps/api/ layer and business logic. | GitNexus (code context), ICM (pattern memory) |
+| **AI Engineer** | LangGraph, LangChain, Pydantic-AI, RAG, prompt engineering, agentic loops, eval suites. | LangGraph, Pydantic v2, pytest, GitNexus |
+| **Python Backend** | FastAPI, Starlette, SQLAlchemy, Alembic, Celery, async background workers, model serving APIs. | FastAPI, uv, pydantic, pytest, GitNexus |
 | **Rustacean** | Tauri v2 + Rust specialist. Owns the entire desktop app (`apps/desktop/`): Rust commands, IPC, AND the UI inside the Tauri webview. | GitNexus (code context), ICM (pattern memory) |
-| **Python** | AI agents, LLM pipelines, ML, scraping, FastAPI. Owns Python services and `.py` files. | uv, pydantic, pytest, GitNexus |
 | **DevOps** | CI/CD pipelines, Docker, Kubernetes/Helm, Terraform, Prometheus/Grafana observability. | GitHub Actions, Docker, Helm, Prometheus, Grafana |
 | **QA** | Test strategy, Vitest unit tests, Playwright E2E, coverage analysis. Enforces TDD. | GitNexus (detect changes), ICM (test memory) |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection, permission audits. Gates deployment. | AgentShield CLI, ICM (security memory) |
@@ -150,8 +152,12 @@ Each agent runs on its own model. Configure in `.opencode/agent-models.json`:
     "pm":        { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
     "designer":  { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
     "frontend":  { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "backend":   { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "qa":        { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] }
+    "nestjs":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "rustacean": { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "python":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "devops":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "qa":        { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "security-auditor": { "model": "my_xiaomi/mimo-v2.5", "fallback": ["my_xiaomi/mimo-v2.5-pro"] }
   }
 }
 ```
@@ -160,7 +166,7 @@ Model is enforced via YAML frontmatter in each agent `.md` file. Opencode reads 
 
 ```yaml
 ---
-name: backend
+name: nestjs
 description: NestJS, Prisma, PostgreSQL
 mode: subagent
 model: my_xiaomi/mimo-v2.5
@@ -176,7 +182,7 @@ override layer is used — the frontmatter IS the source of truth.
 ```bash
 # Diagnostic: test model availability (read-only, does not change config)
 node .opencode/scripts/model-health-check.mjs        # all agents
-node .opencode/scripts/model-health-check.mjs backend # single agent
+node .opencode/scripts/model-health-check.mjs nestjs # single agent
 ```
 
 ### Model & Skill Sync
@@ -240,7 +246,7 @@ node .opencode/scripts/verify.mjs
 |---|---|
 | Language | TypeScript (strict mode) |
 | Monorepo | NX |
-| Frontend | Next.js 16 + React 19 + Shadcn + Tailwind 4 |
+| Frontend | Next.js 16 (App Router) + React 19 + Shadcn + Tailwind 4 |
 | Backend | NestJS + Prisma + PostgreSQL |
 | API | REST or GraphQL (per-project decision) |
 | Auth | Custom JWT (NestJS Passport) |
@@ -308,7 +314,7 @@ User: /build
     ┌────┴────┐
     ▼         ▼
 ┌────────┐ ┌────────┐
-│Frontend│ │Backend │  Parallel execution
+│Frontend│ │ NestJS │  Parallel execution
 │ Agent  │ │ Agent  │  Each agent owns their domain
 └───┬────┘ └───┬────┘
     │          │
@@ -500,7 +506,7 @@ export CONTEXT7_API_KEY=your_key_here
 | Command | Description | Agent Flow |
 |---|---|---|
 | `/plan` | Socratic interview → spec → architecture plan | PM → Designer → Tech Lead |
-| `/build` | Activate full team, parallel execution | Tech Lead → Frontend + Backend → QA |
+| `/build` | Activate full team, parallel execution | Tech Lead → Dynamic Specialists → QA |
 | `/review` | Code review + security audit | Tech Lead + Security Auditor |
 | `/ship` | Final tests + security gate + approval | QA + Security Auditor + Tech Lead |
 | `/security` | Run AgentShield scan | Security Auditor |
@@ -542,7 +548,7 @@ export CONTEXT7_API_KEY=your_key_here
 | `socratic-planning` | PM | Interview before coding with HARD-GATE, scaling questions (from Superpowers brainstorming) |
 | `continuous-learning` | All | Auto-extract patterns with confidence scoring (from ECC instincts) |
 | `security-scan` | Security Auditor | AgentShield integration |
-| `jwt-auth` | Backend | NestJS JWT implementation |
+| `jwt-auth` | NestJS | NestJS JWT implementation |
 | `ux-flow` | Designer | User journey mapping |
 | `coding-standards` | All | TypeScript strict conventions |
 | `git-workflow` | All | Git branch/commit conventions |
@@ -679,7 +685,7 @@ SOFTWARE.
 
 ### v1.2 (Current)
 
-- ✅ 10 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, Rustacean, Python, DevOps, QA, Security Auditor)
+- ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
 - ✅ 152 skills (141 from skills.sh + 11 custom)
 - ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix) — each with Phase 0 context check, pushy descriptions, Execution Mode
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)

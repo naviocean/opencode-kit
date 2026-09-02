@@ -33,8 +33,8 @@ function run(args, expectError = false) {
 // Default mode (human-readable prompt)
 // ──────────────────────────────────────────────
 test('dispatch: default mode returns human-readable prompt', () => {
-  const output = run('backend "implement JWT auth"');
-  assert.match(output, /## Dispatch: backend/);
+  const output = run('nestjs "implement JWT auth"');
+  assert.match(output, /## Dispatch: nestjs/);
   assert.match(output, /### Agent Identity/);
   assert.match(output, /### Model Assignment/);
   assert.match(output, /### Skill Loading/);
@@ -43,14 +43,14 @@ test('dispatch: default mode returns human-readable prompt', () => {
 });
 
 test('dispatch: prompt includes model from registry', () => {
-  const output = run('backend "test task"');
+  const output = run('nestjs "test task"');
   // Should contain the model string from agent-models.json
   assert.match(output, /opencode\/deepseek|deepseek\/deepseek|commandcode/);
 });
 
 test('dispatch: prompt includes skill loading instructions', () => {
-  const output = run('backend "test task"');
-  // Backend has nestjs-best-practices as always skill
+  const output = run('nestjs "test task"');
+  // NestJS has nestjs-best-practices as always skill
   assert.match(output, /nestjs-best-practices/);
 });
 
@@ -58,9 +58,9 @@ test('dispatch: prompt includes skill loading instructions', () => {
 // --json mode
 // ──────────────────────────────────────────────
 test('dispatch: --json mode returns valid JSON', () => {
-  const output = run('backend "test task" --json');
+  const output = run('nestjs "test task" --json');
   const parsed = JSON.parse(output);
-  assert.equal(parsed.agent, 'backend');
+  assert.equal(parsed.agent, 'nestjs');
   assert.ok(parsed.model, 'must have model');
   assert.ok(Array.isArray(parsed.fallback), 'must have fallback array');
   assert.ok(Array.isArray(parsed.alwaysSkills), 'must have alwaysSkills array');
@@ -114,11 +114,12 @@ test('dispatch: unknown agent shows error', () => {
 
 test('dispatch: agent list in error is derived from registry (not hardcoded)', () => {
   const output = run('', true);
-  // Should include python (was missing before H1 fix)
-  assert.match(output, /python/);
-  // Should include all 9 agents
+  // Should include ai-engineer and python-backend
+  assert.match(output, /ai-engineer/);
+  assert.match(output, /python-backend/);
+  // Should include all agents
   assert.match(output, /tech-lead/);
-  assert.match(output, /backend/);
+  assert.match(output, /nestjs/);
   assert.match(output, /frontend/);
 });
 

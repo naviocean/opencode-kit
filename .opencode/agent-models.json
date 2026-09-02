@@ -28,7 +28,7 @@
         "deepseek/deepseek-v4-flash"
       ]
     },
-    "backend": {
+    "nestjs": {
       "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
         "deepseek/deepseek-v4-flash"
@@ -52,7 +52,13 @@
         "deepseek/deepseek-v4-flash"
       ]
     },
-    "python": {
+    "ai-engineer": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "python-backend": {
       "model": "opencode/deepseek-v4-flash-free",
       "fallback": [
         "deepseek/deepseek-v4-flash"

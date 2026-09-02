@@ -22,16 +22,18 @@ Tech Lead (triage) → Specialist (TDD fix) → QA (regression verify) → Secur
 ## Phase 0: Tech Lead — Triage & Blast Radius
 
 1. **Analyze bug report / error stack trace**:
-   - Determine affected module: Frontend (`apps/web/`), Backend (`apps/api/`), Desktop (`apps/desktop/`), or AI/Python (`.py` files).
+   - Determine affected module: Frontend (`apps/web/`), NestJS (`apps/api/`), Python Backend (Python APIs/DB), AI/LLM (LangGraph/prompts), Desktop (`apps/desktop/`), or Infra (`.github/`, Docker, K8s).
 2. **GitNexus Investigation**:
    - Run `gitnexus_context({name: affectedSymbol})` to see callers and callees.
    - Run `gitnexus_impact({target: affectedSymbol, direction: "upstream"})` to determine blast radius.
    - If blast radius is CRITICAL (e.g. core auth, shared database schema changes), warn user before proceeding.
 3. **Dispatch to single specialist agent**:
    - Web/UI bug → `frontend` (category: `quick` or `deep`)
-   - API/DB/Auth bug → `backend` (category: `quick` or `deep`)
+   - NestJS API/DB/Auth bug → `nestjs` (category: `quick` or `deep`)
+   - Python API/DB/Worker bug → `python-backend` (category: `quick` or `deep`)
+   - AI/LLM/LangGraph bug → `ai-engineer` (category: `quick` or `deep`)
    - Desktop/IPC bug → `rustacean` (category: `quick` or `deep`)
-   - Python/AI/ML bug → `python` (category: `quick` or `deep`)
+   - CI/CD / Docker / Infra bug → `devops` (category: `quick` or `deep`)
 
 ## Phase 1: Specialist — Reproduce & Fix (TDD)
 

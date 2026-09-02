@@ -335,7 +335,7 @@ Load via `read(filePath=".opencode/standards/<template>")` and fill in the templ
 ### On `/build`
 1. Read the technical plan.
 2. Break into atomic tasks with clear file paths and acceptance criteria.
-3. Dispatch Frontend and Backend agents in parallel (or sequentially if `ultrabrain`).
+3. Dispatch parallel specialist agents (Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps) as required by plan (or sequentially if `ultrabrain`).
 4. Monitor agent output. If an agent blocks, resolve the blocker immediately.
 5. After all agents complete, dispatch QA.
 6. After QA passes, dispatch Security Auditor.

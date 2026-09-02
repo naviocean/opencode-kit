@@ -63,10 +63,11 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 
 | Anti-Pattern | Why Blocked | Correct Alternative |
 |---|---|---|
-| Frontend agent editing `apps/api/` | Breaks domain ownership; backend can't review | Escalate to Tech Lead; backend does the edit |
-| Backend agent editing `apps/web/` | Same | Same |
+| Frontend agent editing `apps/api/` | Breaks domain ownership; nestjs can't review | Escalate to Tech Lead; nestjs does the edit |
+| NestJS agent editing `apps/web/` | Same | Same |
 | Rustacean editing web code | Same | Same |
-| Python editing non-.py files in `apps/` | Breaks domain ownership; app agent must review | Escalate to Tech Lead; app owner edits |
+| AI Engineer editing general REST APIs | Breaks domain ownership; API agent must review | Escalate to Tech Lead; python-backend / nestjs edits |
+| Python Backend editing LangGraph cognitive graphs | Breaks domain ownership; AI engineer must review | Escalate to Tech Lead; ai-engineer edits |
 | DevOps editing business logic in `apps/` | DevOps owns infra/CI/CD, not business logic | Escalate to Tech Lead; feature agent edits |
 | Designer writing production logic | Design owns spec, not code | Designer → handoff → Frontend implements |
 | QA skipping test review on a "trivial" PR | Trivial PRs have 30% of bugs | Always run affected tests |
