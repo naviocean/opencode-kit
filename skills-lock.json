@@ -73,6 +73,12 @@
       "skillPath": "plugins/developer-essentials/skills/auth-implementation-patterns/SKILL.md",
       "computedHash": "f97118b792830d928ce691a44d0f38fb55a2032e2fa15b22b482c229d2853e87"
     },
+    "axum-web-framework": {
+      "source": "manutej/luxor-claude-marketplace",
+      "sourceType": "github",
+      "skillPath": "plugins/luxor-backend-toolkit/skills/axum-web-framework/SKILL.md",
+      "computedHash": "4bf0bf5ad32cdcf46aa63c14a85f29f2059d6e885764b5c487bcfa3d167bdf7f"
+    },
     "backtesting-frameworks": {
       "source": "wshobson/agents",
       "sourceType": "github",
@@ -1267,6 +1273,12 @@
       "skillPath": "plugins/systems-programming/skills/rust-async-patterns/SKILL.md",
       "computedHash": "20d32ef58158c94eb4dfc4aaf19bec7ae2a025ae5d42da7b49ccfbaeda389273"
     },
+    "rust-best-practices": {
+      "source": "apollographql/skills",
+      "sourceType": "github",
+      "skillPath": "skills/rust-best-practices/SKILL.md",
+      "computedHash": "0ac6606adb27e64a31bdc8c1ed34e446ae0c14bff1c7648867c46e106adc048f"
+    },
     "rust-daily": {
       "source": "zhanghandong/rust-skills",
       "sourceType": "github",
@@ -1278,6 +1290,12 @@
       "sourceType": "github",
       "skillPath": "skills/rust/rust-debugging/SKILL.md",
       "computedHash": "70002eabb81f25ffdf84ba7203b6d0069cfe976dea30d17a3b558d335458488f"
+    },
+    "rust-testing": {
+      "source": "affaan-m/ecc",
+      "sourceType": "github",
+      "skillPath": "skills/rust-testing/SKILL.md",
+      "computedHash": "bd66d6441ff6d3a6acb89c902cd6a01bf58410aec3ecbc43d45409b3a3788ac8"
     },
     "saga-orchestration": {
       "source": "wshobson/agents",

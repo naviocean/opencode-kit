@@ -1,6 +1,6 @@
 {
   "name": "opencode-saas-kit",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "Multi-agent development team kit for OpenCode. 11 specialized AI agents work together to build SaaS products.",
   "keywords": [
     "opencode",

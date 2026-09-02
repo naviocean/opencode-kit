@@ -27,7 +27,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 - **Frontend / NestJS / AI Engineer / Python Backend / Rustacean** specialist agents work in parallel on their domains
 - **AI Engineer** builds LangGraph multi-agent workflows, RAG pipelines, and LLM evaluation suites
 - **Python Backend** builds FastAPI microservices, SQLAlchemy data layers, and async workers
-- **Rustacean** owns the Tauri desktop stack end-to-end (`apps/desktop/`)
+- **Rustacean** owns Tauri desktop apps (`apps/desktop/`), Axum microservices, Tokio concurrency, and native crates (`crates/`)
 - **DevOps** owns CI/CD, Docker, Kubernetes, Terraform, and Observability
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
@@ -68,7 +68,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | **NestJS** | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT auth. Builds apps/api/ layer and business logic. | GitNexus (code context), ICM (pattern memory) |
 | **AI Engineer** | LangGraph, LangChain, Pydantic-AI, RAG, prompt engineering, agentic loops, eval suites. | LangGraph, Pydantic v2, pytest, GitNexus |
 | **Python Backend** | FastAPI, Starlette, SQLAlchemy, Alembic, Celery, async background workers, model serving APIs. | FastAPI, uv, pydantic, pytest, GitNexus |
-| **Rustacean** | Tauri v2 + Rust specialist. Owns the entire desktop app (`apps/desktop/`): Rust commands, IPC, AND the UI inside the Tauri webview. | GitNexus (code context), ICM (pattern memory) |
+| **Rustacean** | Tauri v2, Rust systems, Axum microservices, Tokio async, shared crates (`crates/`). Owns desktop apps and high-performance Rust services. | Cargo, Tokio, Axum, Tauri CLI, GitNexus |
 | **DevOps** | CI/CD pipelines, Docker, Kubernetes/Helm, Terraform, Prometheus/Grafana observability. | GitHub Actions, Docker, Helm, Prometheus, Grafana |
 | **QA** | Test strategy, Vitest unit tests, Playwright E2E, coverage analysis. Enforces TDD. | GitNexus (detect changes), ICM (test memory) |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection, permission audits. Gates deployment. | AgentShield CLI, ICM (security memory) |
@@ -686,7 +686,7 @@ SOFTWARE.
 ### v1.2 (Current)
 
 - ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
-- ✅ 152 skills (141 from skills.sh + 11 custom)
+- ✅ 157 skills (146 from skills.sh + 11 custom)
 - ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix) — each with Phase 0 context check, pushy descriptions, Execution Mode
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`

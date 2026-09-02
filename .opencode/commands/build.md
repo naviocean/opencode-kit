@@ -85,10 +85,10 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - Writes async integration tests (`pytest`, `httpx.AsyncClient`)
 - Outputs to `_workspace/02_python-backend_*.py`
 
-**Rustacean Agent (Desktop & Native):**
+**Rustacean Agent (Systems, Microservices & Desktop):**
 - Reads tasks from `docs/tasks/rustacean-*.md`
-- Implements Tauri v2 commands, native IPC handlers, Rust business logic
-- Writes Rust tests (`cargo test`)
+- Implements Tauri v2 commands, native IPC handlers, Axum REST/WebSocket services, Tokio async tasks, shared crates
+- Writes Rust unit, integration & property tests (`cargo test`, `mockall`, `proptest`)
 - Outputs to `_workspace/02_rustacean_*.rs`
 
 **DevOps Agent (Infra, CI/CD & Containers):**

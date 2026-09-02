@@ -11,7 +11,7 @@
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
 6. **One logical change per commit.** Squash before merge. Never force-push to main.
 7. **GitNexus MUST rules are not negotiable.** Each has a documented "if skipped, X risk" rationale.
-8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean does not touch web. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
+8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean owns Rust desktop apps (`apps/desktop/`), Axum microservices, and native crates (`crates/`), but does not touch `apps/web/`. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
 
 ## Agent Trigger Map
 
@@ -22,7 +22,7 @@
 | UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** |
 | Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** |
 | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** |
-| Tauri, Rust, `apps/desktop/`, `src-tauri/`, IPC, system tray, native | **rustacean** |
+| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** |
 | LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** |
 | Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** |
 | CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** |
@@ -82,6 +82,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.6 | 2026-09-02 | Upgrade `rustacean` to full Rust Systems, Concurrency (Tokio), and High-Performance Services (Axum). Install 5 core Rust skills (`rust-async-patterns`, `memory-safety-patterns`, `rust-best-practices`, `rust-testing`, `axum-web-framework`). Total 157 skills. |
 | 1.2.5 | 2026-09-02 | Refactor `backend` → `nestjs` and decompose `python` → `ai-engineer` + `python-backend`. Expand team to 11 specialized agents, 8 commands, 152 skills. |
 | 1.2.4 | 2026-09-02 | Add 10th agent `devops` (SRE & Cloud Infrastructure). Install 13 DevOps skills (CI/CD, Docker, K8s, Helm, Terraform, Prometheus, Grafana, SLO). Synchronize docs and CLI to 10 agents, 8 commands, 152 skills. |
 | 1.2.3 | 2026-09-02 | Add 8th command `/hotfix` (fast-track bugfix pipeline with TDD + QA + Security). Add 5 LangGraph skills to `python` agent. Synchronize docs and CLI to 9 agents, 8 commands, 140 skills. |
