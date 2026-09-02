@@ -17,7 +17,7 @@ const { execSync } = require('child_process');
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.2.1';
+const VERSION = '1.2.3';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -105,7 +105,7 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .opencode/    8 agents, 7 commands, 4 rules, 116 skills, 7 doc templates
+  .opencode/    9 agents, 8 commands, 4 rules, 142 skills, 7 doc templates
   AGENTS.md     Project rules (injected every session)
   docs/         Document output directories (prds, designs, plans, adr, tasks)
 
@@ -152,7 +152,7 @@ function verifyInstallation(projectDir) {
 
   // Check commands
   const commandsDir = path.join(opencodeDir, 'commands');
-  const expectedCommands = ['plan', 'build', 'review', 'ship', 'security', 'design', 'test'];
+  const expectedCommands = ['plan', 'build', 'review', 'ship', 'security', 'design', 'test', 'hotfix'];
   for (const cmd of expectedCommands) {
     checks.push({ name: `.opencode/commands/${cmd}.md`, pass: fs.existsSync(path.join(commandsDir, `${cmd}.md`)) });
   }
@@ -336,7 +336,7 @@ function initProject(projectDir, options = {}) {
   const kitDir = path.dirname(__filename);
 
   const copyTasks = [
-    { src: '.opencode', dest: '.opencode', desc: '8 agents, 7 commands, 4 rules, 116 skills, 8 doc templates, RTK hook' },
+    { src: '.opencode', dest: '.opencode', desc: '9 agents, 8 commands, 4 rules, 142 skills, 8 doc templates, RTK hook' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
     { src: 'docs', dest: 'docs', desc: 'Document output directories' },
   ];
@@ -385,10 +385,10 @@ function initProject(projectDir, options = {}) {
   logStep('Installation complete!');
   log(`
 ${COLORS.bold}What was installed:${COLORS.reset}
-  .opencode/agents/         8 agent definitions
-  .opencode/commands/       7 slash commands
+  .opencode/agents/         9 agent definitions
+  .opencode/commands/       8 slash commands
   .opencode/rules/          4 always-follow rules
-  .opencode/skills/         116 skills (105 from skills.sh + 11 custom)
+  .opencode/skills/         142 skills (131 from skills.sh + 11 custom)
   .opencode/standards/      7 document templates
   .opencode/memory/         Continuous learning config
   AGENTS.md                 Project rules
@@ -408,6 +408,7 @@ ${COLORS.bold}Commands:${COLORS.reset}
   ${COLORS.cyan}/design${COLORS.reset}   Create UI Kit + UX flow
   ${COLORS.cyan}/security${COLORS.reset} Run AgentShield scan
   ${COLORS.cyan}/test${COLORS.reset}     Run test suite, analyze coverage
+  ${COLORS.cyan}/hotfix${COLORS.reset}   Fast-track bugfix or urgent patch
 
 ${COLORS.bold}More info:${COLORS.reset}
   README.md — Full documentation
@@ -432,8 +433,8 @@ function updateProject(projectDir, options = {}) {
   logStep('Updating kit files...');
 
   const updateTasks = [
-    { src: '.opencode/agents', dest: '.opencode/agents', desc: '8 agent definitions' },
-    { src: '.opencode/commands', dest: '.opencode/commands', desc: '7 slash commands' },
+    { src: '.opencode/agents', dest: '.opencode/agents', desc: '9 agent definitions' },
+    { src: '.opencode/commands', dest: '.opencode/commands', desc: '8 slash commands' },
     { src: '.opencode/rules', dest: '.opencode/rules', desc: '4 rules' },
     { src: '.opencode/standards', dest: '.opencode/standards', desc: '7 document templates' },
     { src: '.opencode/memory', dest: '.opencode/memory', desc: 'Continuous learning config' },

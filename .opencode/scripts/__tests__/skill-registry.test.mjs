@@ -56,6 +56,18 @@ function parseFrontmatter(content) {
   return result;
 }
 
+function updateFrontmatterModel(content, newModel) {
+  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return content;
+  let fm = match[1];
+  if (/^model:\s*.+$/m.test(fm)) {
+    fm = fm.replace(/^model:\s*.+$/m, `model: ${newModel}`);
+  } else {
+    fm = `${fm.trimEnd()}\nmodel: ${newModel}`;
+  }
+  return content.replace(/^---\n[\s\S]*?\n---/, `---\n${fm}\n---`);
+}
+
 function parseSkills(content) {
   const always = [];
   const conditional = [];
@@ -281,11 +293,26 @@ test('parseSkills: skills with backticks in description (rare) are NOT misparsed
   assert.equal(result.conditional[0].skill, 'real-skill');
 });
 
+test('updateFrontmatterModel: replaces existing model in frontmatter', () => {
+  const input = '---\nname: backend\nmodel: old-model\n---\n# Body\nmodel: not-in-frontmatter\n';
+  const output = updateFrontmatterModel(input, 'new-model');
+  assert.ok(output.includes('model: new-model'));
+  assert.ok(!output.includes('model: old-model'));
+  assert.ok(output.includes('model: not-in-frontmatter'), 'body outside frontmatter is preserved');
+});
+
+test('updateFrontmatterModel: appends model to frontmatter if missing', () => {
+  const input = '---\nname: backend\n---\n# Body\n';
+  const output = updateFrontmatterModel(input, 'new-model');
+  assert.ok(output.includes('model: new-model'));
+  assert.ok(output.includes('name: backend'));
+});
+
 // ──────────────────────────────────────────────
 // Integration: real agent files
 // ──────────────────────────────────────────────
-test('integration: all 8 real agent files parse without error', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor'];
+test('integration: all 9 real agent files parse without error', () => {
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
   for (const name of expected) {
     const file = join(ROOT, '.opencode', 'agents', `${name}.md`);
     assert.ok(existsSync(file), `${name}.md must exist`);
@@ -299,7 +326,7 @@ test('integration: all 8 real agent files parse without error', () => {
 });
 
 test('integration: every agent has a unique skill set (no two agents share 100%)', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor'];
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'backend', 'rustacean', 'qa', 'security-auditor', 'python'];
   const allSkills = {};
   for (const name of expected) {
     const file = join(ROOT, '.opencode', 'agents', `${name}.md`);

@@ -2,7 +2,7 @@
 name: tech-lead
 description: USE WHEN you are the entry point for any non-trivial request and need to classify, route, dispatch, or approve work. Triggers: plain-text user request with no slash command, "/plan", "/build", "/review", "/ship", "implement X across backend and frontend", "decide between Y and Z", "review this PR", "ship it", "who should handle this". DO NOT use for: small edits, single-file bug fixes, or questions a single domain agent can answer directly (route to that agent via task dispatch with category: "quick" instead). Owns architecture decisions, parallel agent dispatch, code review, and final approval.
 mode: primary
-model: deepseek/deepseek-v4-pro
+model: commandcode/deepseek/deepseek-v4-pro
 ---
 
 ## Startup (AUTO-EXECUTE)

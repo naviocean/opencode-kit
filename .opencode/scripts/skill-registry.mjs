@@ -12,6 +12,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..', '..');
@@ -103,6 +104,23 @@ function parseSkills(content) {
 }
 
 // ──────────────────────────────────────────────
+// Update frontmatter model in agent MD file
+// ──────────────────────────────────────────────
+function updateFrontmatterModel(content, newModel) {
+  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return content;
+  
+  let fm = match[1];
+  if (/^model:\s*.+$/m.test(fm)) {
+    fm = fm.replace(/^model:\s*.+$/m, `model: ${newModel}`);
+  } else {
+    fm = `${fm.trimEnd()}\nmodel: ${newModel}`;
+  }
+  
+  return content.replace(/^---\n[\s\S]*?\n---/, `---\n${fm}\n---`);
+}
+
+// ──────────────────────────────────────────────
 // Load agent models config
 // ──────────────────────────────────────────────
 function loadModels() {
@@ -120,6 +138,7 @@ function loadModels() {
 function main() {
   const models = loadModels();
   const registry = {};
+  const synced = [];
   
   // Read all agent MD files
   const agentFiles = readdirSync(AGENTS_DIR)
@@ -127,21 +146,32 @@ function main() {
     .sort();
   
   for (const file of agentFiles) {
-    const content = readFileSync(join(AGENTS_DIR, file), 'utf-8');
+    const filePath = join(AGENTS_DIR, file);
+    let content = readFileSync(filePath, 'utf-8');
     const frontmatter = parseFrontmatter(content);
     const name = frontmatter.name || file.replace('.md', '');
     const description = frontmatter.description || '';
     const mode = frontmatter.mode || 'subagent';
     
-    // Parse skills
-    const skills = parseSkills(content);
-    
-    // Get model config
+    // Get model config from agent-models.json
     const modelConfig = models.agents?.[name] || {};
     const model = modelConfig.model || null;
     const fallback = modelConfig.fallback || models.default_fallback || [];
     const variant = modelConfig.variant || null;
     const temperature = modelConfig.temperature || null;
+
+    // Sync model to agent MD frontmatter if mismatch detected
+    if (model && frontmatter.model !== model) {
+      const updatedContent = updateFrontmatterModel(content, model);
+      if (updatedContent !== content) {
+        writeFileSync(filePath, updatedContent, 'utf-8');
+        synced.push({ name, from: frontmatter.model || '(none)', to: model });
+        content = updatedContent;
+      }
+    }
+    
+    // Parse skills
+    const skills = parseSkills(content);
     
     registry[name] = {
       description,
@@ -164,7 +194,14 @@ function main() {
   writeFileSync(OUTPUT_FILE, JSON.stringify(output, null, 2) + '\n');
   
   // Summary
-  console.log(`✅ Generated ${OUTPUT_FILE}`);
+  if (synced.length > 0) {
+    console.log(`\n🔄 Auto-synced ${synced.length} agent model(s) to frontmatter:`);
+    for (const item of synced) {
+      console.log(`   • ${item.name}: ${item.from} → ${item.to}`);
+    }
+  }
+
+  console.log(`\n✅ Generated ${OUTPUT_FILE}`);
   console.log(`   ${Object.keys(registry).length} agents processed:`);
   for (const [name, data] of Object.entries(registry)) {
     const alwaysCount = data.skills.always.length;
@@ -172,6 +209,16 @@ function main() {
     const modelStr = data.model || 'no model';
     const fbStr = data.fallback.length ? ` → ${data.fallback.join(' → ')}` : '';
     console.log(`   • ${name}: ${modelStr}${fbStr} | ${alwaysCount} always, ${condCount} conditional skills`);
+  }
+
+  // Optional: run health check
+  if (process.argv.includes('--health') || process.argv.includes('--check-health')) {
+    console.log('\n🩺 Running model health check...');
+    try {
+      execSync('node .opencode/scripts/model-health-check.mjs', { cwd: ROOT, stdio: 'inherit' });
+    } catch {
+      // handled inside model-health-check
+    }
   }
 }
 

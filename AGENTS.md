@@ -4,7 +4,7 @@
 
 ## HARD RULES (never violate)
 
-1. **Socratic first, code last.** Every non-trivial request goes through PM (`/plan`) before any agent writes code. No exceptions for "small" features.
+1. **Socratic first, code last.** Every non-trivial request goes through PM (`/plan`) before any agent writes code. No exceptions for "small" features. Isolated bug fixes and emergency patches use `/hotfix` (Tech Lead triages and dispatches directly with TDD enforcement).
 2. **Spec before implementation.** A PRD must exist in `docs/prds/` before backend/frontend agents touch code.
 3. **Tests before code (TDD).** RED → GREEN → REFACTOR for all business logic. 80%+ statement coverage required.
 4. **Security before ship.** No agent ships without a security scan passing. Secrets in code = automatic block.
@@ -57,6 +57,7 @@
 | `/design` | Design only (no code) | Spec or brief | `docs/designs/`, `DESIGN.md` |
 | `/security` | Security scan only | Any | Security report |
 | `/test` | Run test suite + coverage | Any | Test report |
+| `/hotfix` | Fast-track bugfix | Issue / error log | Bugfix diff + test report |
 
 For command details, read `.opencode/commands/<name>.md`.
 
@@ -79,6 +80,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.3 | 2026-09-02 | Add 8th command `/hotfix` (fast-track bugfix pipeline with TDD + QA + Security). Add 5 LangGraph skills to `python` agent. Synchronize docs and CLI to 9 agents, 8 commands, 142 skills. |
 | 1.2.2 | 2026-08-05 | Add 9th agent `python` (senior Python dev for AI apps). Install 21 Python/AI skills (19 wshobson + pydantic-ai-harness + langchain). Fix pm/tech-lead `.pro` model. |
 | 1.2.0 | 2026-06-01 | Refactor to pointer pattern. Detail moved to `.opencode/standards/conventions.md`. GitNexus MUST rules now have WHY annotations. Pushy descriptions on all 8 agents. Model-fallback uses runtime state (no MD mutation). Added test suite. |
 | 1.2.1 | 2026-08-05 | Fix CLI MCP config to OpenCode format (`{type, command, enabled}`). Add `rustacean` to CLI verify. Install 10 missing skills (116 total). Fix stale skill references. |

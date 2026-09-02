@@ -1,19 +1,19 @@
 {
   "$schema": "./agent-models.schema.json",
   "default_fallback": [
-    "opencode/deepseek-v4-flash-free"
+    "commandcode/opencode/deepseek-v4-flash"
   ],
   "agents": {
     "tech-lead": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "commandcode/deepseek/deepseek-v4-pro",
       "fallback": [
-        "deepseek/deepseek-v4-flash"
+        "commandcode/deepseek/deepseek-v4-flash"
       ]
     },
     "pm": {
-      "model": "deepseek/deepseek-v4-pro",
+      "model": "commandcode/deepseek/deepseek-v4-pro",
       "fallback": [
-        "deepseek/deepseek-v4-flash"
+        "commandcode/deepseek/deepseek-v4-flash"
       ]
     },
     "designer": {

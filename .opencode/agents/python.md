@@ -139,6 +139,11 @@ Load these skills when their context matches:
 
 | Skill                          | When to Load                                                                          |
 | ------------------------------ | ------------------------------------------------------------------------------------- |
+| `langgraph-fundamentals`       | When writing LangGraph code — StateGraph, nodes, edges, Command, Send, streaming.     |
+| `langgraph-persistence`        | When persisting LangGraph state, checkpointers, multi-turn memory, or time travel.    |
+| `langgraph-human-in-the-loop`  | When implementing human-in-the-loop, interrupt(), approval gates, or validation.     |
+| `langgraph-python-quickstart`  | When scaffolding a new local LangGraph agent project in Python.                       |
+| `langgraph-cli`                | When using the langgraph CLI to scaffold, develop, build, or deploy LangGraph apps.   |
 | `langchain-architecture`       | When building LangChain/LangGraph applications — chains, agents, RAG, memory.         |
 | `llm-evaluation`               | When evaluating LLM outputs — metrics, benchmarks, regression testing.                |
 | `pydantic-ai-harness`          | When building pydantic-ai based agents — typed agents, tool calls, structured output. |
