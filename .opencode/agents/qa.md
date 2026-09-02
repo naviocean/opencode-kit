@@ -125,16 +125,30 @@ DELETE  → Remove any code written BEFORE the test existed
 | **Integration** | Vitest + Supertest             | API endpoints, service + database interactions, multi-module flows | <500ms each | Some (15%)  |
 | **E2E**         | Playwright                     | Critical user journeys: auth flow, checkout, core CRUD             | <30s each   | Few (5%)    |
 
-#### Testing Stack
+#### Multi-Stack Testing Matrix
 
-| Tool                      | Version | Purpose                                     |
-| ------------------------- | ------- | ------------------------------------------- |
-| **Vitest**                | 4.x     | Unit and integration tests. NOT Jest.       |
-| **Playwright**            | Latest  | E2E tests for Next.js App Router            |
-| **React Testing Library** | Latest  | Component testing with user-centric queries |
-| **Supertest**             | Latest  | API endpoint testing for NestJS             |
+| Domain | Language / Stack | Tools & Runners | What to Test |
+|---|---|---|---|
+| **Web UI** | Next.js 16, React 19 | Vitest + React Testing Library + Playwright | Components, hooks, state, critical user journeys |
+| **NestJS Backend** | TypeScript, NestJS, Prisma | Vitest + Supertest | Controllers, services, guards, Prisma queries, auth |
+| **AI & LLM Services** | Python, LangGraph, Pydantic | `pytest` + `pytest-asyncio` | StateGraph transitions, tool calling, prompt evals |
+| **Python Backend** | Python, FastAPI, SQLAlchemy | `pytest` + `pytest-asyncio` + `httpx` | Async routers, DB transactions, background jobs |
+| **Rust Systems & Desktop** | Rust, Tauri v2, Axum, Tokio | `cargo test` + `mockall` + `proptest` | Commands, Axum endpoints, Tokio actors, property tests |
 
-**Why Vitest, never Jest:**
+#### Running Multi-Stack Test Suites
+
+```bash
+# TypeScript / Web / NestJS (NX affected)
+npx nx affected -t test
+
+# Python / AI / Backend
+uv run pytest
+
+# Rust / Desktop / Microservices / Crates
+cargo test --all-targets
+```
+
+**Why Vitest for TypeScript (never Jest):**
 
 - 3.7x faster cold start, 10.6x faster watch mode
 - Native ESM support (no transform overhead)

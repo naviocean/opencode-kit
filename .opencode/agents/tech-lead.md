@@ -195,15 +195,18 @@ When a user sends a plain-text request (no slash command), you are the single en
 
 | If the task mentions... | Dispatch |
 |---|---|
-| `prisma`, `migration`, `schema`, `endpoint`, `controller`, `service`, `guard`, `jwt`, `auth`, `dto`, `postgres`, `database`, `sql`, `query`, `api`, `nestjs` | **backend** |
+| `prisma`, `migration`, `schema`, `endpoint`, `controller`, `service`, `guard`, `jwt`, `auth`, `dto`, `postgres`, `database`, `sql`, `query`, `api`, `nestjs` | **nestjs** |
 | `component`, `page`, `layout`, `style`, `css`, `tailwind`, `shadcn`, `button`, `modal`, `form`, `ui`, `responsive`, `animation`, `router`, `page.tsx` | **frontend** |
-| `tauri`, `desktop`, `rust`, `native`, `ipc`, `invoke`, `tray`, `menu bar`, `auto-update`, `window`, `dialog`, `notification`, `file system`, `platform`, `bundle`, `signing`, `src-tauri`, `capabilities` | **rustacean** |
+| `rust`, `tauri`, `axum`, `tokio`, `desktop`, `native`, `ipc`, `invoke`, `crates/`, `tray`, `auto-update`, `systems programming`, `cargo test` | **rustacean** |
+| `llm`, `agent`, `langgraph`, `langchain`, `rag`, `prompt`, `eval`, `stategraph`, `pydantic-ai`, `tool calling`, `cognitive loop` | **ai-engineer** |
+| `fastapi`, `python api`, `sqlalchemy`, `alembic`, `celery`, `async worker`, `pydantic settings`, `model serving` | **python-backend** |
+| `ci/cd`, `github actions`, `docker`, `dockerfile`, `kubernetes`, `helm`, `terraform`, `prometheus`, `grafana`, `slo`, `sli`, `deployment`, `infra` | **devops** |
 | `design`, `token`, `color`, `typography`, `mockup`, `figma`, `pencil`, `wireframe`, `ux`, `ui kit` | **designer** |
 | `spec`, `prd`, `user story`, `requirement`, `stakeholder`, `scope`, `acceptance criteria` | **pm** |
-| `test`, `coverage`, `vitest`, `playwright`, `e2e`, `spec.ts`, `regression`, `break`, `flaky` | **qa** |
+| `test`, `coverage`, `vitest`, `playwright`, `pytest`, `cargo test`, `e2e`, `regression`, `flaky` | **qa** |
 | `audit`, `security`, `scan`, `vulnerability`, `CVE`, `secret`, `injection`, `XSS`, `CSRF`, `OWASP`, `hardcoded`, `permission`, `pentest` | **security-auditor** |
 
-If ambiguous (e.g. "implement login page"), break into sequential steps: backend first (API + auth), then frontend (UI). Dispatch one at a time.
+If ambiguous (e.g. "implement login page"), break into sequential steps: backend first (API + auth via `nestjs` or `python-backend`), then frontend (UI). Dispatch one at a time.
 
 **Review Checklist (Solo):**
 

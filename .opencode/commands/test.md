@@ -19,13 +19,17 @@ QA
 ### 1. QA Agent — Run Tests
 
 ```bash
-nx run-many -t test                # all tests
+# TypeScript / Web & NestJS
+nx run-many -t test                # all TS tests
 nx affected -t test                # only affected (default for /build)
-nx run-many -t test --coverage     # with coverage
-nx test web                        # specific app
-nx test api
 npx playwright test                # E2E
-npx playwright test --ui           # E2E with UI
+
+# Python / AI & Backend
+uv run pytest                      # all Python tests
+uv run pytest --cov                # with coverage
+
+# Rust / Desktop, Axum & Crates
+cargo test --all-targets           # all Rust tests
 ```
 
 **Why so many modes?** Different scopes for different needs. Pre-commit = affected. Pre-merge = full. Debug = single file. Each is a different speed/coverage tradeoff.
