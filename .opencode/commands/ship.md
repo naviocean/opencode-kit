@@ -53,14 +53,18 @@ cargo test
 ## Phase 2: Security Auditor — Final Gate
 
 ```bash
-npx ecc-agentshield scan
+# Programmatic AgentShield security gate (exits 1 on failure, blocking Phase 3)
+node .opencode/scripts/security-gate.mjs --min-grade=B --output=_workspace/06_security_ship.md
+
+# Production dependency vulnerability scan
 npm audit --production
 ```
 
 **Why after QA?** If QA already blocks, no need to scan. Save security scan time for runs that might actually ship.
 
-**Gates:**
-- AgentShield grade: A or B (pass), C (warn), D/F (block)
+**Gates (HARD-BLOCK on failure):**
+- AgentShield exit code `0` (Grade A or B, 0 secrets) → Pass to Phase 3
+- AgentShield exit code `1` (Grade C/D/F or secret leak) → **HARD-BLOCK**: Pipeline aborts immediately
 - No critical npm audit findings
 - No hardcoded secrets (full project scan)
 - Permission boundaries intact

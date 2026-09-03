@@ -269,9 +269,20 @@ Closes: #456
 
 ## Security
 
-### AgentShield (Mandatory)
+### AgentShield Automated Security Gating (Mandatory)
 
-Run `npx ecc-agentshield scan` before every `/ship` and `/review`. 102 rules across 5 categories:
+We enforce a **Multi-Tier Defense Architecture** inspired by the latest ECC (Everything Claude Code):
+
+1. **Runtime Guard Hook** (`.opencode/hooks/pre-tool-guard.mjs`):
+   - Intercepts dangerous operations before tool execution (modifying `.env*`, `rm -rf /`, `curl | bash`, dumping credentials).
+2. **Programmatic Gate CLI** (`node .opencode/scripts/security-gate.mjs`):
+   - Automatically executed in `/review` and `/ship`.
+   - Threshold: **Grade >= B** and **0 secret leaks**.
+   - Standard exit codes: `0 = PASSED`, `1 = BLOCKED` (aborts the workflow).
+3. **CI/CD Hard Gate** (`.github/workflows/agentshield.yml`):
+   - Runs `affaan-m/agentshield@v1` on all PRs to main/master, blocking merges on medium+ findings.
+
+**102 rules across 5 categories:**
 
 | Category | Rules | Examples |
 |---|---|---|

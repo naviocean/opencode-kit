@@ -1,6 +1,6 @@
 {
   "name": "opencode-saas-kit",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Multi-agent development team kit for OpenCode. 11 specialized AI agents work together to build SaaS products.",
   "keywords": [
     "opencode",
@@ -34,10 +34,12 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node .opencode/scripts/__tests__/skill-registry.test.mjs && node .opencode/scripts/__tests__/dispatch.test.mjs && node .opencode/scripts/__tests__/verify.test.mjs",
+    "test": "node .opencode/scripts/__tests__/skill-registry.test.mjs && node .opencode/scripts/__tests__/dispatch.test.mjs && node .opencode/scripts/__tests__/verify.test.mjs && node .opencode/scripts/__tests__/security-gate.test.mjs && node .opencode/scripts/__tests__/pre-tool-guard.test.mjs",
     "test:registry": "node .opencode/scripts/__tests__/skill-registry.test.mjs",
     "test:dispatch": "node .opencode/scripts/__tests__/dispatch.test.mjs",
     "test:verify": "node .opencode/scripts/__tests__/verify.test.mjs",
+    "test:security": "node .opencode/scripts/__tests__/security-gate.test.mjs",
+    "test:guard": "node .opencode/scripts/__tests__/pre-tool-guard.test.mjs",
     "verify": "node .opencode/scripts/verify.mjs",
     "verify:cli": "node bin/cli.js verify",
     "registry": "node .opencode/scripts/skill-registry.mjs",

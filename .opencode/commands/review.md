@@ -50,8 +50,14 @@ Two-stage review (Superpowers pattern):
 
 Runs in parallel:
 
-- AgentShield scan: `npx ecc-agentshield scan`
-- Secret detection in changed files
+- **AgentShield Automated Gate**:
+  ```bash
+  node .opencode/scripts/security-gate.mjs --scope=changed --output=_workspace/05_review_security.md
+  ```
+- Programmatic exit code check:
+  - Exit code `0` (Grade A/B, 0 secrets) → Security passes.
+  - Exit code `1` (Grade C/D/F or secret leak) → Automatically sets verdict to **Blocked**.
+- Secret detection across changed files
 - Permission boundary validation
 - OWASP checks: A01 (access control), A03 (injection), A07 (XSS)
 - Prompt injection in agent configs

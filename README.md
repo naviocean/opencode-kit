@@ -547,7 +547,7 @@ export CONTEXT7_API_KEY=your_key_here
 | `orchestrate` | Tech Lead | Task breakdown, subagent dispatch, dependency ordering, code review |
 | `socratic-planning` | PM | Interview before coding with HARD-GATE, scaling questions (from Superpowers brainstorming) |
 | `continuous-learning` | All | Auto-extract patterns with confidence scoring (from ECC instincts) |
-| `security-scan` | Security Auditor | AgentShield integration |
+| `security-scan` | Security Auditor | AgentShield multi-tier runtime defense & automated security gate |
 | `jwt-auth` | NestJS | NestJS JWT implementation |
 | `ux-flow` | Designer | User journey mapping |
 | `coding-standards` | All | TypeScript strict conventions |
@@ -683,20 +683,20 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.2 (Current)
+### v1.2.7 (Current)
 
 - ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
 - ✅ 157 skills (146 from skills.sh + 11 custom)
 - ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix) — each with Phase 0 context check, pushy descriptions, Execution Mode
+- ✅ **AgentShield Automated Security Gating (ECC Architecture)** — Multi-tier runtime defense: PreToolUse guard hook (`pre-tool-guard.mjs`), programmatic security gate (`security-gate.mjs`) with exit code gating (Grade >= B), hard-gates in `/review` and `/ship`, and CI/CD GitHub Action (`.github/workflows/agentshield.yml`)
 - ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates + conventions.md)
 - ✅ AGENTS.md pointer pattern — detail moved to `.opencode/standards/conventions.md`
 - ✅ GitNexus MUST rules with "because X, if skipped Y" annotations on all 9 agents
 - ✅ Model-per-agent via frontmatter `model:` (opencode-native routing, verified by `verify.mjs` § 7)
-- ✅ Test suite: `verify.mjs` (99 checks) + `skill-registry.test.mjs` (20)
+- ✅ Test suite: `verify.mjs` (120 checks) + 5 test suites (58 unit tests including security-gate & pre-tool-guard)
 - ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
 - ✅ ICM memory integration
 - ✅ GitNexus code intelligence integration
-- ✅ AgentShield security scan workflow via Security Auditor
 - ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
 - ✅ CLI tool (npx opencode-saas-kit init/update/verify)
 
@@ -716,10 +716,9 @@ SOFTWARE.
 ### v2.0 (Planned)
 
 - 🔄 **Continuous Learning** — Hook-based observation, background observer agent, instinct extraction with confidence scoring, `/evolve` and `/instinct-status` commands
-- 🔄 **AgentShield Integration** — Expand automated security gating and reporting in `/review` and `/ship`
-- 🔄 **Designer Agent Enhancement** — Standardize Stitch + Pencil handoff with richer DESIGN.md generation
+- 🔄 **Designer Agent Enhancement** — Standardize Stitch + Pencil handoff with richer `DESIGN.md` generation (tokens, typography, spacing, component specs)
 - 🔄 **Multi-project Support** — Project-scoped instincts, cross-project pattern sharing
-- 🔄 **CI/CD Integration** — GitHub Actions for automated /ship workflow
+- 🔄 **CI/CD Integration** — GitHub Actions for automated `/ship` workflow, test execution, container builds, and deployment pipelines
 - 🔄 **Team Collaboration** — Instinct export/import, shared team patterns
 
 ### v3.0 (Future)

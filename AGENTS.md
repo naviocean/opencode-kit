@@ -82,6 +82,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.2.7 | 2026-09-03 | Implement AgentShield Automated Security Gating (ECC Multi-tier Architecture): PreToolUse runtime guard hook (`.opencode/hooks/pre-tool-guard.mjs`), programmatic `security-gate.mjs` CLI with grade thresholds (Grade >= B), hard-gates in `/review` and `/ship`, and CI/CD GitHub Action (`.github/workflows/agentshield.yml`). Added unit test suites. |
 | 1.2.6 | 2026-09-02 | Upgrade `rustacean` to full Rust Systems, Concurrency (Tokio), and High-Performance Services (Axum). Install 5 core Rust skills (`rust-async-patterns`, `memory-safety-patterns`, `rust-best-practices`, `rust-testing`, `axum-web-framework`). Total 157 skills. |
 | 1.2.5 | 2026-09-02 | Refactor `backend` → `nestjs` and decompose `python` → `ai-engineer` + `python-backend`. Expand team to 11 specialized agents, 8 commands, 152 skills. |
 | 1.2.4 | 2026-09-02 | Add 10th agent `devops` (SRE & Cloud Infrastructure). Install 13 DevOps skills (CI/CD, Docker, K8s, Helm, Terraform, Prometheus, Grafana, SLO). Synchronize docs and CLI to 10 agents, 8 commands, 152 skills. |
