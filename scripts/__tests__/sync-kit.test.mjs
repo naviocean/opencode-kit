@@ -166,3 +166,20 @@ test('sync-kit: verifies universal persistent memory (.agent-memory) across all 
   assert.equal(fs.realpathSync(claudeMemory), resolvedRootMemory, '.claude/memory must resolve to .agent-memory');
 });
 
+test('sync-kit: verifies skill-packs.json is synced to adapters', () => {
+  runSync();
+
+  const corePacks = path.join(ROOT, '.agent-core', 'skill-packs.json');
+  const opencodePacks = path.join(ROOT, '.opencode', 'skill-packs.json');
+  const agentsPacks = path.join(ROOT, '.agents', 'skill-packs.json');
+
+  assert.ok(fs.existsSync(corePacks), '.agent-core/skill-packs.json must exist');
+  assert.ok(fs.existsSync(opencodePacks), '.opencode/skill-packs.json must exist');
+  assert.ok(fs.existsSync(agentsPacks), '.agents/skill-packs.json must exist');
+
+  const resolvedCore = fs.realpathSync(corePacks);
+  assert.equal(fs.realpathSync(opencodePacks), resolvedCore, '.opencode/skill-packs.json must resolve to .agent-core');
+  assert.equal(fs.realpathSync(agentsPacks), resolvedCore, '.agents/skill-packs.json must resolve to .agent-core');
+});
+
+

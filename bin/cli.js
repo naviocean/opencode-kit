@@ -18,7 +18,7 @@ const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'l
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.3.2';
+const VERSION = '1.3.3';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -96,6 +96,10 @@ ${COLORS.bold}Usage:${COLORS.reset}
   npx ${KIT_NAME} sync            Sync kit across harnesses (OpenCode, Claude, Antigravity, Codex)
   npx ${KIT_NAME} update          Update kit files (preserves your docs)
   npx ${KIT_NAME} update --skills Update kit + refresh skills from registry
+  npx ${KIT_NAME} pack [list]     List available skill packs
+  npx ${KIT_NAME} pack add <name> Activate a skill pack (e.g. rust-systems, python-ai)
+  npx ${KIT_NAME} pack remove <n> Deactivate a skill pack
+  npx ${KIT_NAME} pack auto       Auto-detect and activate matching packs from codebase
   npx ${KIT_NAME} verify          Verify installation
   npx ${KIT_NAME} --help          Show this help
 
@@ -197,6 +201,10 @@ function verifyInstallation(projectDir) {
 
   // Check .agent-memory
   checks.push({ name: '.agent-memory/ (Universal persistent memory)', pass: fs.existsSync(path.join(projectDir, '.agent-memory')) });
+
+  // Check skill packs
+  const packsFile = path.join(projectDir, '.agent-core', 'skill-packs.json');
+  checks.push({ name: '.agent-core/skill-packs.json (Modular skill packs)', pass: fs.existsSync(packsFile) });
 
   // Check docs
   const docsDir = path.join(projectDir, 'docs');
@@ -614,6 +622,25 @@ function syncProject(projectDir, options = {}) {
   return runCommand(`node "${syncScript}" ${flags.join(' ')}`, { cwd: projectDir });
 }
 
+function handlePackCommand(projectDir, packArgs) {
+  const kitDir = path.dirname(__filename);
+  const packScript = path.join(kitDir, '..', 'scripts', 'skill-pack-manager.mjs');
+  if (!fs.existsSync(packScript)) {
+    logError('scripts/skill-pack-manager.mjs not found.');
+    process.exit(1);
+  }
+  const subcmd = packArgs[0] || 'list';
+  const rest = packArgs.slice(1).map(a => `"${a}"`).join(' ');
+  try {
+    execSync(`node "${packScript}" ${subcmd} ${rest}`, {
+      stdio: 'inherit',
+      cwd: projectDir,
+    });
+  } catch (e) {
+    process.exit(1);
+  }
+}
+
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 function main() {
@@ -697,6 +724,10 @@ function main() {
         dryRun: flags.dryRun,
         yes: flags.yes,
       });
+      break;
+
+    case 'pack':
+      handlePackCommand(projectDir, args.slice(1));
       break;
 
     case 'verify':

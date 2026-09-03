@@ -371,6 +371,7 @@ function syncOpenCode(mode, dryRun, presetName) {
     { src: path.join(CORE_DIR, 'commands'), dest: path.join(opencodeDir, 'commands') },
     { src: path.join(CORE_DIR, 'hooks'), dest: path.join(opencodeDir, 'hooks') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(opencodeDir, 'memory') },
+    { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(opencodeDir, 'skill-packs.json') },
   ];
 
   for (const { src, dest } of staticTargets) {
@@ -427,11 +428,12 @@ function syncAntigravityAndCodex(mode, dryRun, presetName, target) {
   const destAgentsDir = path.join(agentsDir, 'agents');
   syncAgentsWithPreset(destAgentsDir, agentsPreset, dryRun);
 
-  // Symlink static assets (skills, rules, memory)
+  // Symlink static assets (skills, rules, memory, skill-packs)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(agentsDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(agentsDir, 'rules') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(agentsDir, 'memory') },
+    { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(agentsDir, 'skill-packs.json') },
   ];
 
   for (const { src, dest } of staticTargets) {

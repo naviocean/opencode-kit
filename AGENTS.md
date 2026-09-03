@@ -88,12 +88,33 @@ npx opencode-saas-kit verify
 /plan "Build a SaaS dashboard with user auth, analytics, and billing"
 ```
 
+## Skill Packs & Modular Presets
+
+The kit groups 130+ specialized skills into installable domain packs (`.agent-core/skill-packs.json`), keeping AI context clean and focused:
+- `core`: Base workflows, strict TDD, Git, security scanning, Socratic planning.
+- `web-fullstack`: Next.js, React, Tailwind CSS, NestJS, UI design tokens.
+- `python-ai`: FastAPI, async Python, LangGraph agents, RAG, LLM eval.
+- `rust-systems`: Tokio async, Axum web framework, memory safety, RTK TDD.
+- `devops-cloud`: GitHub Actions, Docker, K8s, Helm, Prometheus, SLOs.
+- `web3`: Solidity security, DeFi protocols, NFT standards, Hardhat testing.
+- `mobile`: React Native architecture, animations, iOS HIG, Android Material 3.
+- `data-ml`: Apache Airflow, Spark optimization, MLOps, dbt, data contracts.
+
+Manage packs via CLI:
+```bash
+npx opencode-saas-kit pack list
+npx opencode-saas-kit pack add <pack-name>
+npx opencode-saas-kit pack remove <pack-name>
+npx opencode-saas-kit pack auto
+```
+
 For human-facing documentation (installation, configuration, troubleshooting), see `README.md`.
 
 ## Changelog
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.3 | 2026-09-03 | Implement BMad Borrowed Point 3 (Skill Packs & Modular Presets): Defined 8 modular domain packs in `.agent-core/skill-packs.json`, created `scripts/skill-pack-manager.mjs`, integrated pack auto-detection into repo scanner and CLI (`npx opencode-saas-kit pack [list/add/remove/auto]`). 84 unit tests + 120 verification checks pass. |
 | 1.3.2 | 2026-09-03 | Implement BMad patterns: Brownfield Repo Scanner (Node, Python, Rust, Go), Safe Context Markers (`<!-- opencode-saas-kit:start/end -->`), and Adaptive Socratic Sizing (S / M / L) with Mini-Plan template and triage-sizer. 80 unit tests + 120 verification checks pass. |
 | 1.3.1 | 2026-09-03 | Implement Universal Dedicated Memory Architecture: decoupled neutral `.agent-memory/` SSoT across OpenCode, Claude Code, Antigravity, and Codex via symlinks; updated memory pointers and removed prompt-polluting memory from AGENTS.md/CLAUDE.md. |
 | 1.3.0 | 2026-09-03 | Implement Universal Multi-Harness Architecture: SSoT `.agent-core/`, sync engine `scripts/sync-kit.mjs` with relative symlinks and copy fallback, multi-harness adapters for OpenCode, Claude Code (`CLAUDE.md`), Antigravity (`AGENTS.md`), and OpenAI Codex (`CODEX.md`), model SSoT via `agent-models.json` with preset profiles. 65 unit tests + 120 verification checks pass. |

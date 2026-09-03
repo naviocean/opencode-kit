@@ -13,6 +13,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import { detectRecommendedPacks } from './skill-pack-manager.mjs';
 
 /**
  * Safely reads and parses JSON from a file path.
@@ -251,6 +252,7 @@ export function scanRepo(projectDir = process.cwd()) {
   result.testRunners = [...new Set(result.testRunners)];
   result.linters = [...new Set(result.linters)];
   result.database = [...new Set(result.database)];
+  result.recommendedSkillPacks = detectRecommendedPacks(result);
 
   return result;
 }
@@ -262,7 +264,7 @@ export function scanRepo(projectDir = process.cwd()) {
  */
 export function formatProjectContextMarkdown(profile) {
   const pm = profile.primaryPackageManager || 'npm';
-  let testCmd = profile.testRunners[0] || `${pm} test`;
+  let testCmd = (profile.testRunners && profile.testRunners[0]) || `${pm} test`;
   if (pm === 'cargo' && !testCmd.includes('cargo')) testCmd = 'cargo test';
   if (pm === 'uv' || pm === 'poetry') testCmd = `${pm} run pytest`;
 
@@ -270,6 +272,9 @@ export function formatProjectContextMarkdown(profile) {
   const frameworksStr = profile.frameworks.length > 0 ? profile.frameworks.join(', ') : 'Vanilla / Standard';
   const databaseStr = profile.database.length > 0 ? profile.database.join(', ') : 'Not detected';
   const lintersStr = profile.linters.length > 0 ? profile.linters.join(', ') : 'Default';
+  const packsStr = (profile.recommendedSkillPacks && profile.recommendedSkillPacks.length > 0)
+    ? profile.recommendedSkillPacks.map(p => `\`${p}\``).join(', ')
+    : '`core`';
 
   return `# Project Context (Auto-scanned)
 
@@ -282,6 +287,7 @@ This file stores project-specific knowledge that persists across sessions.
 - **Database / ORM**: ${databaseStr}
 - **Test Command**: \`${testCmd}\`
 - **Linters / Formatters**: ${lintersStr}
+- **Recommended Skill Packs**: ${packsStr}
 ${profile.monorepo ? `- **Monorepo**: Yes (${profile.monorepoType})\n` : ''}${profile.docker ? '- **Containerization**: Docker detected\n' : ''}
 ## Pointers to Dedicated Memory
 - **Architecture Decisions**: See [.agent-memory/decisions.md](decisions.md)
@@ -312,6 +318,16 @@ export function writeProjectContext(projectDir, scanResult) {
   const contextFile = path.join(memoryDir, 'project-context.md');
   const markdown = formatProjectContextMarkdown(scanResult);
   fs.writeFileSync(contextFile, markdown, 'utf-8');
+
+  // Initialize active-packs.json if not present
+  const activeFile = path.join(memoryDir, 'active-packs.json');
+  if (!fs.existsSync(activeFile) && scanResult.recommendedSkillPacks) {
+    fs.writeFileSync(activeFile, JSON.stringify({
+      updatedAt: new Date().toISOString(),
+      packs: scanResult.recommendedSkillPacks
+    }, null, 2) + '\n', 'utf-8');
+  }
+
   return contextFile;
 }
 
