@@ -1,0 +1,74 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "claude-3-5-haiku"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "claude-3-7-sonnet",
+      "fallback": [
+        "claude-3-5-sonnet"
+      ]
+    },
+    "pm": {
+      "model": "claude-3-7-sonnet",
+      "fallback": [
+        "claude-3-5-sonnet"
+      ]
+    },
+    "designer": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "frontend": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "nestjs": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "rustacean": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "qa": {
+      "model": "claude-3-5-haiku",
+      "fallback": [
+        "claude-3-5-sonnet"
+      ]
+    },
+    "security-auditor": {
+      "model": "claude-3-5-haiku",
+      "fallback": [
+        "claude-3-5-sonnet"
+      ]
+    },
+    "ai-engineer": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "python-backend": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    },
+    "devops": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
+    }
+  }
+}

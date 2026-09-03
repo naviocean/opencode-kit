@@ -17,7 +17,7 @@ const { execSync } = require('child_process');
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.2.6';
+const VERSION = '1.3.0';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -87,17 +87,21 @@ function showHelp() {
   log(`
 ${COLORS.bold}${KIT_NAME}${COLORS.reset} v${VERSION}
 
-${COLORS.dim}Multi-agent development team kit for OpenCode${COLORS.reset}
+${COLORS.dim}Universal multi-agent development team kit for OpenCode, Claude Code, Antigravity, and Codex${COLORS.reset}
 
 ${COLORS.bold}Usage:${COLORS.reset}
   npx ${KIT_NAME} init            Install kit to current project
   npx ${KIT_NAME} init --tools    Install kit + tools (gitnexus)
+  npx ${KIT_NAME} sync            Sync kit across harnesses (OpenCode, Claude, Antigravity, Codex)
   npx ${KIT_NAME} update          Update kit files (preserves your docs)
   npx ${KIT_NAME} update --skills Update kit + refresh skills from registry
   npx ${KIT_NAME} verify          Verify installation
   npx ${KIT_NAME} --help          Show this help
 
 ${COLORS.bold}Options:${COLORS.reset}
+  --preset      Model preset: opencode, claude, antigravity, codex
+  --target      Target harness for sync: all, opencode, claude, codex, antigravity
+  --copy        Use copy mode instead of relative symlinks
   --tools       Install tools (gitnexus) globally
   --skills      Update skills from skills.sh registry
   --skip-mcp    Skip opencode.json MCP configuration
@@ -105,8 +109,11 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .opencode/    11 agents, 8 commands, 4 rules, 157 skills, 7 doc templates
-  AGENTS.md     Project rules (injected every session)
+  .agent-core/  Single Source of Truth (11 agents, 8 commands, 4 rules, skills, standards)
+  .opencode/    OpenCode integration (symlinks + opencode.json)
+  AGENTS.md     Universal project rules (Antigravity & OpenAI Codex)
+  .agents/      Skills and rules for Antigravity & OpenAI Codex
+  CLAUDE.md     Claude Code instructions
   docs/         Document output directories (prds, designs, plans, adr, tasks)
 
 ${COLORS.bold}More info:${COLORS.reset}
@@ -343,8 +350,10 @@ function initProject(projectDir, options = {}) {
   const kitDir = path.dirname(__filename);
 
   const copyTasks = [
-    { src: '.opencode', dest: '.opencode', desc: '11 agents, 8 commands, 4 rules, 157 skills, 8 doc templates, RTK hook' },
-    { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
+    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 11 agents, 8 commands, rules, skills, standards' },
+    { src: '.opencode', dest: '.opencode', desc: 'OpenCode integration' },
+    { src: 'scripts', dest: 'scripts', desc: 'Universal sync engine and tool scripts' },
+    { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Universal project rules' },
     { src: 'docs', dest: 'docs', desc: 'Document output directories' },
   ];
 
@@ -355,12 +364,23 @@ function initProject(projectDir, options = {}) {
     if (dryRun) {
       logInfo(`Would copy ${task.src}/ → ${task.dest}/ (${task.desc})`);
     } else {
-      if (copyRecursive(srcPath, destPath)) {
-        logSuccess(`${task.dest}/ — ${task.desc}`);
-      } else {
-        logError(`Failed to copy ${task.src}`);
+      if (fs.existsSync(srcPath)) {
+        if (copyRecursive(srcPath, destPath)) {
+          logSuccess(`${task.dest}/ — ${task.desc}`);
+        } else {
+          logError(`Failed to copy ${task.src}`);
+        }
       }
     }
+  }
+
+  // Run sync to link environments
+  if (!dryRun) {
+    syncProject(projectDir, {
+      target: options.target || 'all',
+      mode: options.mode || 'symlink',
+      dryRun,
+    });
   }
 
   // Copy opencode.json template if not exists
@@ -544,6 +564,23 @@ ${COLORS.bold}Verify:${COLORS.reset}
 `);
 }
 
+function syncProject(projectDir, options = {}) {
+  const { target = 'all', mode = 'symlink', preset = null, dryRun = false } = options;
+  const syncScript = path.join(projectDir, 'scripts', 'sync-kit.mjs');
+  if (!fs.existsSync(syncScript)) {
+    logError('scripts/sync-kit.mjs not found. Make sure opencode-saas-kit is initialized.');
+    return false;
+  }
+  const flags = [];
+  if (target) flags.push(`--target ${target}`);
+  if (preset) flags.push(`--preset ${preset}`);
+  if (mode === 'copy') flags.push('--copy');
+  if (dryRun) flags.push('--dry-run');
+
+  logStep(`Synchronizing Universal Agent Kit (${target}${preset ? ', preset: ' + preset : ''})...`);
+  return runCommand(`node "${syncScript}" ${flags.join(' ')}`, { cwd: projectDir });
+}
+
 // ─── Main ───────────────────────────────────────────────────────────────────
 
 function main() {
@@ -551,7 +588,28 @@ function main() {
   const command = args[0];
 
   // Parse flags
+  let target = 'all';
+  const targetIdx = args.indexOf('--target');
+  if (targetIdx !== -1 && args[targetIdx + 1]) {
+    target = args[targetIdx + 1];
+  } else {
+    const targetEq = args.find(a => a.startsWith('--target='));
+    if (targetEq) target = targetEq.split('=')[1];
+  }
+
+  let preset = null;
+  const presetIdx = args.indexOf('--preset');
+  if (presetIdx !== -1 && args[presetIdx + 1]) {
+    preset = args[presetIdx + 1];
+  } else {
+    const presetEq = args.find(a => a.startsWith('--preset='));
+    if (presetEq) preset = presetEq.split('=')[1];
+  }
+
   const flags = {
+    target,
+    preset,
+    copy: args.includes('--copy'),
     tools: args.includes('--tools'),
     skills: args.includes('--skills'),
     skipMcp: args.includes('--skip-mcp'),
@@ -580,10 +638,22 @@ function main() {
   switch (command) {
     case 'init':
       initProject(projectDir, {
+        target: flags.target,
+        preset: flags.preset,
+        mode: flags.copy ? 'copy' : 'symlink',
         installToolsFlag: flags.tools,
         skipMcp: flags.skipMcp,
         dryRun: flags.dryRun,
         yes: flags.yes,
+      });
+      break;
+
+    case 'sync':
+      syncProject(projectDir, {
+        target: flags.target,
+        preset: flags.preset,
+        mode: flags.copy ? 'copy' : 'symlink',
+        dryRun: flags.dryRun,
       });
       break;
 

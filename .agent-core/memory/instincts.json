@@ -1,0 +1,18 @@
+{
+  "version": "1.0.0",
+  "description": "Continuous learning instincts for opencode-saas-kit",
+  "instincts": [],
+  "config": {
+    "autoExtract": true,
+    "confidenceThreshold": 0.7,
+    "maxInstincts": 100,
+    "decayRate": 0.01,
+    "categories": [
+      "architecture",
+      "pattern",
+      "preference",
+      "error-resolution",
+      "workflow"
+    ]
+  }
+}

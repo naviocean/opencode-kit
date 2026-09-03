@@ -8,10 +8,13 @@ build/
 .opencode/agent-registry.json
 .opencode/model-health.json
 .gitnexus/
-.claude/
-.agents/
-CLAUDE.md
 # Runtime state — harness checkpoints
 _workspace/.harness-state.json
 _workspace/0[1-9]_*.md
 _workspace/*_*.md.tmp
+
+# Generated Harness Adapters (generated on-demand via npm run sync)
+.claude/
+CLAUDE.md
+.agents/
+.opencode/

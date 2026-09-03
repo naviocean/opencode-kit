@@ -31,7 +31,7 @@ jobs:
           fi
 
       - name: Run AgentShield Local Gate
-        run: node .opencode/scripts/security-gate.mjs --min-grade=B
+        run: node scripts/security-gate.mjs --min-grade=B
 
       - name: AgentShield Action Scanner
         uses: affaan-m/agentshield@v1

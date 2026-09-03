@@ -1,0 +1,74 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "gemini-3.8-flash-medium"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "gemini-3.1-pro-high",
+      "fallback": [
+        "gemini-3.8-flash-high"
+      ]
+    },
+    "pm": {
+      "model": "gemini-3.1-pro-high",
+      "fallback": [
+        "gemini-3.8-flash-high"
+      ]
+    },
+    "designer": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "frontend": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "nestjs": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "rustacean": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "qa": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "security-auditor": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "ai-engineer": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "python-backend": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    },
+    "devops": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
+    }
+  }
+}

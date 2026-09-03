@@ -1,0 +1,74 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "gpt-5-luna"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "gpt-5-sol",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "pm": {
+      "model": "gpt-5-sol",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "designer": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "frontend": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "nestjs": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "rustacean": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "qa": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "security-auditor": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "ai-engineer": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "python-backend": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    },
+    "devops": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
+    }
+  }
+}

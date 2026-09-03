@@ -15,19 +15,19 @@
 
 ## Agent Trigger Map
 
-| If the request mentions… | Activate |
-|---|---|
-| New feature, requirement unclear, prioritization, stakeholder, scope | **pm** |
-| Architecture decision, multi-agent dispatch, code review, final approval, plain-text request | **tech-lead** |
-| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** |
-| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** |
-| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** |
-| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** |
-| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** |
-| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** |
-| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** |
-| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** |
-| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** |
+| If the request mentions… | Activate | Model |
+|---|---|---|
+| New feature, requirement unclear, prioritization, stakeholder, scope | **pm** | `commandcode/deepseek/deepseek-v4-pro` |
+| Architecture decision, multi-agent dispatch, code review, final approval, plain-text request | **tech-lead** | `commandcode/deepseek/deepseek-v4-pro` |
+| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** | `opencode/deepseek-v4-flash-free` |
+| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `opencode/deepseek-v4-flash-free` |
+| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `opencode/deepseek-v4-flash-free` |
+| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `opencode/deepseek-v4-flash-free` |
+| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `opencode/deepseek-v4-flash-free` |
+| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `opencode/deepseek-v4-flash-free` |
+| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `opencode/deepseek-v4-flash-free` |
+| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** | `opencode/deepseek-v4-flash-free` |
+| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** | `opencode/deepseek-v4-flash-free` |
 
 ## File Map
 
@@ -44,7 +44,7 @@
 | **Slash commands** (`/plan`, `/build`, etc.) | `.opencode/commands/<name>.md` |
 | **Workflow rules** (always-on) | `.opencode/rules/*.md` |
 | **Skill library** (skills) | `.opencode/skills/<category>/SKILL.md` |
-| **Scripts + tests** | `.opencode/scripts/`, `.opencode/scripts/__tests__/` |
+| **Scripts + tests** | `scripts/`, `scripts/__tests__/` |
 | **Runtime state** (gitignored) | `_workspace/` (harness checkpoints) |
 | **End-user docs** (humans installing the kit) | `README.md` |
 
@@ -82,6 +82,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.0 | 2026-09-03 | Implement Universal Multi-Harness Architecture: SSoT `.agent-core/`, sync engine `scripts/sync-kit.mjs` with relative symlinks and copy fallback, multi-harness adapters for OpenCode, Claude Code (`CLAUDE.md`), Antigravity (`AGENTS.md`), and OpenAI Codex (`CODEX.md`), model SSoT via `agent-models.json` with preset profiles. 65 unit tests + 120 verification checks pass. |
 | 1.2.7 | 2026-09-03 | Implement AgentShield Automated Security Gating (ECC Multi-tier Architecture): PreToolUse runtime guard hook (`.opencode/hooks/pre-tool-guard.mjs`), programmatic `security-gate.mjs` CLI with grade thresholds (Grade >= B), hard-gates in `/review` and `/ship`, and CI/CD GitHub Action (`.github/workflows/agentshield.yml`). Added unit test suites. |
 | 1.2.6 | 2026-09-02 | Upgrade `rustacean` to full Rust Systems, Concurrency (Tokio), and High-Performance Services (Axum). Install 5 core Rust skills (`rust-async-patterns`, `memory-safety-patterns`, `rust-best-practices`, `rust-testing`, `axum-web-framework`). Total 157 skills. |
 | 1.2.5 | 2026-09-02 | Refactor `backend` → `nestjs` and decompose `python` → `ai-engineer` + `python-backend`. Expand team to 11 specialized agents, 8 commands, 152 skills. |

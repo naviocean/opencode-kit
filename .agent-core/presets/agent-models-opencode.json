@@ -1,0 +1,74 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "commandcode/opencode/deepseek-v4-flash"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "commandcode/deepseek/deepseek-v4-pro",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4-flash"
+      ]
+    },
+    "pm": {
+      "model": "commandcode/deepseek/deepseek-v4-pro",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4-flash"
+      ]
+    },
+    "designer": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "frontend": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "nestjs": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "rustacean": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "qa": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "security-auditor": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "ai-engineer": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "python-backend": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    },
+    "devops": {
+      "model": "opencode/deepseek-v4-flash-free",
+      "fallback": [
+        "deepseek/deepseek-v4-flash"
+      ]
+    }
+  }
+}

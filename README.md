@@ -181,8 +181,8 @@ override layer is used — the frontmatter IS the source of truth.
 
 ```bash
 # Diagnostic: test model availability (read-only, does not change config)
-node .opencode/scripts/model-health-check.mjs        # all agents
-node .opencode/scripts/model-health-check.mjs nestjs # single agent
+node scripts/model-health-check.mjs        # all agents
+node scripts/model-health-check.mjs nestjs # single agent
 ```
 
 ### Model & Skill Sync
@@ -191,10 +191,10 @@ node .opencode/scripts/model-health-check.mjs nestjs # single agent
 
 ```bash
 # Auto-sync models to .opencode/agents/*.md frontmatter + regenerate agent-registry.json
-node .opencode/scripts/skill-registry.mjs
+node scripts/skill-registry.mjs
 
 # Optional: sync models AND run health check to update model-health.json in one command
-node .opencode/scripts/skill-registry.mjs --health
+node scripts/skill-registry.mjs --health
 ```
 
 ## Skill Auto-Load
@@ -237,7 +237,7 @@ skill(name="nestjs-best-practices")  ← auto-loaded
 
 ```bash
 # Check all agents, models, skills, hooks
-node .opencode/scripts/verify.mjs
+node scripts/verify.mjs
 ```
 
 ## Tech Stack
@@ -683,7 +683,23 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.2.7 (Current)
+### v1.3.0 (Current)
+
+- ✅ **Universal Multi-Harness Architecture** — Cross-platform compatibility with OpenCode (`.opencode/`), Claude Code (`.claude/`, `CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex (`.codex/`, `CODEX.md`).
+- ✅ **Single Source of Truth (`.agent-core/`)** — Centralized repository of 11 agent roles, 273 skills, standards, templates, and commands with zero disk duplication via relative symlinks (with automated copy fallback).
+- ✅ **Single Source of Truth for Models (`agent-models.json`)** — Directly configure models in `agent-models.json`, and run `npm run sync` or `npx opencode-saas-kit sync` to propagate across all agent frontmatters and platform configs.
+- ✅ **Model Presets** — Ready-to-use model configurations (`agent-models-opencode.json`, `agent-models-claude.json`, `agent-models-antigravity.json`, `agent-models-codex.json`). Switch dynamically with `npm run sync -- --preset <name>`.
+- ✅ **Sync Engine CLI** — `npx opencode-saas-kit sync` (with `--target`, `--preset`, `--mode`, `--dry-run`).
+- ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
+- ✅ 273 skills available with zero duplication
+- ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix)
+- ✅ AgentShield Automated Security Gating (ECC Architecture)
+- ✅ Test suite: `verify.mjs` (120 checks) + 6 test suites (65 unit tests including `sync-kit.test.mjs`)
+- ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
+- ✅ ICM memory & GitNexus code intelligence integration
+- ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
+
+### v1.2.7 (Previous)
 
 - ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
 - ✅ 157 skills (146 from skills.sh + 11 custom)
@@ -700,19 +716,6 @@ SOFTWARE.
 - ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
 - ✅ CLI tool (npx opencode-saas-kit init/update/verify)
 
-### v1.0 (Previous)
-
-- ✅ 7 specialized agents (PM, Tech Lead, Designer, Frontend, Backend, QA, Security Auditor)
-- ✅ 116 skills (105 from skills.sh + 11 custom)
-- ✅ 7 commands (/plan, /build, /review, /ship, /design, /security, /test)
-- ✅ Document standards (PRD, Design Doc, Plan, Task, ADR, Security Review templates)
-- ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
-- ✅ ICM memory integration
-- ✅ GitNexus code intelligence integration
-- ✅ AgentShield security scan workflow via Security Auditor
-- ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
-- ✅ CLI tool (npx opencode-saas-kit init/update/verify)
-
 ### v2.0 (Planned)
 
 - 🔄 **Continuous Learning** — Hook-based observation, background observer agent, instinct extraction with confidence scoring, `/evolve` and `/instinct-status` commands
@@ -723,7 +726,6 @@ SOFTWARE.
 
 ### v3.0 (Future)
 
-- 🔮 **Multi-harness Support** — Claude Code, Cursor, Codex compatibility
 - 🔮 **Plugin Marketplace** — Share custom skills and agents
 - 🔮 **Analytics Dashboard** — Agent performance, token usage, learning progress
 
@@ -732,3 +734,4 @@ SOFTWARE.
 Built with patterns from [Superpowers](https://github.com/obra/superpowers) and [ECC](https://github.com/affaan-m/ECC).
 
 Tools: [ICM](https://github.com/rtk-ai/icm), [GitNexus](https://github.com/abhigyanpatwari/GitNexus), [AgentShield](https://github.com/affaan-m/agentshield), [Stitch](https://stitch.withgoogle.com), [Pencil](https://pencil.dev).
+
