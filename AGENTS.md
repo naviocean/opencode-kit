@@ -88,17 +88,15 @@ npx opencode-saas-kit verify
 /plan "Build a SaaS dashboard with user auth, analytics, and billing"
 ```
 
-## Skill Packs & Modular Presets
+## Skill Packs & Modular Presets (Agent-Centric)
 
-The kit groups 130+ specialized skills into installable domain packs (`.agent-core/skill-packs.json`), keeping AI context clean and focused:
-- `core`: Base workflows, strict TDD, Git, security scanning, Socratic planning.
-- `web-fullstack`: Next.js, React, Tailwind CSS, NestJS, UI design tokens.
-- `python-ai`: FastAPI, async Python, LangGraph agents, RAG, LLM eval.
-- `rust-systems`: Tokio async, Axum web framework, memory safety, RTK TDD.
-- `devops-cloud`: GitHub Actions, Docker, K8s, Helm, Prometheus, SLOs.
-- `web3`: Solidity security, DeFi protocols, NFT standards, Hardhat testing.
-- `mobile`: React Native architecture, animations, iOS HIG, Android Material 3.
-- `data-ml`: Apache Airflow, Spark optimization, MLOps, dbt, data contracts.
+The kit groups skills strictly by the **Agents & Squads** that require them (`.agent-core/skill-packs.json`), ensuring zero missing skills and clean AI context:
+- `core`: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 74 skills.
+- `web-frontend`: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills.
+- `nestjs-backend`: NestJS & TypeScript Backend Squad (`nestjs`) — 24 skills.
+- `python-ai`: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills.
+- `rust-systems`: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills.
+- `devops-infra`: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills.
 
 Manage packs via CLI:
 ```bash

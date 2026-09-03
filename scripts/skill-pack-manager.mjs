@@ -105,6 +105,40 @@ export function removePack(projectDir = ROOT, packName) {
 }
 
 /**
+ * Get active agents based on active packs.
+ * @param {string} projectDir
+ * @returns {string[]}
+ */
+export function getActiveAgents(projectDir = ROOT) {
+  const packs = loadPackDefinitions();
+  const activePacks = getActivePacks(projectDir);
+  const activeAgents = new Set();
+  for (const p of activePacks) {
+    if (packs[p] && Array.isArray(packs[p].agents)) {
+      packs[p].agents.forEach(a => activeAgents.add(a));
+    }
+  }
+  return Array.from(activeAgents);
+}
+
+/**
+ * Get active skills based on active packs.
+ * @param {string} projectDir
+ * @returns {string[]}
+ */
+export function getActiveSkills(projectDir = ROOT) {
+  const packs = loadPackDefinitions();
+  const activePacks = getActivePacks(projectDir);
+  const activeSkills = new Set();
+  for (const p of activePacks) {
+    if (packs[p] && Array.isArray(packs[p].skills)) {
+      packs[p].skills.forEach(s => activeSkills.add(s));
+    }
+  }
+  return Array.from(activeSkills);
+}
+
+/**
  * Auto-detect recommended packs from scan results.
  * @param {object} scanResults
  * @returns {string[]}
@@ -115,14 +149,21 @@ export function detectRecommendedPacks(scanResults = {}) {
   const frameworks = (scanResults.frameworks || []).map(f => f.toLowerCase());
   const pkgMgr = (scanResults.primaryPackageManager || '').toLowerCase();
 
-  // Web Fullstack
+  // Web Frontend
   if (
     langs.includes('typescript') ||
     langs.includes('javascript') ||
-    frameworks.some(f => ['next.js', 'react', 'nest.js', 'vue', 'tailwind'].includes(f)) ||
-    ['pnpm', 'bun', 'yarn', 'npm'].includes(pkgMgr)
+    frameworks.some(f => ['next.js', 'react', 'vue', 'tailwind css', 'tailwind'].includes(f))
   ) {
-    recommended.add('web-fullstack');
+    recommended.add('web-frontend');
+  }
+
+  // NestJS Backend
+  if (
+    frameworks.some(f => ['nest.js', 'nestjs'].includes(f)) ||
+    (scanResults.database && scanResults.database.length > 0 && langs.includes('typescript'))
+  ) {
+    recommended.add('nestjs-backend');
   }
 
   // Python & AI
@@ -141,7 +182,7 @@ export function detectRecommendedPacks(scanResults = {}) {
 
   // DevOps & Cloud
   if (scanResults.docker || scanResults.monorepo) {
-    recommended.add('devops-cloud');
+    recommended.add('devops-infra');
   }
 
   return Array.from(recommended);
@@ -159,11 +200,13 @@ if (process.argv[1] && process.argv[1].endsWith('skill-pack-manager.mjs')) {
   const active = getActivePacks(targetDir);
 
   if (command === 'list') {
-    console.log('\n📦 Skill Packs:\n');
+    console.log('\n📦 Agent-Centric Skill Packs:\n');
     for (const [id, pack] of Object.entries(defs)) {
       const isActive = active.includes(id);
       const mark = isActive ? '✅ ACTIVE  ' : '⚪ INACTIVE';
-      console.log(`${mark} [${id}] — ${pack.name} (${pack.skills.length} skills)`);
+      const agentsStr = (pack.agents || []).join(', ');
+      console.log(`${mark} [${id}] — ${pack.name}`);
+      console.log(`            Agents: [${agentsStr}] | Skills: ${pack.skills.length}`);
       console.log(`            ${pack.description}\n`);
     }
   } else if (command === 'add') {
