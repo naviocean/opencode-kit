@@ -1,8 +1,11 @@
 # /plan
 
-Socratic planning session. Use to produce PRD + design + technical plan before any code is written. Do NOT use for: implementation (`/build`), quick fixes (dispatch Tech Lead with `quick` category), security audit (`/security`), final approval (`/ship`), or design-only requests without specs (`/design`).
+Socratic planning session. Right-sized planning pipeline:
+- **Size L/XL (Default):** Full 4-phase pipeline (PM Socratic interview 5-7 questions → PRD → Designer UI/UX → Tech Lead Architecture).
+- **Size M (or `--mini`):** Fast Mini-Plan (1-2 targeted questions → `docs/plans/mini-*.md` using `mini-plan-template.md`, skips formal PRD and Designer subagents).
+- **Size S:** Do NOT use `/plan` for bug fixes, CSS tweaks, or typos. Route directly to `/hotfix` or domain specialist with strict TDD.
 
-**HARD-GATE:** If the user request is implementation ("build me X") or unclear, PM interview begins BEFORE any spec work. Skipping the interview = invalid spec.
+**HARD-GATE:** For Size L/XL, PM interview begins BEFORE any spec work. Skipping the interview = invalid spec.
 
 ## Execution Mode: Subagent Pipeline (Sequential)
 

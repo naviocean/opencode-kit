@@ -1,8 +1,11 @@
 # /build
 
-Activate the full team for parallel implementation. Use ONLY when an approved plan exists in `docs/plans/`. Do NOT use for: planning (`/plan`), security-only audit (`/security`), final approval (`/ship`), or single-file mechanical edits (dispatch Tech Lead with category `quick` directly).
+Activate implementation. Right-fits execution based on task sizing:
+- **Size S (< 50 LOC, bugfix, CSS/text, tweak):** Fast-track directly to domain specialist or `/hotfix` with strict TDD (RED → GREEN → REFACTOR) and AgentShield security scan. No plan document required.
+- **Size M (Single component, 1 endpoint, isolated refactor):** Requires an approved Mini-Plan in `docs/plans/mini-*.md` (using `mini-plan-template.md`).
+- **Size L/XL (Multi-system, new module, epic):** Requires an approved full plan in `docs/plans/*-plan.md`.
 
-**HARD-GATE:** If no `docs/plans/*-plan.md` exists, STOP and return: "Run `/plan` first. /build requires an approved plan."
+**HARD-GATE:** For Size M/L, if no approved plan (`docs/plans/*-plan.md` or `docs/plans/mini-*.md`) exists, STOP and return: "Run `/plan` first or produce a Mini-Plan. For quick Size S bugfixes, dispatch directly with `/hotfix`."
 
 ## Execution Mode: Hybrid
 

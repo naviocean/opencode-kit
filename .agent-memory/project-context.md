@@ -1,15 +1,14 @@
-# Project Context
+# Project Context (Auto-scanned)
 
 This file stores project-specific knowledge that persists across sessions.
 
-## Project Summary
-<!-- Project name, purpose, and domain overview -->
-
 ## Discovered Stack & Environment
-<!-- Auto-scanned or user-defined: language, framework, database, package manager -->
-- **Package Manager**: pnpm / npm / bun / cargo / uv
-- **Test Command**: `npm test` / `vitest` / `pytest` / `cargo test`
-- **Build Command**: `npm run build` / `cargo build`
+- **Languages**: JavaScript
+- **Frameworks & Libs**: Vanilla / Standard
+- **Primary Package Manager**: `npm`
+- **Database / ORM**: Not detected
+- **Test Command**: `npm test`
+- **Linters / Formatters**: Default
 
 ## Pointers to Dedicated Memory
 - **Architecture Decisions**: See [.agent-memory/decisions.md](decisions.md)

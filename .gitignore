@@ -5,6 +5,7 @@ node_modules/
 dist/
 build/
 .opencode/memory/instincts.json
+.agent-memory/instincts.json
 .opencode/agent-registry.json
 .opencode/model-health.json
 .gitnexus/

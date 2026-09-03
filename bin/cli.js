@@ -13,11 +13,12 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'lib', 'context-marker.cjs'));
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.3.0';
+const VERSION = '1.3.2';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -109,12 +110,13 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .agent-core/  Single Source of Truth (11 agents, 8 commands, 4 rules, skills, standards)
-  .opencode/    OpenCode integration (symlinks + opencode.json)
-  AGENTS.md     Universal project rules (Antigravity & OpenAI Codex)
-  .agents/      Skills and rules for Antigravity & OpenAI Codex
-  CLAUDE.md     Claude Code instructions
-  docs/         Document output directories (prds, designs, plans, adr, tasks)
+  .agent-core/   Single Source of Truth (11 agents, 8 commands, 4 rules, skills, standards)
+  .agent-memory/ Universal persistent memory (decisions, contracts, context)
+  .opencode/     OpenCode integration (symlinks + opencode.json)
+  AGENTS.md      Universal project rules (Antigravity & OpenAI Codex)
+  .agents/       Skills and rules for Antigravity & OpenAI Codex
+  CLAUDE.md      Claude Code instructions
+  docs/          Document output directories (prds, designs, plans, adr, tasks)
 
 ${COLORS.bold}More info:${COLORS.reset}
   https://github.com/naviocean/opencode-kit
@@ -192,6 +194,9 @@ function verifyInstallation(projectDir) {
 
   // Check AGENTS.md
   checks.push({ name: 'AGENTS.md', pass: fs.existsSync(path.join(projectDir, 'AGENTS.md')) });
+
+  // Check .agent-memory
+  checks.push({ name: '.agent-memory/ (Universal persistent memory)', pass: fs.existsSync(path.join(projectDir, '.agent-memory')) });
 
   // Check docs
   const docsDir = path.join(projectDir, 'docs');
@@ -344,10 +349,24 @@ function initProject(projectDir, options = {}) {
     logInfo('Files will be merged (existing files overwritten)');
   }
 
-  // 3. Copy kit files
-  logStep('Installing kit files...');
+  // 3. Brownfield Scan & Onboarding
+  logStep('Scanning repository profile...');
+  const scannerScript = path.join(kitDir, '..', 'scripts', 'repo-scanner.mjs');
+  if (fs.existsSync(scannerScript)) {
+    if (dryRun) {
+      logInfo('Would scan repository and generate .agent-memory/project-context.md');
+    } else {
+      try {
+        execSync(`node "${scannerScript}" --write "${projectDir}"`, { stdio: 'ignore' });
+        logSuccess('Repository profile scanned → .agent-memory/project-context.md');
+      } catch (err) {
+        logWarn(`Repository scan skipped (${err.message})`);
+      }
+    }
+  }
 
-  const kitDir = path.dirname(__filename);
+  // 4. Copy kit files
+  logStep('Installing kit files...');
 
   const copyTasks = [
     { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 11 agents, 8 commands, rules, skills, standards' },
@@ -360,6 +379,20 @@ function initProject(projectDir, options = {}) {
   for (const task of copyTasks) {
     const srcPath = path.join(kitDir, '..', task.src);
     const destPath = path.join(projectDir, task.dest);
+
+    // Safe handling for AGENTS.md: inject within markers to preserve existing human rules
+    if (task.dest === 'AGENTS.md') {
+      if (dryRun) {
+        logInfo(`Would safely inject kit rules into ${task.dest} with markers`);
+      } else if (fs.existsSync(srcPath)) {
+        const kitContent = fs.readFileSync(srcPath, 'utf-8');
+        const existingContent = fs.existsSync(destPath) ? fs.readFileSync(destPath, 'utf-8') : '';
+        const merged = injectMarkedContent(existingContent, kitContent, { markerId: 'opencode-saas-kit' });
+        fs.writeFileSync(destPath, merged, 'utf-8');
+        logSuccess(`${task.dest} — ${task.desc} (safe context marker injected)`);
+      }
+      continue;
+    }
 
     if (dryRun) {
       logInfo(`Would copy ${task.src}/ → ${task.dest}/ (${task.desc})`);
@@ -417,7 +450,7 @@ ${COLORS.bold}What was installed:${COLORS.reset}
   .opencode/rules/          4 always-follow rules
   .opencode/skills/         157 skills (146 from skills.sh + 11 custom)
   .opencode/standards/      7 document templates
-  .opencode/memory/         Continuous learning config
+  .agent-memory/            Universal persistent memory (decisions, contracts, context)
   AGENTS.md                 Project rules
   docs/                     Document output directories
 

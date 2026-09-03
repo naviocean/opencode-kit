@@ -4,8 +4,11 @@
 
 ## HARD RULES (never violate)
 
-1. **Socratic first, code last.** Every non-trivial request goes through PM (`/plan`) before any agent writes code. No exceptions for "small" features. Isolated bug fixes and emergency patches use `/hotfix` (Tech Lead triages and dispatches directly with TDD enforcement).
-2. **Spec before implementation.** A PRD must exist in `docs/prds/` before specialist agents (frontend, nestjs, ai-engineer, python-backend, rustacean) touch code.
+1. **Adaptive Socratic Sizing (S / M / L).** All requests are right-sized before implementation:
+   - **Size S (< 50 LOC, bugfix, CSS/text, config):** Fast-track directly to domain specialist or `/hotfix`. Enforce strict TDD (RED → GREEN → REFACTOR) and AgentShield security scan. Zero PRD ceremony.
+   - **Size M (Single endpoint, 1 component, isolated refactor):** Mini-Plan (`docs/plans/mini-*.md`) with 1-2 targeted questions. Skips formal 7-question PRD pipeline.
+   - **Size L/XL (Cross-domain, multi-module, new feature/system):** Full Socratic pipeline (`/plan`) with PM interview (5-7 questions) → PRD → Architecture → Parallel Build (`/build`) → QA → Security.
+2. **Spec before implementation for M & L.** A plan (`docs/plans/mini-*.md` for M, or `docs/prds/` + `docs/plans/` for L) must exist before specialist agents touch code. Size S bugfixes/tweaks require verified failing tests (TDD) before implementation.
 3. **Tests before code (TDD).** RED → GREEN → REFACTOR for all business logic. 80%+ statement coverage required.
 4. **Security before ship.** No agent ships without a security scan passing. Secrets in code = automatic block.
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
@@ -39,7 +42,7 @@
 | **Git workflow** (commits, branches, PRs) | `.opencode/standards/conventions.md` § Git |
 | **Anti-patterns** (blocking) | `.opencode/standards/conventions.md` § Anti-Patterns |
 | **Document templates** (PRD, design, plan, ADR, task) | `.opencode/standards/*.md` |
-| **Project-specific memory** (decisions, contracts, tokens) | `.opencode/memory/project-context.md` |
+| **Project-specific memory** (decisions, contracts, context) | `.agent-memory/` |
 | **Agent definitions** (frontmatter, skills, MUST rules) | `.opencode/agents/<name>.md` |
 | **Slash commands** (`/plan`, `/build`, etc.) | `.opencode/commands/<name>.md` |
 | **Workflow rules** (always-on) | `.opencode/rules/*.md` |
@@ -47,6 +50,15 @@
 | **Scripts + tests** | `scripts/`, `scripts/__tests__/` |
 | **Runtime state** (gitignored) | `_workspace/` (harness checkpoints) |
 | **End-user docs** (humans installing the kit) | `README.md` |
+
+## Persistent Memory (Universal)
+
+Project-specific memory persists across sessions in `.agent-memory/` (and via ICM for semantic retrieval):
+- **Stack & Conventions**: Read `.agent-memory/project-context.md` before planning or architectural changes.
+- **Decisions Log**: Tech Lead appends architectural decisions to `.agent-memory/decisions.md`.
+- **Contracts**: Backend/Specialists update verified API endpoints & schemas to `.agent-memory/contracts.md`.
+- **Learned Patterns**: Recorded in `.agent-memory/instincts.json` via continuous-learning.
+- **Dynamic Semantic Retrieval**: Query via `icm recall "<query>"` / Store via `icm store -t <topic>`.
 
 ## Workflow Shortcuts
 
@@ -82,6 +94,8 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.2 | 2026-09-03 | Implement BMad patterns: Brownfield Repo Scanner (Node, Python, Rust, Go), Safe Context Markers (`<!-- opencode-saas-kit:start/end -->`), and Adaptive Socratic Sizing (S / M / L) with Mini-Plan template and triage-sizer. 80 unit tests + 120 verification checks pass. |
+| 1.3.1 | 2026-09-03 | Implement Universal Dedicated Memory Architecture: decoupled neutral `.agent-memory/` SSoT across OpenCode, Claude Code, Antigravity, and Codex via symlinks; updated memory pointers and removed prompt-polluting memory from AGENTS.md/CLAUDE.md. |
 | 1.3.0 | 2026-09-03 | Implement Universal Multi-Harness Architecture: SSoT `.agent-core/`, sync engine `scripts/sync-kit.mjs` with relative symlinks and copy fallback, multi-harness adapters for OpenCode, Claude Code (`CLAUDE.md`), Antigravity (`AGENTS.md`), and OpenAI Codex (`CODEX.md`), model SSoT via `agent-models.json` with preset profiles. 65 unit tests + 120 verification checks pass. |
 | 1.2.7 | 2026-09-03 | Implement AgentShield Automated Security Gating (ECC Multi-tier Architecture): PreToolUse runtime guard hook (`.opencode/hooks/pre-tool-guard.mjs`), programmatic `security-gate.mjs` CLI with grade thresholds (Grade >= B), hard-gates in `/review` and `/ship`, and CI/CD GitHub Action (`.github/workflows/agentshield.yml`). Added unit test suites. |
 | 1.2.6 | 2026-09-02 | Upgrade `rustacean` to full Rust Systems, Concurrency (Tokio), and High-Performance Services (Axum). Install 5 core Rust skills (`rust-async-patterns`, `memory-safety-patterns`, `rust-best-practices`, `rust-testing`, `axum-web-framework`). Total 157 skills. |

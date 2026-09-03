@@ -370,7 +370,7 @@ function syncOpenCode(mode, dryRun, presetName) {
     { src: path.join(CORE_DIR, 'standards'), dest: path.join(opencodeDir, 'standards') },
     { src: path.join(CORE_DIR, 'commands'), dest: path.join(opencodeDir, 'commands') },
     { src: path.join(CORE_DIR, 'hooks'), dest: path.join(opencodeDir, 'hooks') },
-    { src: path.join(CORE_DIR, 'memory'), dest: path.join(opencodeDir, 'memory') },
+    { src: path.join(ROOT, '.agent-memory'), dest: path.join(opencodeDir, 'memory') },
   ];
 
   for (const { src, dest } of staticTargets) {
@@ -427,10 +427,11 @@ function syncAntigravityAndCodex(mode, dryRun, presetName, target) {
   const destAgentsDir = path.join(agentsDir, 'agents');
   syncAgentsWithPreset(destAgentsDir, agentsPreset, dryRun);
 
-  // Symlink static assets (skills, rules)
+  // Symlink static assets (skills, rules, memory)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(agentsDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(agentsDir, 'rules') },
+    { src: path.join(ROOT, '.agent-memory'), dest: path.join(agentsDir, 'memory') },
   ];
 
   for (const { src, dest } of staticTargets) {
@@ -459,6 +460,13 @@ function syncClaudeCode(mode, dryRun) {
     linkOrCopy(skillsSrc, skillsDest, mode, dryRun);
   }
 
+  // Memory symlink
+  const memorySrc = path.join(ROOT, '.agent-memory');
+  const memoryDest = path.join(claudeDir, 'memory');
+  if (fs.existsSync(memorySrc)) {
+    linkOrCopy(memorySrc, memoryDest, mode, dryRun);
+  }
+
   // Generate / update CLAUDE.md
   const claudeMdPath = path.join(ROOT, 'CLAUDE.md');
   const claudeMdContent = `# Claude Code Project Instructions
@@ -467,6 +475,7 @@ function syncClaudeCode(mode, dryRun) {
 
 ## Project Rules & Guidelines
 - Primary Rules: See [AGENTS.md](AGENTS.md) for full agent trigger mapping and HARD RULES.
+- Memory & Context: Persistent project memory is maintained in [.agent-memory/](.agent-memory/).
 - Conventions: [.opencode/standards/conventions.md](.opencode/standards/conventions.md)
 - Skills Library: Available in \`.claude/skills/\` (or \`.agent-core/skills/\`).
 
@@ -540,6 +549,31 @@ function cleanAdapters(target, dryRun) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Ensure Universal Persistent Memory (.agent-memory/)
+// ─────────────────────────────────────────────────────────────────────────────
+function ensureAgentMemory(dryRun) {
+  logStep('2. Ensuring Universal Persistent Memory (.agent-memory/)...');
+  const rootMemoryDir = path.join(ROOT, '.agent-memory');
+  const coreMemoryDir = path.join(CORE_DIR, 'memory');
+
+  if (!dryRun) {
+    if (!fs.existsSync(rootMemoryDir)) {
+      fs.mkdirSync(rootMemoryDir, { recursive: true });
+    }
+    if (fs.existsSync(coreMemoryDir)) {
+      for (const entry of fs.readdirSync(coreMemoryDir)) {
+        const srcFile = path.join(coreMemoryDir, entry);
+        const destFile = path.join(rootMemoryDir, entry);
+        if (!fs.existsSync(destFile)) {
+          fs.copyFileSync(srcFile, destFile);
+        }
+      }
+    }
+  }
+  logSuccess('Persistent memory initialized at .agent-memory/ (SSoT for all harnesses).');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Main Dispatcher
 // ─────────────────────────────────────────────────────────────────────────────
 function main() {
@@ -566,6 +600,9 @@ function main() {
 
   // Step 1: Always synchronize models first
   syncAgentModels(options.preset, options.dryRun);
+
+  // Step 2: Ensure neutral persistent memory exists
+  ensureAgentMemory(options.dryRun);
 
   // Targets to sync
   const target = options.target.toLowerCase();

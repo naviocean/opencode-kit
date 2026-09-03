@@ -141,3 +141,28 @@ test('sync-kit: --preset opencode only syncs opencode and does not create .agent
   runSync();
 });
 
+test('sync-kit: verifies universal persistent memory (.agent-memory) across all harnesses', () => {
+  runSync();
+
+  const rootMemory = path.join(ROOT, '.agent-memory');
+  assert.ok(fs.existsSync(rootMemory), '.agent-memory must exist at project root');
+  assert.ok(fs.existsSync(path.join(rootMemory, 'project-context.md')), 'project-context.md must exist in .agent-memory');
+  assert.ok(fs.existsSync(path.join(rootMemory, 'decisions.md')), 'decisions.md must exist in .agent-memory');
+  assert.ok(fs.existsSync(path.join(rootMemory, 'contracts.md')), 'contracts.md must exist in .agent-memory');
+  assert.ok(fs.existsSync(path.join(rootMemory, 'instincts.json')), 'instincts.json must exist in .agent-memory');
+
+  const opencodeMemory = path.join(ROOT, '.opencode', 'memory');
+  const agentsMemory = path.join(ROOT, '.agents', 'memory');
+  const claudeMemory = path.join(ROOT, '.claude', 'memory');
+
+  assert.ok(fs.existsSync(opencodeMemory), '.opencode/memory must exist');
+  assert.ok(fs.existsSync(agentsMemory), '.agents/memory must exist');
+  assert.ok(fs.existsSync(claudeMemory), '.claude/memory must exist');
+
+  // Verify all resolve to the same root .agent-memory directory
+  const resolvedRootMemory = fs.realpathSync(rootMemory);
+  assert.equal(fs.realpathSync(opencodeMemory), resolvedRootMemory, '.opencode/memory must resolve to .agent-memory');
+  assert.equal(fs.realpathSync(agentsMemory), resolvedRootMemory, '.agents/memory must resolve to .agent-memory');
+  assert.equal(fs.realpathSync(claudeMemory), resolvedRootMemory, '.claude/memory must resolve to .agent-memory');
+});
+

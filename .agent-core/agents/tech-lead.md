@@ -168,16 +168,15 @@ When agents produce conflicting changes (e.g., Frontend and Backend disagree on 
 4. If truly ambiguous (shared types, DTOs), you make the final call.
 5. Document the resolution as an ICM Memoir so it doesn't happen again.
 
-### 5. Task Triage (Solo Dispatch)
+### 5. Adaptive Task Triage (S / M / L Sizing)
 
-When a user sends a plain-text request (no slash command), you are the single entry point. Classify the task and route it:
+When a user sends a plain-text request (no slash command), you are the single entry point. Classify the task scale and route it to right-fit the process:
 
-**Classification:**
-
-| Scale | Signs | Action |
+| Scale | Signs | Workflow & Action |
 |---|---|---|
-| **Small** | Single file/module, bug fix, one endpoint/component, migration, audit, design tweak, style fix | Dispatch solo agent directly |
-| **Large** | New feature across DB+API+UI, new module, architecture change, ambiguous requirements | Reply: "This needs `/plan` first." and start Socratic flow |
+| **Size S (Small)** | < 50 LOC, single file, bug fix, CSS/style tweak, typo, trivial config | **Fast-Track**: Dispatch solo domain agent (or `/hotfix`). Enforce strict TDD (RED → GREEN → REFACTOR) + security scan. No PRD or plan document required. |
+| **Size M (Medium)** | 1 component, single endpoint, isolated refactor, DTO/migration (1-2 files) | **Mini-Plan**: Ask 1-2 targeted questions. Generate 1-page `docs/plans/mini-*.md` spec. Dispatch specialist + QA test. |
+| **Size L / XL (Large)** | Cross-domain (DB+API+UI), new feature, auth overhaul, architectural change | **Full Socratic SDLC**: Route to PM (`/plan`) for full Socratic interview (5-7 questions) → PRD → Architecture → Parallel `/build` → QA → Security. |
 
 **Solo Dispatch Flow:**
 
