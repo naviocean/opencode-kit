@@ -188,6 +188,42 @@ if (existsSync(registryFile) && existsSync(skillsDir)) {
   warn('Skill validation skipped', 'registry or skills dir missing');
 }
 
+// 9. Agent-to-Pack Zero Skill Deficit Verification
+console.log('\n9. Agent-to-Pack Zero Skill Deficit');
+const packsFile = join(ROOT, '.agent-core', 'skill-packs.json');
+if (existsSync(packsFile) && existsSync(registryFile)) {
+  const packsData = JSON.parse(readFileSync(packsFile, 'utf-8')).packs || {};
+  const registry = loadRegistry();
+  let deficitCount = 0;
+
+  for (const [agentName, agentData] of Object.entries(registry.agents || {})) {
+    const packEntry = Object.entries(packsData).find(([, p]) => (p.agents || []).includes(agentName));
+    if (!packEntry) {
+      check(`  ${agentName}: assigned to a skill pack`, false, 'orphan agent (no pack)');
+      deficitCount++;
+      continue;
+    }
+    const [packId, pack] = packEntry;
+    const packSkills = new Set(pack.skills || []);
+    const requiredSkills = [
+      ...(agentData.skills?.always || []),
+      ...(agentData.skills?.conditional || []).map(c => (typeof c === 'string' ? c : c.skill)),
+    ];
+
+    const missingInPack = requiredSkills.filter(s => !packSkills.has(s));
+    if (missingInPack.length > 0) {
+      check(`  ${agentName}: covered by pack [${packId}]`, false, `missing: ${missingInPack.join(', ')}`);
+      deficitCount++;
+    } else {
+      check(`  ${agentName}: 100% covered in pack [${packId}]`, true);
+    }
+  }
+  if (deficitCount === 0) {
+    check('Zero skill deficit: every agent has 100% skill coverage in its pack', true);
+  }
+}
+
+
 // ──────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log(`Results: ${passed} passed, ${failed} failed, ${warnings} warnings`);
