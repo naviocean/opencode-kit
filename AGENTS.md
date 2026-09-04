@@ -112,6 +112,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.4 | 2026-09-04 | Fix `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`. Added automated regression test suite `scripts/__tests__/cli.test.mjs` verifying CLI subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`). 90 unit tests + 132 verification checks pass. |
 | 1.3.3 | 2026-09-03 | Implement BMad Borrowed Point 3 (Skill Packs & Modular Presets): Defined 8 modular domain packs in `.agent-core/skill-packs.json`, created `scripts/skill-pack-manager.mjs`, integrated pack auto-detection into repo scanner and CLI (`npx opencode-saas-kit pack [list/add/remove/auto]`). 84 unit tests + 120 verification checks pass. |
 | 1.3.2 | 2026-09-03 | Implement BMad patterns: Brownfield Repo Scanner (Node, Python, Rust, Go), Safe Context Markers (`<!-- opencode-saas-kit:start/end -->`), and Adaptive Socratic Sizing (S / M / L) with Mini-Plan template and triage-sizer. 80 unit tests + 120 verification checks pass. |
 | 1.3.1 | 2026-09-03 | Implement Universal Dedicated Memory Architecture: decoupled neutral `.agent-memory/` SSoT across OpenCode, Claude Code, Antigravity, and Codex via symlinks; updated memory pointers and removed prompt-polluting memory from AGENTS.md/CLAUDE.md. |

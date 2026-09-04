@@ -18,7 +18,7 @@ const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'l
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.3.3';
+const VERSION = '1.3.4';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -334,6 +334,7 @@ function configureMcp(projectDir, dryRun = false) {
 
 function initProject(projectDir, options = {}) {
   const { installToolsFlag = false, skipMcp = false, dryRun = false, yes = false } = options;
+  const kitDir = path.dirname(__filename);
 
   log(`\n${COLORS.bold}${COLORS.cyan}${KIT_NAME} v${VERSION}${COLORS.reset}`);
   log(`${COLORS.dim}Multi-agent development team kit for OpenCode${COLORS.reset}\n`);
