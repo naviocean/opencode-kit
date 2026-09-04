@@ -388,15 +388,20 @@ User: /ship
 ### Quick Start (Recommended)
 
 ```bash
-# One command — installs kit + GitNexus
+# One command — Brownfield scan, universal setup, and safe context markers
+npx opencode-saas-kit init
+
+# Or install kit + tools (gitnexus)
 npx opencode-saas-kit init --tools
 ```
 
 This will:
-- Copy agents, commands, rules, skills, standards to `.opencode/`
-- Copy AGENTS.md and docs/ to your project
-- Create opencode.json with MCP servers
-- Set up GitNexus for code intelligence
+- Run Brownfield repository scan (detecting Node, Python, Rust, Go) → `.agent-memory/project-context.md`
+- Install Single Source of Truth (`.agent-core/`) with 11 agents, 8 commands, 4 rules, skills, standards
+- Safely inject kit instructions into `AGENTS.md` and `CLAUDE.md` using safe context markers (`<!-- opencode-saas-kit:start/end -->`) preserving human custom rules
+- Set up Universal Persistent Memory in `.agent-memory/`
+- Synchronize adapters across OpenCode (`.opencode/`), Claude Code (`CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex
+- Configure `opencode.json` with recommended MCP servers
 
 ### Prerequisites
 
@@ -514,47 +519,45 @@ export CONTEXT7_API_KEY=your_key_here
 | `/test` | Run test suite, analyze coverage | QA |
 | `/hotfix` | Fast-track bugfix or urgent patch | Tech Lead → Specialist → QA → Security Auditor |
 
-## Skills
+## Skills & Skill Packs
 
-152 skills total — 141 from [skills.sh](https://skills.sh) registry (including 26 Python/AI skills and 13 DevOps skills) + 11 custom skills unique to this kit.
+The kit includes **273 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
 
-### From skills.sh (141 skills)
+- **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 74 skills
+- **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills
+- **`nestjs-backend`**: NestJS & TypeScript Backend Squad (`nestjs`) — 24 skills
+- **`python-ai`**: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills
+- **`rust-systems`**: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills
+- **`devops-infra`**: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills
 
-| Category | Skills | Source |
-|---|---|---|
-| **NX Official** | `nx-workspace`, `nx-generate`, `nx-run-tasks`, `nx-plugins`, `nx-import`, `link-workspace-packages`, `monitor-ci`, `nx-workspace-patterns` | [nrwl/nx-ai-agents-config](https://github.com/nrwl/nx-ai-agents-config) |
-| **GitNexus** | `gitnexus-impact-analysis`, `gitnexus-exploring`, `gitnexus-refactoring`, `gitnexus-debugging`, `gitnexus-cli`, `gitnexus-guide`, `gitnexus-pr-review` | [abhigyanpatwari/gitnexus](https://github.com/abhigyanpatwari/gitnexus) |
-| **Superpowers** | `brainstorming`, `writing-plans`, `systematic-debugging`, `tdd`, `requesting-code-review`, `receiving-code-review`, `using-git-worktrees`, `subagent-driven-development`, `verification-before-completion`, `dispatching-parallel-agents`, `executing-plans` | [obra/superpowers](https://github.com/obra/superpowers) |
-| **Next.js** | `nextjs-app-router-patterns` | [wshobson/agents](https://github.com/wshobson/agents) |
-| **React** | `react-components`, `react-state-management`, `vercel-react-best-practices` | [vercel-labs/agent-skills](https://github.com/vercel-labs/agent-skills) |
-| **NestJS** | `nestjs-best-practices` | [kadajett/agent-nestjs-skills](https://github.com/kadajett/agent-nestjs-skills) |
-| **Prisma** | `prisma-database-setup`, `prisma-client-api`, `prisma-cli`, `prisma-postgres`, `prisma-postgres-setup`, `prisma-upgrade-v7` | [prisma/skills](https://github.com/prisma/skills) |
-| **TypeScript** | `typescript-advanced-types` | [wshobson/agents](https://github.com/wshobson/agents) |
-| **Python / AI & LangGraph** | `langgraph-fundamentals`, `langgraph-persistence`, `langgraph-human-in-the-loop`, `langgraph-python-quickstart`, `langgraph-cli`, `langchain-architecture`, `pydantic-ai-harness`, `deepagents-python-quickstart`, `uv-package-manager`, `fastapi-templates`, `async-python-patterns`, `python-code-style`, `python-testing-patterns`, `python-type-safety`, `python-resilience`, `python-error-handling`, `python-observability`, `python-background-jobs`, `python-performance-optimization`, `python-resource-management`, `python-anti-patterns` | [langchain-ai/langchain-skills](https://github.com/langchain-ai/langchain-skills), [wshobson/agents](https://github.com/wshobson/agents) |
-| **DevOps & Infrastructure** | `github-actions-templates`, `gitlab-ci-patterns`, `terraform-module-library`, `k8s-manifest-generator`, `k8s-security-policies`, `helm-chart-scaffolding`, `prometheus-configuration`, `grafana-dashboards`, `slo-implementation`, `cost-optimization`, `gitops-workflow`, `deployment-pipeline-design`, `incident-runbook-templates` | [wshobson/agents](https://github.com/wshobson/agents) |
-| **Testing** | `vitest`, `tdd`, `test-driven-development`, `playwright-best-practices`, `e2e-testing-patterns`, `javascript-testing-patterns` | [antfu/skills](https://github.com/antfu/skills), [mattpocock/skills](https://github.com/mattpocock/skills), [currents-dev](https://github.com/currents-dev/playwright-best-practices-skill) |
-| **Design** | `shadcn`, `tailwind-design-system`, `design-md`, `design-flow`, `design-brief`, `design-tokens`, `design-system-patterns`, `design-review`, `interaction-design`, `high-end-visual-design`, `industrial-brutalist-ui`, `redesign-existing-projects`, `stitch-loop`, `stitch-manage-design-system`, `pencil-design`, `taste-design`, `design-taste-frontend`, `minimalist-ui`, `information-architecture`, `frontend-design`, `responsive-design`, `visual-design-foundations` | [shadcn/ui](https://github.com/shadcn/ui), [google-labs-code/stitch-skills](https://github.com/google-labs-code/stitch-skills), [leonxlnx/taste-skill](https://github.com/leonxlnx/taste-skill), [julianoczkowski/designer-skills](https://github.com/julianoczkowski/designer-skills) |
-| **RTK** | `rtk-tdd`, `code-simplifier`, `design-patterns` | [rtk-ai/rtk](https://github.com/rtk-ai/rtk) |
-| **Rust / Tauri** | `tauri-v2`, `rust-daily`, `rust-debugging` | [nodnarbnitram/claude-code-extensions](https://github.com/nodnarbnitram/claude-code-extensions), [zhanghandong/rust-skills](https://github.com/zhanghandong/rust-skills), [mohitmishra786/low-level-dev-skills](https://github.com/mohitmishra786/low-level-dev-skills) |
-| **Architecture** | `architecture-decision-records`, `architecture-patterns`, `api-design-principles`, `monorepo-management`, `database-migration`, `openapi-spec-generation`, `sql-optimization-patterns`, `postgresql-table-design` | Various |
-| **Security** | `security-requirement-extraction`, `secrets-management`, `auth-implementation-patterns` | Various |
-| **Workflow** | `triage`, `issue-triage`, `pr-triage`, `handoff`, `brief-to-tasks`, `to-prd`, `to-issues`, `review-agent-setup`, `scan`, `diagnose`, `prototype`, `changelog-automation`, `track-management`, `find-skills` | Various |
+### Skill Pack CLI Management
 
-### Custom Skills (11 skills)
+Manage domain skill packs dynamically:
 
-| Skill | Agent | Purpose |
-|---|---|---|
-| `orchestrate` | Tech Lead | Task breakdown, subagent dispatch, dependency ordering, code review |
-| `socratic-planning` | PM | Interview before coding with HARD-GATE, scaling questions (from Superpowers brainstorming) |
-| `continuous-learning` | All | Auto-extract patterns with confidence scoring (from ECC instincts) |
-| `security-scan` | Security Auditor | AgentShield multi-tier runtime defense & automated security gate |
-| `jwt-auth` | NestJS | NestJS JWT implementation |
-| `ux-flow` | Designer | User journey mapping |
-| `coding-standards` | All | TypeScript strict conventions |
-| `git-workflow` | All | Git branch/commit conventions |
-| `react-components` | Frontend | React component patterns and best practices |
-| `stitch-extract-design-md` | Designer | Extract design specs to DESIGN.md format |
-| `stitch-generate-design` | Designer | Generate UI designs with Stitch |
+```bash
+# List all packs and their active/inactive status
+npx opencode-saas-kit pack list
+
+# Automatically detect tech stack and activate matching packs
+npx opencode-saas-kit pack auto
+
+# Activate a domain pack
+npx opencode-saas-kit pack add rust-systems
+
+# Deactivate a domain pack
+npx opencode-saas-kit pack remove python-ai
+```
+
+## Adaptive Socratic Sizing (S / M / L)
+
+Not all tasks need a heavy PRD and multi-agent ceremony. Requests are right-sized before implementation:
+
+- **Size S (< 50 LOC, bugfix, CSS/text, config):**
+  Fast-track directly to domain specialist or `/hotfix`. Strict TDD (RED → GREEN → REFACTOR) and AgentShield security scan. Zero PRD ceremony.
+- **Size M (Single endpoint, 1 component, isolated refactor):**
+  Mini-Plan (`docs/plans/mini-*.md`) with 1-2 targeted questions. Skips formal 7-question PRD pipeline.
+- **Size L/XL (Cross-domain, multi-module, new feature/system):**
+  Full Socratic pipeline (`/plan`) with PM interview (5-7 questions) → PRD → Architecture → Parallel Build (`/build`) → QA → Security.
 
 ## Document Standards
 
@@ -562,17 +565,20 @@ Standard templates for all project documentation. Agents use these templates whe
 
 | Template | Used By | Output Path |
 |---|---|---|
-| [PRD Template](/.opencode/standards/prd-template.md) | PM | `docs/prds/` |
-| [Design Doc Template](/.opencode/standards/design-doc-template.md) | Tech Lead + Designer | `docs/designs/` |
-| [Implementation Plan](/.opencode/standards/plan-template.md) | Tech Lead | `docs/plans/` |
-| [Task Breakdown](/.opencode/standards/task-template.md) | Tech Lead → Agents | `docs/tasks/` |
-| [ADR Template](/.opencode/standards/adr-template.md) | Tech Lead | `docs/adr/` |
-| [Security Review](/.opencode/standards/security-review-template.md) | Security Auditor | `docs/` |
+| [Mini-Plan Template](/.agent-core/standards/mini-plan-template.md) | Tech Lead / Specialists | `docs/plans/mini-*.md` |
+| [PRD Template](/.agent-core/standards/prd-template.md) | PM | `docs/prds/` |
+| [Design Doc Template](/.agent-core/standards/design-doc-template.md) | Tech Lead + Designer | `docs/designs/` |
+| [Implementation Plan](/.agent-core/standards/plan-template.md) | Tech Lead | `docs/plans/` |
+| [Task Breakdown](/.agent-core/standards/task-template.md) | Tech Lead → Agents | `docs/tasks/` |
+| [ADR Template](/.agent-core/standards/adr-template.md) | Tech Lead | `docs/adr/` |
+| [Security Review](/.agent-core/standards/security-review-template.md) | Security Auditor | `docs/` |
 
 ### Document Lifecycle
 
 ```
-User Request → PRD (PM) → Design Doc (TL+Designer) → Plan (TL) → Tasks (TL → Agents)
+Size S:  Issue / Bug Log ───────────────→ /hotfix ───→ TDD (Red-Green) ──→ Security Gate
+Size M:  User Request ──→ Mini-Plan ────→ Specialist ─→ Tests ───────────→ Security Gate
+Size L:  User Request ──→ PRD (PM) ─────→ Design Doc ─→ Plan (TL) ───────→ Parallel Build → QA → Ship
 ```
 
 ## Superpowers Patterns
@@ -604,34 +610,40 @@ Always-follow guidelines injected into every session.
 
 ```
 opencode-kit/
-├── README.md                          # Human-facing docs (this file)
-├── AGENTS.md                          # Agent entry point (pointer pattern, ~80 lines)
-├── skills-lock.json                   # Skills version lock
+├── README.md                          # Human-facing documentation
+├── AGENTS.md                          # Universal project rules (Antigravity & OpenAI Codex)
+├── CLAUDE.md                          # Claude Code instructions
+├── package.json                       # npm package config (v1.3.4)
 │
-├── .opencode/
-│   ├── agents/ (10)                   # Agent definitions (pushy desc + WHY on MUST rules)
-│   ├── commands/ (8)                  # Slash commands (Phase 0 context check + Execution Mode)
+├── .agent-core/                       # Single Source of Truth (SSoT)
+│   ├── agents/ (11)                   # Agent definitions
+│   ├── commands/ (8)                  # Slash commands
 │   ├── rules/ (4)                     # Always-follow rules
-│   ├── standards/ (8)                 # Document templates + conventions.md
-│   ├── memory/ (2)                    # Continuous learning + project-context
-│   ├── skills/ (152)                  # All skills (141 from skills.sh + 11 custom)
-│   ├── agent-models.json              # Model + fallback config per agent (source of truth)
-│   ├── agent-registry.json            # Auto-generated: skills + model mapping
-│   ├── scripts/
-│   │   ├── skill-registry.mjs         # Parse agent MD → registry
-│   │   ├── dispatch.mjs               # Dispatch prompt builder (--shell, --claude, --json)
-│   │   ├── model-health-check.mjs     # Test model availability (read-only)
-│   │   ├── verify.mjs                 # E2E verification (99 checks)
-│   │   └── __tests__/                 # node:test + bash tests
-│   │       └── skill-registry.test.mjs
-│   └── standards/
-│       ├── conventions.md             # Coding/Security/Testing/Git/Anti-patterns (400 lines)
-│       └── *.md                       # Document templates
+│   ├── standards/ (8)                 # Document templates + conventions.md + mini-plan
+│   ├── skills/ (273)                  # Skill library
+│   ├── skill-packs.json               # Modular skill pack definitions (100% agent coverage)
+│   └── hooks/                         # Security hooks (pre-tool-guard.mjs)
 │
-├── _workspace/                        # Runtime state (gitignored)
-│   └── README.md                      # What's runtime vs committed
+├── .agent-memory/                     # Universal persistent memory (neutral SSoT)
+│   ├── project-context.md             # Stack & conventions
+│   ├── decisions.md                   # Architecture decisions log
+│   ├── contracts.md                   # Verified endpoints & schemas
+│   └── instincts.json                 # Continuous learning
 │
-└── docs/                              # Document output (committed)
+├── .opencode/                         # OpenCode Adapter (symlinks + opencode.json)
+├── .agents/                           # Antigravity & OpenAI Codex Adapter
+├── .claude/                           # Claude Code Adapter
+│
+├── scripts/                           # Toolchain & verification scripts
+│   ├── sync-kit.mjs                   # Universal multi-harness sync engine
+│   ├── repo-scanner.mjs               # Brownfield tech stack scanner
+│   ├── triage-sizer.mjs               # Adaptive S/M/L request sizer
+│   ├── skill-pack-manager.mjs         # Skill pack manager & CLI
+│   ├── security-gate.mjs              # AgentShield programmatic security gate
+│   ├── verify.mjs                     # E2E test verification
+│   └── __tests__/ (12 suites)         # 90 unit tests
+│
+└── docs/                              # Document output directories
     ├── prds/                          # PRDs from /plan
     ├── designs/                       # Design docs
     ├── plans/                         # Implementation plans
@@ -649,6 +661,10 @@ This kit stands on the shoulders of these open-source projects:
 | Superpowers | TDD enforcement | RED-GREEN-REFACTOR cycle |
 | Superpowers | Git worktrees | Parallel branch development |
 | Superpowers | Subagent-driven dev | Fresh agent per task, two-stage review |
+| [BMad Method](https://github.com/bmad-code-org/bmad-method) | Brownfield Onboarding | `repo-scanner.mjs` auto-profiles existing repos (Node, Python, Rust, Go) |
+| BMad Method | Safe Context Markers | `<!-- opencode-saas-kit:start/end -->` preserves custom human rules |
+| BMad Method | Adaptive Socratic Sizing | Right-sized triage (S bugfix, M mini-plan, L full PRD) |
+| BMad Method | Modular Skill Packs | Squad-centric skill packs with 100% agent coverage & auto-detection |
 | [ECC](https://github.com/affaan-m/ECC) | SKILL.md format | Standard skill definition |
 | ECC | Hook patterns | Pre/Post tool use hooks |
 | ECC | Instinct-based learning | Continuous learning with confidence scoring |
@@ -683,21 +699,35 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.3.0 (Current)
+### v1.3.4 (Current)
+
+- ✅ **CLI ReferenceError Fix** — Fixed `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`.
+- ✅ **Automated CLI Regression Test Suite** — Added `scripts/__tests__/cli.test.mjs` verifying subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`).
+- ✅ **Test & Verification Suite** — 90 unit tests across 12 test suites + 132 E2E verification checks passing.
+
+### v1.3.3
+
+- ✅ **Skill Packs & Modular Presets (BMad Borrowed Pattern)** — Defined 6 agent-centric domain packs in `.agent-core/skill-packs.json` guaranteeing 100% agent skill coverage with zero deficit.
+- ✅ **Skill Pack Manager CLI** — Added `scripts/skill-pack-manager.mjs` and CLI commands `npx opencode-saas-kit pack [list/add/remove/auto]`.
+- ✅ **Auto-detection Integration** — Integrated pack auto-detection into repo scanner to automatically activate domain packs matching codebase.
+
+### v1.3.2
+
+- ✅ **Brownfield Repo Scanner** — `scripts/repo-scanner.mjs` automatically profiles Node.js, Python, Rust, and Go codebases into `.agent-memory/project-context.md`.
+- ✅ **Safe Context Markers** — `<!-- opencode-saas-kit:start/end -->` markers preserve human custom instructions in `AGENTS.md` and `CLAUDE.md`.
+- ✅ **Adaptive Socratic Sizing (S / M / L)** — Sized development flow: Size S fast-track bugfix/hotfix, Size M Mini-Plan (`mini-plan-template.md`), Size L full PRD + architecture pipeline.
+
+### v1.3.1
+
+- ✅ **Universal Dedicated Memory Architecture** — Decoupled persistent memory into neutral `.agent-memory/` SSoT across OpenCode, Claude Code, Antigravity, and Codex via symlinks.
+
+### v1.3.0
 
 - ✅ **Universal Multi-Harness Architecture** — Cross-platform compatibility with OpenCode (`.opencode/`), Claude Code (`.claude/`, `CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex (`.codex/`, `CODEX.md`).
 - ✅ **Single Source of Truth (`.agent-core/`)** — Centralized repository of 11 agent roles, 273 skills, standards, templates, and commands with zero disk duplication via relative symlinks (with automated copy fallback).
 - ✅ **Single Source of Truth for Models (`agent-models.json`)** — Directly configure models in `agent-models.json`, and run `npm run sync` or `npx opencode-saas-kit sync` to propagate across all agent frontmatters and platform configs.
 - ✅ **Model Presets** — Ready-to-use model configurations (`agent-models-opencode.json`, `agent-models-claude.json`, `agent-models-antigravity.json`, `agent-models-codex.json`). Switch dynamically with `npm run sync -- --preset <name>`.
 - ✅ **Sync Engine CLI** — `npx opencode-saas-kit sync` (with `--target`, `--preset`, `--mode`, `--dry-run`).
-- ✅ 11 specialized agents (PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, Security Auditor)
-- ✅ 273 skills available with zero duplication
-- ✅ 8 commands (/plan, /build, /review, /ship, /design, /security, /test, /hotfix)
-- ✅ AgentShield Automated Security Gating (ECC Architecture)
-- ✅ Test suite: `verify.mjs` (120 checks) + 6 test suites (65 unit tests including `sync-kit.test.mjs`)
-- ✅ Superpowers patterns (HARD-GATE, Socratic, two-stage review, no placeholders)
-- ✅ ICM memory & GitNexus code intelligence integration
-- ✅ Designer workflow with Stitch, Pencil, and DESIGN.md-oriented handoff
 
 ### v1.2.7 (Previous)
 
