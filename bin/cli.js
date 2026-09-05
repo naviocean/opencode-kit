@@ -18,7 +18,7 @@ const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'l
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.3.4';
+const VERSION = '1.3.5';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -379,10 +379,8 @@ function initProject(projectDir, options = {}) {
 
   const copyTasks = [
     { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 11 agents, 8 commands, rules, skills, standards' },
-    { src: '.opencode', dest: '.opencode', desc: 'OpenCode integration' },
     { src: 'scripts', dest: 'scripts', desc: 'Universal sync engine and tool scripts' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Universal project rules' },
-    { src: 'docs', dest: 'docs', desc: 'Document output directories' },
   ];
 
   for (const task of copyTasks) {
@@ -414,6 +412,19 @@ function initProject(projectDir, options = {}) {
         }
       }
     }
+  }
+
+  // 5. Setup clean document output directories (never copy kit's own internal docs)
+  logStep('Setting up document directories...');
+  const docsDir = path.join(projectDir, 'docs');
+  const docDirs = ['prds', 'designs', 'plans', 'adr', 'tasks'];
+  if (dryRun) {
+    logInfo('Would create clean docs/ output directories (prds, designs, plans, adr, tasks)');
+  } else {
+    for (const dir of docDirs) {
+      fs.mkdirSync(path.join(docsDir, dir), { recursive: true });
+    }
+    logSuccess('docs/ — clean document output directories (prds, designs, plans, adr, tasks)');
   }
 
   // Run sync to link environments
@@ -502,17 +513,28 @@ function updateProject(projectDir, options = {}) {
   logStep('Updating kit files...');
 
   const updateTasks = [
-    { src: '.opencode/agents', dest: '.opencode/agents', desc: '10 agent definitions' },
-    { src: '.opencode/commands', dest: '.opencode/commands', desc: '8 slash commands' },
-    { src: '.opencode/rules', dest: '.opencode/rules', desc: '4 rules' },
-    { src: '.opencode/standards', dest: '.opencode/standards', desc: '7 document templates' },
-    { src: '.opencode/memory', dest: '.opencode/memory', desc: 'Continuous learning config' },
+    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 11 agents, 8 commands, rules, skills, standards' },
+    { src: 'scripts', dest: 'scripts', desc: 'Universal sync engine and tool scripts' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
   ];
 
   for (const task of updateTasks) {
     const srcPath = path.join(kitDir, '..', task.src);
     const destPath = path.join(projectDir, task.dest);
+
+    // Safe handling for AGENTS.md: inject within markers to preserve existing human rules
+    if (task.dest === 'AGENTS.md') {
+      if (dryRun) {
+        logInfo(`Would safely inject kit rules into ${task.dest} with markers`);
+      } else if (fs.existsSync(srcPath)) {
+        const kitContent = fs.readFileSync(srcPath, 'utf-8');
+        const existingContent = fs.existsSync(destPath) ? fs.readFileSync(destPath, 'utf-8') : '';
+        const merged = injectMarkedContent(existingContent, kitContent, { markerId: 'opencode-saas-kit' });
+        fs.writeFileSync(destPath, merged, 'utf-8');
+        logSuccess(`${task.dest} — ${task.desc} (safe context marker injected)`);
+      }
+      continue;
+    }
 
     if (dryRun) {
       logInfo(`Would update ${task.dest} (${task.desc})`);
@@ -523,6 +545,15 @@ function updateProject(projectDir, options = {}) {
         logWarn(`${task.src} — not found in kit`);
       }
     }
+  }
+
+  // Run sync to refresh harness adapters
+  if (!dryRun) {
+    syncProject(projectDir, {
+      target: options.target || 'all',
+      mode: options.mode || 'symlink',
+      dryRun,
+    });
   }
 
   logStep('Preserving user documents...');
@@ -589,16 +620,14 @@ function updateProject(projectDir, options = {}) {
   logStep('Update complete!');
   log(`
 ${COLORS.bold}What was updated:${COLORS.reset}
-  .opencode/agents/         Agent definitions
-  .opencode/commands/       Slash commands
-  .opencode/rules/          Rules
-  .opencode/standards/      Document templates
-  .opencode/memory/         Continuous learning config
+  .agent-core/              Single Source of Truth (11 agents, 8 commands, rules, skills, standards)
+  scripts/                  Universal sync engine and tool scripts
   AGENTS.md                 Project rules
+  Harness adapters          Synchronized (.opencode/, .agents/, .claude/)
 
 ${COLORS.bold}What was preserved:${COLORS.reset}
   docs/                     Your PRDs, designs, plans, tasks
-  .opencode/skills/         Skills (use --skills to refresh)
+  .agent-memory/            Persistent memory (decisions, contracts, context)
   opencode.json             Your MCP configuration
 
 ${COLORS.bold}Verify:${COLORS.reset}

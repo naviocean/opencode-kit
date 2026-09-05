@@ -36,17 +36,17 @@
 
 | Need | Location |
 |---|---|
-| **Coding standards** (TS strict, naming, imports) | `.opencode/standards/conventions.md` § Coding |
-| **Security guidelines** (AgentShield, secret rules) | `.opencode/standards/conventions.md` § Security |
-| **Testing requirements** (TDD, coverage thresholds) | `.opencode/standards/conventions.md` § Testing |
-| **Git workflow** (commits, branches, PRs) | `.opencode/standards/conventions.md` § Git |
-| **Anti-patterns** (blocking) | `.opencode/standards/conventions.md` § Anti-Patterns |
-| **Document templates** (PRD, design, plan, ADR, task) | `.opencode/standards/*.md` |
+| **Coding standards** (TS strict, naming, imports) | `.agent-core/standards/conventions.md` (or `.agents/standards/`) § Coding |
+| **Security guidelines** (AgentShield, secret rules) | `.agent-core/standards/conventions.md` § Security |
+| **Testing requirements** (TDD, coverage thresholds) | `.agent-core/standards/conventions.md` § Testing |
+| **Git workflow** (commits, branches, PRs) | `.agent-core/standards/conventions.md` § Git |
+| **Anti-patterns** (blocking) | `.agent-core/standards/conventions.md` § Anti-Patterns |
+| **Document templates** (PRD, design, plan, ADR, task) | `.agent-core/standards/*.md` |
 | **Project-specific memory** (decisions, contracts, context) | `.agent-memory/` |
-| **Agent definitions** (frontmatter, skills, MUST rules) | `.opencode/agents/<name>.md` |
-| **Slash commands** (`/plan`, `/build`, etc.) | `.opencode/commands/<name>.md` |
-| **Workflow rules** (always-on) | `.opencode/rules/*.md` |
-| **Skill library** (skills) | `.opencode/skills/<category>/SKILL.md` |
+| **Agent definitions** (frontmatter, skills, MUST rules) | `.agents/agents/<name>.md` (or `.opencode/agents/`) |
+| **Slash commands** (`/plan`, `/build`, etc.) | `.agents/commands/<name>.md` (or `.agent-core/commands/`) |
+| **Workflow rules** (always-on) | `.agents/rules/*.md` (or `.agent-core/rules/`) |
+| **Skill library** (skills) | `.agents/skills/<category>/SKILL.md` |
 | **Scripts + tests** | `scripts/`, `scripts/__tests__/` |
 | **Runtime state** (gitignored) | `_workspace/` (harness checkpoints) |
 | **End-user docs** (humans installing the kit) | `README.md` |
@@ -73,7 +73,7 @@ Project-specific memory persists across sessions in `.agent-memory/` (and via IC
 | `/test` | Run test suite + coverage | Any | Test report |
 | `/hotfix` | Fast-track bugfix | Issue / error log | Bugfix diff + test report |
 
-For command details, read `.opencode/commands/<name>.md`.
+For command details, read `.agents/commands/<name>.md` (or `.agent-core/commands/<name>.md`).
 
 ## Quick Start
 
@@ -112,6 +112,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.3.5 | 2026-09-05 | Fix multi-harness sync parity: include `commands` and `standards` across Antigravity, Codex (`.agents/`), and Claude Code (`.claude/`). Neutralize paths in `AGENTS.md` & `CLAUDE.md`. Exclude kit internal `docs/` from `initProject()` copy and package files, scaffolding clean empty output directories. Remove obsolete `.opencode` copy from CLI tasks. 91 unit tests + 132 verification checks pass. |
 | 1.3.4 | 2026-09-04 | Fix `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`. Added automated regression test suite `scripts/__tests__/cli.test.mjs` verifying CLI subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`). 90 unit tests + 132 verification checks pass. |
 | 1.3.3 | 2026-09-03 | Implement BMad Borrowed Point 3 (Skill Packs & Modular Presets): Defined 8 modular domain packs in `.agent-core/skill-packs.json`, created `scripts/skill-pack-manager.mjs`, integrated pack auto-detection into repo scanner and CLI (`npx opencode-saas-kit pack [list/add/remove/auto]`). 84 unit tests + 120 verification checks pass. |
 | 1.3.2 | 2026-09-03 | Implement BMad patterns: Brownfield Repo Scanner (Node, Python, Rust, Go), Safe Context Markers (`<!-- opencode-saas-kit:start/end -->`), and Adaptive Socratic Sizing (S / M / L) with Mini-Plan template and triage-sizer. 80 unit tests + 120 verification checks pass. |

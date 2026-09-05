@@ -44,18 +44,48 @@ test('sync-kit: verifies symlinks point to .agent-core', () => {
 
   const opencodeAgents = path.join(ROOT, '.opencode', 'agents');
   const opencodeSkills = path.join(ROOT, '.opencode', 'skills');
+  const opencodeCommands = path.join(ROOT, '.opencode', 'commands');
+  const opencodeStandards = path.join(ROOT, '.opencode', 'standards');
+
   const agentsSkills = path.join(ROOT, '.agents', 'skills');
+  const agentsCommands = path.join(ROOT, '.agents', 'commands');
+  const agentsStandards = path.join(ROOT, '.agents', 'standards');
+
   const claudeSkills = path.join(ROOT, '.claude', 'skills');
+  const claudeCommands = path.join(ROOT, '.claude', 'commands');
+  const claudeStandards = path.join(ROOT, '.claude', 'standards');
+  const claudeRules = path.join(ROOT, '.claude', 'rules');
 
   assert.ok(fs.existsSync(opencodeAgents), '.opencode/agents must exist');
   assert.ok(fs.existsSync(opencodeSkills), '.opencode/skills must exist');
+  assert.ok(fs.existsSync(opencodeCommands), '.opencode/commands must exist');
+  assert.ok(fs.existsSync(opencodeStandards), '.opencode/standards must exist');
+
   assert.ok(fs.existsSync(agentsSkills), '.agents/skills must exist');
+  assert.ok(fs.existsSync(agentsCommands), '.agents/commands must exist');
+  assert.ok(fs.existsSync(agentsStandards), '.agents/standards must exist');
+
   assert.ok(fs.existsSync(claudeSkills), '.claude/skills must exist');
+  assert.ok(fs.existsSync(claudeCommands), '.claude/commands must exist');
+  assert.ok(fs.existsSync(claudeStandards), '.claude/standards must exist');
+  assert.ok(fs.existsSync(claudeRules), '.claude/rules must exist');
 
   // Verify symlink resolution
-  const resolvedSkills = fs.realpathSync(opencodeSkills);
   const resolvedCoreSkills = fs.realpathSync(path.join(ROOT, '.agent-core', 'skills'));
-  assert.equal(resolvedSkills, resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
+  const resolvedCoreCommands = fs.realpathSync(path.join(ROOT, '.agent-core', 'commands'));
+  const resolvedCoreStandards = fs.realpathSync(path.join(ROOT, '.agent-core', 'standards'));
+
+  assert.equal(fs.realpathSync(opencodeSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
+  assert.equal(fs.realpathSync(agentsSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
+  assert.equal(fs.realpathSync(claudeSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
+
+  assert.equal(fs.realpathSync(opencodeCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
+  assert.equal(fs.realpathSync(agentsCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
+  assert.equal(fs.realpathSync(claudeCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
+
+  assert.equal(fs.realpathSync(opencodeStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
+  assert.equal(fs.realpathSync(agentsStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
+  assert.equal(fs.realpathSync(claudeStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
 });
 
 test('sync-kit: verifies Antigravity and OpenAI Codex share .agents/ and AGENTS.md', () => {
@@ -70,11 +100,15 @@ test('sync-kit: verifies Antigravity and OpenAI Codex share .agents/ and AGENTS.
 
   const agentsSkills = path.join(ROOT, '.agents', 'skills');
   const agentsRules = path.join(ROOT, '.agents', 'rules');
+  const agentsCommands = path.join(ROOT, '.agents', 'commands');
+  const agentsStandards = path.join(ROOT, '.agents', 'standards');
   const agentsAgents = path.join(ROOT, '.agents', 'agents');
   const agentsModels = path.join(ROOT, '.agents', 'agent-models.json');
 
   assert.ok(fs.existsSync(agentsSkills), '.agents/skills must exist');
   assert.ok(fs.existsSync(agentsRules), '.agents/rules must exist');
+  assert.ok(fs.existsSync(agentsCommands), '.agents/commands must exist');
+  assert.ok(fs.existsSync(agentsStandards), '.agents/standards must exist');
   assert.ok(fs.existsSync(agentsAgents), '.agents/agents must exist');
   assert.ok(!fs.existsSync(agentsModels), '.agents/agent-models.json must NOT exist');
 
@@ -91,6 +125,8 @@ test('sync-kit: verifies CLAUDE.md generation', () => {
   const content = fs.readFileSync(claudeMd, 'utf-8');
   assert.match(content, /Claude Code Project Instructions/);
   assert.match(content, /AGENTS\.md/);
+  assert.match(content, /\.claude\/commands/);
+  assert.match(content, /\.claude\/standards/);
 });
 
 test('sync-kit: dry-run does not mutate', () => {

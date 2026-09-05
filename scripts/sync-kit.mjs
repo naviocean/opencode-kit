@@ -428,10 +428,12 @@ function syncAntigravityAndCodex(mode, dryRun, presetName, target) {
   const destAgentsDir = path.join(agentsDir, 'agents');
   syncAgentsWithPreset(destAgentsDir, agentsPreset, dryRun);
 
-  // Symlink static assets (skills, rules, memory, skill-packs)
+  // Symlink static assets (skills, rules, standards, commands, memory, skill-packs)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(agentsDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(agentsDir, 'rules') },
+    { src: path.join(CORE_DIR, 'standards'), dest: path.join(agentsDir, 'standards') },
+    { src: path.join(CORE_DIR, 'commands'), dest: path.join(agentsDir, 'commands') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(agentsDir, 'memory') },
     { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(agentsDir, 'skill-packs.json') },
   ];
@@ -455,18 +457,20 @@ function syncClaudeCode(mode, dryRun) {
     fs.mkdirSync(claudeDir, { recursive: true });
   }
 
-  // Skills symlink
-  const skillsSrc = path.join(CORE_DIR, 'skills');
-  const skillsDest = path.join(claudeDir, 'skills');
-  if (fs.existsSync(skillsSrc)) {
-    linkOrCopy(skillsSrc, skillsDest, mode, dryRun);
-  }
+  // Symlink static assets (skills, rules, standards, commands, memory, skill-packs)
+  const staticTargets = [
+    { src: path.join(CORE_DIR, 'skills'), dest: path.join(claudeDir, 'skills') },
+    { src: path.join(CORE_DIR, 'rules'), dest: path.join(claudeDir, 'rules') },
+    { src: path.join(CORE_DIR, 'standards'), dest: path.join(claudeDir, 'standards') },
+    { src: path.join(CORE_DIR, 'commands'), dest: path.join(claudeDir, 'commands') },
+    { src: path.join(ROOT, '.agent-memory'), dest: path.join(claudeDir, 'memory') },
+    { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(claudeDir, 'skill-packs.json') },
+  ];
 
-  // Memory symlink
-  const memorySrc = path.join(ROOT, '.agent-memory');
-  const memoryDest = path.join(claudeDir, 'memory');
-  if (fs.existsSync(memorySrc)) {
-    linkOrCopy(memorySrc, memoryDest, mode, dryRun);
+  for (const { src, dest } of staticTargets) {
+    if (fs.existsSync(src)) {
+      linkOrCopy(src, dest, mode, dryRun);
+    }
   }
 
   // Generate / update CLAUDE.md
@@ -478,7 +482,8 @@ function syncClaudeCode(mode, dryRun) {
 ## Project Rules & Guidelines
 - Primary Rules: See [AGENTS.md](AGENTS.md) for full agent trigger mapping and HARD RULES.
 - Memory & Context: Persistent project memory is maintained in [.agent-memory/](.agent-memory/).
-- Conventions: [.opencode/standards/conventions.md](.opencode/standards/conventions.md)
+- Conventions & Standards: [.claude/standards/conventions.md](.claude/standards/conventions.md) (or [.agent-core/standards/conventions.md](.agent-core/standards/conventions.md))
+- Slash Commands: Available in \`.claude/commands/\` (\`/plan\`, \`/build\`, \`/review\`, \`/ship\`, etc.)
 - Skills Library: Available in \`.claude/skills/\` (or \`.agent-core/skills/\`).
 
 ## Universal Workflows

@@ -1,6 +1,6 @@
 {
   "name": "opencode-saas-kit",
-  "version": "1.3.4",
+  "version": "1.3.5",
   "description": "Universal multi-agent development team kit for OpenCode, Claude Code, Antigravity, and Codex.",
   "keywords": [
     "opencode",
@@ -32,10 +32,8 @@
     "bin/",
     ".agent-core/",
     ".agent-memory/",
-    ".opencode/",
     "scripts/",
     "AGENTS.md",
-    "docs/",
     "opencode.json",
     "README.md"
   ],
