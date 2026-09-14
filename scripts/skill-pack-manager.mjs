@@ -180,6 +180,11 @@ export function detectRecommendedPacks(scanResults = {}) {
     recommended.add('rust-systems');
   }
 
+  // Mobile Systems & Cross-Platform (Bare React Native)
+  if (frameworks.some(f => ['react native', 'react-native'].includes(f))) {
+    recommended.add('mobile-native');
+  }
+
   // DevOps & Cloud
   if (scanResults.docker || scanResults.monorepo) {
     recommended.add('devops-infra');

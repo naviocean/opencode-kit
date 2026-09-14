@@ -65,6 +65,8 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 |---|---|---|
 | Frontend agent editing `apps/api/` | Breaks domain ownership; nestjs can't review | Escalate to Tech Lead; nestjs does the edit |
 | NestJS agent editing `apps/web/` | Same | Same |
+| Mobile agent editing `apps/web/` or `apps/api/` | Breaks domain ownership | Escalate to Tech Lead; frontend/nestjs edits |
+| Frontend editing `apps/mobile/` | Breaks native boundary; mobile has distinct UI primitives | Escalate to Tech Lead; mobile edits |
 | Rustacean editing standalone web frontend | Breaks domain ownership | Escalate to Tech Lead; frontend edits |
 | AI Engineer editing general REST APIs | Breaks domain ownership; API agent must review | Escalate to Tech Lead; python-backend / nestjs edits |
 | Python Backend editing LangGraph cognitive graphs | Breaks domain ownership; AI engineer must review | Escalate to Tech Lead; ai-engineer edits |

@@ -19,7 +19,7 @@ import {
 
 test('skill-pack-manager: loads agent-centric pack definitions and guarantees 100% agent coverage', () => {
   const packs = loadPackDefinitions();
-  const expectedPacks = ['core', 'web-frontend', 'nestjs-backend', 'python-ai', 'rust-systems', 'devops-infra'];
+  const expectedPacks = ['core', 'web-frontend', 'nestjs-backend', 'python-ai', 'rust-systems', 'devops-infra', 'mobile-native'];
 
   const regFile = join(ROOT, '.opencode', 'agent-registry.json');
   const reg = JSON.parse(readFileSync(regFile, 'utf-8'));
@@ -124,4 +124,13 @@ test('skill-pack-manager: recommends packs based on detected repo stack', () => 
   assert.ok(webPacks.includes('core'));
   assert.ok(webPacks.includes('web-frontend'));
   assert.ok(webPacks.includes('nestjs-backend'));
+
+  // Mobile Bare React Native
+  const mobilePacks = detectRecommendedPacks({
+    languages: ['TypeScript', 'JavaScript'],
+    frameworks: ['React Native'],
+    primaryPackageManager: 'yarn',
+  });
+  assert.ok(mobilePacks.includes('core'));
+  assert.ok(mobilePacks.includes('mobile-native'));
 });

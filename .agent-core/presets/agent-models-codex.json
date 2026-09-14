@@ -69,6 +69,12 @@
       "fallback": [
         "gpt-5-luna"
       ]
+    },
+    "mobile": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
     }
   }
 }

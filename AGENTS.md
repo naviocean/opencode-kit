@@ -14,7 +14,7 @@
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
 6. **One logical change per commit.** Squash before merge. Never force-push to main.
 7. **GitNexus MUST rules are not negotiable.** Each has a documented "if skipped, X risk" rationale.
-8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean owns Rust desktop apps (`apps/desktop/`), Axum microservices, and native crates (`crates/`), but does not touch `apps/web/`. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
+8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean owns Rust desktop apps (`apps/desktop/`), Axum microservices, and native crates (`crates/`), but does not touch `apps/web/`. `mobile` owns cross-platform mobile apps (`apps/mobile/`), React Native New Architecture (Fabric/TurboModules), and native iOS/Android code (`ios/`, `android/`), but does not touch `apps/web/`. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
 
 ## Agent Trigger Map
 
@@ -26,6 +26,7 @@
 | Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `opencode/deepseek-v4-flash-free` |
 | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `opencode/deepseek-v4-flash-free` |
 | Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `opencode/deepseek-v4-flash-free` |
+| React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `opencode/deepseek-v4-flash-free` |
 | LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `opencode/deepseek-v4-flash-free` |
 | Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `opencode/deepseek-v4-flash-free` |
 | CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `opencode/deepseek-v4-flash-free` |
@@ -97,6 +98,7 @@ The kit groups skills strictly by the **Agents & Squads** that require them (`.a
 - `python-ai`: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills.
 - `rust-systems`: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills.
 - `devops-infra`: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills.
+- `mobile-native`: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills.
 
 Manage packs via CLI:
 ```bash
@@ -112,6 +114,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.0 | 2026-09-14 | Add 12th specialized agent `mobile` (Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, FlashList, MMKV, Fastlane) and modular skill pack `mobile-native` (18 skills). Added framework auto-detection in `repo-scanner.mjs`. 92 unit tests pass. |
 | 1.3.5 | 2026-09-05 | Fix multi-harness sync parity: include `commands` and `standards` across Antigravity, Codex (`.agents/`), and Claude Code (`.claude/`). Neutralize paths in `AGENTS.md` & `CLAUDE.md`. Exclude kit internal `docs/` from `initProject()` copy and package files, scaffolding clean empty output directories. Remove obsolete `.opencode` copy from CLI tasks. 91 unit tests + 132 verification checks pass. |
 | 1.3.4 | 2026-09-04 | Fix `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`. Added automated regression test suite `scripts/__tests__/cli.test.mjs` verifying CLI subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`). 90 unit tests + 132 verification checks pass. |
 | 1.3.3 | 2026-09-03 | Implement BMad Borrowed Point 3 (Skill Packs & Modular Presets): Defined 8 modular domain packs in `.agent-core/skill-packs.json`, created `scripts/skill-pack-manager.mjs`, integrated pack auto-detection into repo scanner and CLI (`npx opencode-saas-kit pack [list/add/remove/auto]`). 84 unit tests + 120 verification checks pass. |

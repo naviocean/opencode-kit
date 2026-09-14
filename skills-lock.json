@@ -1189,6 +1189,12 @@
       "skillPath": "plugins/frontend-mobile-development/skills/react-native-architecture/SKILL.md",
       "computedHash": "a83762db6ab371eb25e1b33e49d7895bb73df9d3952e26a3bdca90903d6ac91a"
     },
+    "react-native-best-practices": {
+      "source": "callstackincubator/agent-skills",
+      "sourceType": "github",
+      "skillPath": "skills/react-native-best-practices/SKILL.md",
+      "computedHash": "4b2b9561ff7b4b9d15ff76d2dd2a6191e3cdc7f36c06d171e377bfefcbcb2bfb"
+    },
     "react-native-design": {
       "source": "wshobson/agents",
       "sourceType": "github",

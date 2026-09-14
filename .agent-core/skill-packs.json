@@ -261,6 +261,34 @@
         "slo-implementation",
         "terraform-module-library"
       ]
+    },
+    "mobile-native": {
+      "name": "Bare React Native & Mobile Systems Squad",
+      "description": "Cross-Platform Mobile Engineer. React Native New Architecture (Fabric/TurboModules), React Navigation, Reanimated, MMKV, Native bridging (iOS/Android), and Fastlane CI/CD.",
+      "agents": [
+        "mobile"
+      ],
+      "default": false,
+      "skills": [
+        "argent-react-native-optimization",
+        "argent-react-native-profiler",
+        "code-simplifier",
+        "coding-standards",
+        "continuous-learning",
+        "design-tokens",
+        "git-workflow",
+        "gitnexus-exploring",
+        "gitnexus-refactoring",
+        "mobile-android-design",
+        "mobile-ios-design",
+        "react-native-architecture",
+        "react-native-best-practices",
+        "react-native-design",
+        "react-native-testing",
+        "react-state-management",
+        "typescript-advanced-types",
+        "ux-flow"
+      ]
     }
   }
 }

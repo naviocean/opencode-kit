@@ -154,6 +154,7 @@ Each agent runs on its own model. Configure in `.opencode/agent-models.json`:
     "frontend":  { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
     "nestjs":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
     "rustacean": { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
+    "mobile":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
     "python":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
     "devops":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
     "qa":        { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
@@ -529,6 +530,7 @@ The kit includes **273 skills** organized into modular, **agent-centric skill pa
 - **`python-ai`**: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills
 - **`rust-systems`**: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills
 - **`devops-infra`**: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills
+- **`mobile-native`**: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills
 
 ### Skill Pack CLI Management
 

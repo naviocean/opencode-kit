@@ -69,6 +69,12 @@
       "fallback": [
         "claude-3-5-haiku"
       ]
+    },
+    "mobile": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
     }
   }
 }

@@ -69,6 +69,12 @@
       "fallback": [
         "gemini-3.7-flash-medium"
       ]
+    },
+    "mobile": {
+      "model": "gemini-3.8-flash-medium",
+      "fallback": [
+        "gemini-3.7-flash-medium"
+      ]
     }
   }
 }

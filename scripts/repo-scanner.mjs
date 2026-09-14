@@ -129,7 +129,10 @@ export function scanRepo(projectDir = process.cwd()) {
     if (allDeps['@nestjs/core'] || allDeps['@nestjs/common']) {
       result.frameworks.push('NestJS');
     }
-    if (allDeps.react && !result.frameworks.includes('Next.js')) {
+    if (allDeps['react-native'] || fs.existsSync(path.join(projectDir, 'react-native.config.js')) || fs.existsSync(path.join(projectDir, 'react-native.config.ts'))) {
+      result.frameworks.push('React Native');
+    }
+    if (allDeps.react && !result.frameworks.includes('Next.js') && !result.frameworks.includes('React Native')) {
       result.frameworks.push('React');
     }
     if (allDeps.vue || allDeps.nuxt) {
