@@ -24,8 +24,8 @@ Tech Lead (triage) → Specialist (TDD fix) → QA (regression verify) → Secur
 1. **Analyze bug report / error stack trace**:
    - Determine affected module: Frontend (`apps/web/`), NestJS (`apps/api/`), Python Backend (Python APIs/DB), AI/LLM (LangGraph/prompts), Desktop (`apps/desktop/`), or Infra (`.github/`, Docker, K8s).
 2. **GitNexus Investigation**:
-   - Run `gitnexus_context({name: affectedSymbol})` to see callers and callees.
-   - Run `gitnexus_impact({target: affectedSymbol, direction: "upstream"})` to determine blast radius.
+   - Run `gitnexus_context({name: affectedSymbol, repo: "<current-repo>"})` to see callers and callees.
+   - Run `gitnexus_impact({target: affectedSymbol, direction: "upstream", repo: "<current-repo>"})` to determine blast radius.
    - If blast radius is CRITICAL (e.g. core auth, shared database schema changes), warn user before proceeding.
 3. **Dispatch to single specialist agent**:
    - Web/UI bug → `frontend` (category: `quick` or `deep`)
@@ -61,7 +61,7 @@ Security Auditor scans the diff:
 
 ## Phase 4: Tech Lead — Final Approval
 
-1. Run `gitnexus_detect_changes()` — inspect the exact diff.
+1. Run `gitnexus_detect_changes({repo: "<current-repo>"})` — inspect the exact diff.
 2. Confirm:
    - Scope is isolated (only bugfix files touched).
    - Tests pass.

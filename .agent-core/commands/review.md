@@ -2,7 +2,7 @@
 
 Code review + security audit before merge. Use after `/build` completes, before `/ship`. Do NOT use for: implementation (`/build`), final deploy gate (`/ship`), security-only audit (`/security`).
 
-**HARD-GATE:** Only run on actual changes. If `gitnexus_detect_changes()` shows no diff, return: "No changes to review."
+**HARD-GATE:** Only run on actual changes. If `gitnexus_detect_changes({repo: "<current-repo>"})` shows no diff, return: "No changes to review."
 
 ## Execution Mode: Subagents in Parallel
 
@@ -23,7 +23,7 @@ Tech Lead + Security Auditor (parallel)
 
 ## Phase 0: Context Check
 
-1. Run `gitnexus_detect_changes()` — confirm there ARE changes
+1. Run `gitnexus_detect_changes({repo: "<current-repo>"})` — confirm there ARE changes
 2. If no changes → return HARD-GATE error
 3. List changed files for review scope
 
@@ -32,7 +32,7 @@ Tech Lead + Security Auditor (parallel)
 Two-stage review (Superpowers pattern):
 
 **Stage 1 — Automated:**
-1. `gitnexus_impact({target, direction: "upstream"})` — blast radius per change
+1. `gitnexus_impact({target, direction: "upstream", repo: "<current-repo>"})` — blast radius per change
 2. Scope check: Does diff match the assigned task? Scope creep = reject.
 3. Pattern check: New patterns without justification = reject.
 

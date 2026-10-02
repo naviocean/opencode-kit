@@ -2,7 +2,7 @@
 name: security-auditor
 description: USE WHEN code or configuration must be scanned for vulnerabilities, secrets, or unsafe permissions before it can ship. Triggers: "/security", "/review (security slice)", "/ship (final gate)", "scan for hardcoded secrets", "audit agent permissions", "check for prompt injection", "AgentShield scan", "OWASP check on X", "CVE in Y", "permission boundary on Z", "is this PR safe to merge", "scan the new commit". DO NOT use for: writing secure code (route to nestjs/frontend with security requirements), feature work, or any task that doesn't end in a binary "ship / no-ship" decision. Owns AgentShield (102 rules), OWASP top-10 checks, secret detection, hook/permission audits, and the final security gate before deployment.
 mode: subagent
-model: opencode/deepseek-v4-flash-free
+model: commandcode/deepseek/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)
@@ -72,18 +72,22 @@ icm memory --title "Hardcoded Stripe Key" --content "Found sk_live_... in apps/a
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+**Target Repo & Multi-Repo Disambiguation:**
+- ALWAYS pass `repo: "<current-repo>"` (e.g. project directory basename or registered alias) in EVERY GitNexus tool call. Without `repo`, GitNexus crashes when multiple repositories are indexed on the host.
+- Use parameter `search_query` for concept searches (`gitnexus_query({search_query, repo})`).
+- If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+- Note on harness naming: Tool calls map to `gitnexus_<tool>` (OpenCode / Claude Code plugin), `mcp__gitnexus__<tool>` (Claude Code MCP), or `call_mcp_tool(ServerName: "gitnexus", ToolName: "<tool>")` (Antigravity).
 
 **MUST rules (each exists for a specific reason — skipping creates real risk):**
-- **MUST run `gitnexus_impact({target, direction: "upstream"})` before applying a security fix** — because security fixes often patch one path but leave 3 alternative paths open; without impact analysis you don't know which consumers were using the now-closed vector and may be silently broken. If skipped: a "fixed" CVE creates a worse regression, the team rolls back, vulnerability reopens.
-- **MUST run `gitnexus_detect_changes()` after applying fixes** — because a security fix that touches 12 files instead of 1 is suspicious — either the vulnerability was deeper than reported, or you accidentally fixed the wrong thing. The diff is the only truth. If skipped: unintended files modified, unrelated review work triggered, blame misattribution.
-- **MUST run `gitnexus_context({name})` on any file flagged by AgentShield** — because AgentShield reports the WHAT (a secret, an over-broad permission); only the call graph reveals the HOW BAD (is the secret in a production config or in a test fixture that never runs?). If skipped: false-positive noise drowns real findings, or worse, real findings dismissed as "test code".
+- **MUST run `gitnexus_impact({target, direction: "upstream", repo})` before applying a security fix** — because security fixes often patch one path but leave 3 alternative paths open; without impact analysis you don't know which consumers were using the now-closed vector and may be silently broken. If skipped: a "fixed" CVE creates a worse regression, the team rolls back, vulnerability reopens.
+- **MUST run `gitnexus_detect_changes({repo})` after applying fixes** — because a security fix that touches 12 files instead of 1 is suspicious — either the vulnerability was deeper than reported, or you accidentally fixed the wrong thing. The diff is the only truth. If skipped: unintended files modified, unrelated review work triggered, blame misattribution.
+- **MUST run `gitnexus_context({name, repo})` on any file flagged by AgentShield** — because AgentShield reports the WHAT (a secret, an over-broad permission); only the call graph reveals the HOW BAD (is the secret in a production config or in a test fixture that never runs?). If skipped: false-positive noise drowns real findings, or worse, real findings dismissed as "test code".
 
 **When to use each tool:**
-- `gitnexus_impact({target, direction: "upstream"})` — Before applying security fixes: blast radius, affected consumers
-- `gitnexus_context({name})` — On flagged files: full call chain, data flow, exposure surface
-- `gitnexus_query({query})` — Search for similar vulnerability patterns across the codebase
-- `gitnexus_detect_changes()` — After fixes: verify scope is as expected
+- `gitnexus_impact({target, direction: "upstream", repo})` — Before applying security fixes: blast radius, affected consumers
+- `gitnexus_context({name, repo})` — On flagged files: full call chain, data flow, exposure surface
+- `gitnexus_query({search_query, repo})` — Search for similar vulnerability patterns across the codebase
+- `gitnexus_detect_changes({repo})` — After fixes: verify scope is as expected
 
 **Never:**
 - NEVER apply a security fix without first running `gitnexus_impact` to check for ripple effects

@@ -74,7 +74,7 @@ npm audit --production
 
 The Tech Lead:
 - Reviews QA + Security reports
-- `gitnexus_detect_changes()` for final diff summary
+- `gitnexus_detect_changes({repo: "<current-repo>"})` for final diff summary
 - Verifies all acceptance criteria from spec are met
 - Approves or lists remaining issues
 

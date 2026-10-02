@@ -22,16 +22,16 @@
 |---|---|---|
 | New feature, requirement unclear, prioritization, stakeholder, scope | **pm** | `commandcode/deepseek/deepseek-v4-pro` |
 | Architecture decision, multi-agent dispatch, code review, final approval, plain-text request | **tech-lead** | `commandcode/deepseek/deepseek-v4-pro` |
-| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** | `opencode/deepseek-v4-flash-free` |
-| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `opencode/deepseek-v4-flash-free` |
-| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `opencode/deepseek-v4-flash-free` |
-| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `opencode/deepseek-v4-flash-free` |
-| React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `opencode/deepseek-v4-flash-free` |
-| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `opencode/deepseek-v4-flash-free` |
-| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `opencode/deepseek-v4-flash-free` |
-| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `opencode/deepseek-v4-flash-free` |
-| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** | `opencode/deepseek-v4-flash-free` |
-| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** | `opencode/deepseek-v4-flash-free` |
+| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** | `commandcode/deepseek/deepseek-v4.1-flash` |
 
 ## File Map
 
@@ -114,6 +114,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.1 | 2026-10-02 | Fix GitNexus code intelligence contract alignment: enforce `repo: "<current-repo>"` parameter across all 11 agents and 3 commands to prevent "Multiple repositories indexed" crash, fix parameter name `search_query` for `gitnexus_query`, and document cross-harness tool naming mappings. Added regression test suite. 95 unit tests pass. |
 | 1.4.0 | 2026-09-14 | Add 12th specialized agent `mobile` (Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, FlashList, MMKV, Fastlane) and modular skill pack `mobile-native` (18 skills). Added framework auto-detection in `repo-scanner.mjs`. 92 unit tests pass. |
 | 1.3.5 | 2026-09-05 | Fix multi-harness sync parity: include `commands` and `standards` across Antigravity, Codex (`.agents/`), and Claude Code (`.claude/`). Neutralize paths in `AGENTS.md` & `CLAUDE.md`. Exclude kit internal `docs/` from `initProject()` copy and package files, scaffolding clean empty output directories. Remove obsolete `.opencode` copy from CLI tasks. 91 unit tests + 132 verification checks pass. |
 | 1.3.4 | 2026-09-04 | Fix `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`. Added automated regression test suite `scripts/__tests__/cli.test.mjs` verifying CLI subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`). 90 unit tests + 132 verification checks pass. |

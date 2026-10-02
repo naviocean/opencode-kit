@@ -373,8 +373,14 @@ Use for decision memory:
 
 Use MCP tools for technical context during planning:
 
-- `gitnexus_query({query})` — Before writing a spec: understand existing architecture, find related features, check for conflicting implementations.
-- `gitnexus_context({name})` — When a feature touches existing modules: understand dependencies and impact.
+**Target Repo & Multi-Repo Disambiguation:**
+- ALWAYS pass `repo: "<current-repo>"` (e.g. project directory basename or registered alias) in EVERY GitNexus tool call. Without `repo`, GitNexus crashes when multiple repositories are indexed on the host.
+- Use parameter `search_query` for concept searches (`gitnexus_query({search_query, repo})`).
+- Note on harness naming: Tool calls map to `gitnexus_<tool>` (OpenCode / Claude Code plugin), `mcp__gitnexus__<tool>` (Claude Code MCP), or `call_mcp_tool(ServerName: "gitnexus", ToolName: "<tool>")` (Antigravity).
+
+**When to use:**
+- `gitnexus_query({search_query, repo})` — Before writing a spec: understand existing architecture, find related features, check for conflicting implementations.
+- `gitnexus_context({name, repo})` — When a feature touches existing modules: understand dependencies and impact.
 
 PM doesn't edit code, so impact analysis isn't required. But understanding the codebase BEFORE writing specs prevents impossible requirements.
 

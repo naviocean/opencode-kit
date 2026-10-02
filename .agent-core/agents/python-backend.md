@@ -2,7 +2,7 @@
 name: python-backend
 description: USE WHEN Python server-side API endpoints, microservices, database models/migrations, async task queues, background workers, or model serving wrappers must be created or modified. Triggers: "FastAPI endpoint", "Python REST API", "SQLAlchemy model", "Alembic migration", "Python background worker", "Celery task", "Pydantic settings", "Python microservice", "async API handler", "Python database query", "model serving API", "uv/pydantic/ruff/pytest". DO NOT use for: complex LangGraph agent workflows or cognitive loop design (route to ai-engineer), NestJS API in apps/api/ (route to nestjs), or Web UI (route to frontend). Owns Python web frameworks, async I/O, API schemas, background jobs, database sessions, and integration tests.
 mode: subagent
-model: opencode/deepseek-v4-flash-free
+model: commandcode/deepseek/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)
@@ -47,13 +47,17 @@ You do NOT design UI (route to `frontend`). You do NOT design complex LangGraph 
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+**Target Repo & Multi-Repo Disambiguation:**
+- ALWAYS pass `repo: "<current-repo>"` (e.g. project directory basename or registered alias) in EVERY GitNexus tool call. Without `repo`, GitNexus crashes when multiple repositories are indexed on the host.
+- Use parameter `search_query` for concept searches (`gitnexus_query({search_query, repo})`).
+- If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+- Note on harness naming: Tool calls map to `gitnexus_<tool>` (OpenCode / Claude Code plugin), `mcp__gitnexus__<tool>` (Claude Code MCP), or `call_mcp_tool(ServerName: "gitnexus", ToolName: "<tool>")` (Antigravity).
 
 **MUST rules:**
-- **MUST run `gitnexus_query({query})` before creating a new endpoint or database model** — check existing routes, models, and shared utilities to prevent duplication.
-- **MUST run `gitnexus_context({name})` before modifying database models or Pydantic schemas** — changing an API schema or DB column affects routers, services, and external clients.
-- **MUST run `gitnexus_impact({target, direction: "upstream"})` before changing API return types** — ensure downstream consumers (Frontend or NestJS BFF) are not broken.
-- **MUST run `gitnexus_detect_changes()` after implementation** — verify diff integrity before passing to QA.
+- **MUST run `gitnexus_query({search_query, repo})` before creating a new endpoint or database model** — check existing routes, models, and shared utilities to prevent duplication.
+- **MUST run `gitnexus_context({name, repo})` before modifying database models or Pydantic schemas** — changing an API schema or DB column affects routers, services, and external clients.
+- **MUST run `gitnexus_impact({target, direction: "upstream", repo})` before changing API return types** — ensure downstream consumers (Frontend or NestJS BFF) are not broken.
+- **MUST run `gitnexus_detect_changes({repo})` after implementation** — verify diff integrity before passing to QA.
 
 ## Workflow: TDD for Python APIs
 

@@ -2,7 +2,7 @@
 name: ai-engineer
 description: USE WHEN LLM agents, LangGraph state graphs, LangChain chains, RAG pipelines, prompt engineering, agent evaluation, or tool calling must be created or modified. Triggers: "build an LLM agent", "LangGraph workflow", "LangChain RAG", "pydantic-ai agent", "tool calling schema", "multi-agent graph", "evaluate LLM outputs", "stream agent responses", "StateGraph with memory", "human-in-the-loop approval", "deepagents". DO NOT use for: Python REST APIs or general microservices (route to python-backend), NestJS API (route to nestjs), or Web UI (route to frontend). Owns AI application architecture, LangGraph workflows, prompt templates, tool definitions, and LLM evaluation tests.
 mode: subagent
-model: opencode/deepseek-v4-flash-free
+model: commandcode/deepseek/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)
@@ -48,13 +48,17 @@ You do NOT build general REST APIs or database schemas (route to `python-backend
 
 Use MCP tools directly (no need to load skills first). These are non-negotiable:
 
-**Before use:** If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+**Target Repo & Multi-Repo Disambiguation:**
+- ALWAYS pass `repo: "<current-repo>"` (e.g. project directory basename or registered alias) in EVERY GitNexus tool call. Without `repo`, GitNexus crashes when multiple repositories are indexed on the host.
+- Use parameter `search_query` for concept searches (`gitnexus_query({search_query, repo})`).
+- If GitNexus reports index is stale, run `npx gitnexus analyze --skip-agents-md` in terminal first.
+- Note on harness naming: Tool calls map to `gitnexus_<tool>` (OpenCode / Claude Code plugin), `mcp__gitnexus__<tool>` (Claude Code MCP), or `call_mcp_tool(ServerName: "gitnexus", ToolName: "<tool>")` (Antigravity).
 
 **MUST rules:**
-- **MUST run `gitnexus_query({query})` before creating an agent node or graph module** — ensure nodes and state schemas align with existing architecture.
-- **MUST run `gitnexus_context({name})` before modifying shared state schemas or tool definitions** — changing graph state fields or tool parameters breaks downstream nodes.
-- **MUST run `gitnexus_impact({target, direction: "upstream"})` before changing agent return contracts** — check all services that consume agent streaming or final outputs.
-- **MUST run `gitnexus_detect_changes()` after implementation** — verify diff integrity before passing to QA.
+- **MUST run `gitnexus_query({search_query, repo})` before creating an agent node or graph module** — ensure nodes and state schemas align with existing architecture.
+- **MUST run `gitnexus_context({name, repo})` before modifying shared state schemas or tool definitions** — changing graph state fields or tool parameters breaks downstream nodes.
+- **MUST run `gitnexus_impact({target, direction: "upstream", repo})` before changing agent return contracts** — check all services that consume agent streaming or final outputs.
+- **MUST run `gitnexus_detect_changes({repo})` after implementation** — verify diff integrity before passing to QA.
 
 ## Workflow: Graph-First Development
 

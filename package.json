@@ -1,6 +1,6 @@
 {
   "name": "opencode-saas-kit",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Universal multi-agent development team kit for OpenCode, Claude Code, Antigravity, and Codex.",
   "keywords": [
     "opencode",
@@ -38,7 +38,8 @@
     "README.md"
   ],
   "scripts": {
-    "test": "node scripts/__tests__/skill-registry.test.mjs && node scripts/__tests__/dispatch.test.mjs && node scripts/__tests__/verify.test.mjs && node scripts/__tests__/security-gate.test.mjs && node scripts/__tests__/pre-tool-guard.test.mjs && node scripts/__tests__/sync-kit.test.mjs && node scripts/__tests__/context-marker.test.mjs && node scripts/__tests__/repo-scanner.test.mjs && node scripts/__tests__/triage-sizer.test.mjs && node scripts/__tests__/skill-pack-manager.test.mjs && node scripts/__tests__/agent-skills-audit.test.mjs && node scripts/__tests__/cli.test.mjs",
+    "test": "node scripts/__tests__/skill-registry.test.mjs && node scripts/__tests__/dispatch.test.mjs && node scripts/__tests__/verify.test.mjs && node scripts/__tests__/security-gate.test.mjs && node scripts/__tests__/pre-tool-guard.test.mjs && node scripts/__tests__/sync-kit.test.mjs && node scripts/__tests__/context-marker.test.mjs && node scripts/__tests__/repo-scanner.test.mjs && node scripts/__tests__/triage-sizer.test.mjs && node scripts/__tests__/skill-pack-manager.test.mjs && node scripts/__tests__/agent-skills-audit.test.mjs && node scripts/__tests__/cli.test.mjs && node scripts/__tests__/gitnexus-contract.test.mjs",
+    "test:gitnexus": "node scripts/__tests__/gitnexus-contract.test.mjs",
     "test:cli": "node scripts/__tests__/cli.test.mjs",
     "test:registry": "node scripts/__tests__/skill-registry.test.mjs",
     "test:dispatch": "node scripts/__tests__/dispatch.test.mjs",
