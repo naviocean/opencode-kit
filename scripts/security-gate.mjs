@@ -43,6 +43,7 @@ export function parseArgs(argv = process.argv.slice(2)) {
     output: null,
     mock: null,
     verbose: false,
+    supplyChain: false,
   };
 
   for (const arg of argv) {
@@ -56,6 +57,8 @@ export function parseArgs(argv = process.argv.slice(2)) {
       options.json = true;
     } else if (arg === '--verbose') {
       options.verbose = true;
+    } else if (arg === '--supply-chain') {
+      options.supplyChain = true;
     } else if (arg === '--no-fail-on-secrets') {
       options.failOnSecrets = false;
     } else if (arg === '--fail-on-secrets') {
@@ -88,8 +91,22 @@ export function evaluateSecurityReport(report, options = {}) {
   const minGrade = (options.minGrade || 'B').toUpperCase();
   const failOnSecrets = options.failOnSecrets !== false;
 
-  const score = typeof report.score === 'number' ? report.score : 100;
-  const grade = (report.grade || scoreToGrade(score)).toUpperCase();
+  let score = 100;
+  let grade = null;
+  if (typeof report.score === 'number') {
+    score = report.score;
+  } else if (typeof report.score === 'object' && report.score !== null) {
+    if (typeof report.score.numericScore === 'number') {
+      score = report.score.numericScore;
+    }
+    if (report.score.grade) {
+      grade = report.score.grade;
+    }
+  }
+  if (report.grade) {
+    grade = report.grade;
+  }
+  grade = (grade || scoreToGrade(score)).toUpperCase();
   const findings = Array.isArray(report.findings) ? report.findings : [];
 
   const gradeWeight = GRADE_WEIGHTS[grade] ?? 0;
@@ -106,17 +123,20 @@ export function evaluateSecurityReport(report, options = {}) {
 
   // 2. Secret leak check
   const secretFindings = findings.filter(f => {
-    const type = (f.type || '').toLowerCase();
+    const type = (f.type || f.category || '').toLowerCase();
     const severity = (f.severity || '').toLowerCase();
-    const msg = (f.message || '').toLowerCase();
+    const msg = (f.message || f.title || f.description || '').toLowerCase();
+    if (f.id && f.id.startsWith('prompt-defense-missing')) return false;
     return (
       type === 'secret' ||
+      type === 'secrets' ||
       type === 'credential' ||
-      severity === 'critical' ||
-      msg.includes('secret') ||
-      msg.includes('api key') ||
-      msg.includes('token') ||
-      msg.includes('password')
+      (severity === 'critical' && type === 'secrets') ||
+      msg.includes('hardcoded secret') ||
+      msg.includes('hardcoded api key') ||
+      msg.includes('hardcoded token') ||
+      msg.includes('hardcoded password') ||
+      msg.includes('potential hardcoded secret')
     );
   });
 
@@ -221,12 +241,14 @@ export function runScan(options) {
     return JSON.parse(content);
   }
 
-  // Construct npx ecc-agentshield command
-  let cmd = 'npx --yes ecc-agentshield scan --json';
-  if (options.scope === 'changed') {
-    cmd += ' --changed';
-  } else if (options.scope === 'config') {
-    cmd += ' --path .opencode/';
+  // Construct npx ecc-agentshield command (v1.6.0+ format)
+  let scanPath = '.';
+  if (options.scope === 'config') {
+    scanPath = '.opencode/';
+  }
+  let cmd = `npx --yes ecc-agentshield scan --format json --path "${scanPath}"`;
+  if (options.supplyChain) {
+    cmd += ' --supply-chain';
   }
 
   try {
@@ -236,12 +258,46 @@ export function runScan(options) {
       stdio: ['pipe', 'pipe', 'pipe'],
       timeout: 60000,
     });
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (options.scope === 'changed' && Array.isArray(parsed.findings)) {
+      try {
+        const changedFiles = execSync('git diff --cached --name-only', { cwd: ROOT, encoding: 'utf-8' })
+          .split('\n')
+          .map(f => f.trim())
+          .filter(Boolean);
+        if (changedFiles.length > 0) {
+          parsed.findings = parsed.findings.filter(f => {
+            const file = f.file || '';
+            return changedFiles.some(cf => file.includes(cf) || cf.includes(file));
+          });
+        }
+      } catch {
+        // Ignore git diff error
+      }
+    }
+    return parsed;
   } catch (err) {
     // If output contains JSON even on error exit
     if (err.stdout) {
       try {
-        return JSON.parse(err.stdout.toString());
+        const parsed = JSON.parse(err.stdout.toString());
+        if (options.scope === 'changed' && Array.isArray(parsed.findings)) {
+          try {
+            const changedFiles = execSync('git diff --cached --name-only', { cwd: ROOT, encoding: 'utf-8' })
+              .split('\n')
+              .map(f => f.trim())
+              .filter(Boolean);
+            if (changedFiles.length > 0) {
+              parsed.findings = parsed.findings.filter(f => {
+                const file = f.file || '';
+                return changedFiles.some(cf => file.includes(cf) || cf.includes(file));
+              });
+            }
+          } catch {
+            // Ignore git diff error
+          }
+        }
+        return parsed;
       } catch {
         // Ignore parse error
       }

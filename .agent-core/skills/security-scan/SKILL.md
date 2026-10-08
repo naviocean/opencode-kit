@@ -72,18 +72,38 @@ npx ecc-agentshield scan --path .opencode/
 - Missing sandboxing for hooks
 - Hooks executing arbitrary code
 
-**MCP Servers (23 rules)**
+**MCP & Supply Chain (39 rules)**
 - Unauthenticated MCP server connections
-- MCP servers with excessive permissions
-- Missing transport security (non-HTTPS)
-- MCP servers exposing sensitive tools
+- MCP npm supply chain risks & typosquatting (`--supply-chain`)
+- Missing transport security (non-HTTPS, plaintext ws/sse)
+- MCP servers exposing sensitive shell tools
 - Missing rate limiting on MCP endpoints
+
+**Prompt Injection Defenses (12 rules - OWASP LLM01–LLM10)**
+- Instruction override boundaries
+- Role & persona escape defenses
+- Data & secret leakage prevention
+- Indirect prompt injection defenses on untrusted content
+- Malicious payload and output weaponization prevention
+
+### Advanced Scan Modes (v1.6.0)
+
+```bash
+# Supply chain check on MCP packages
+npx ecc-agentshield scan --supply-chain
+
+# Map findings to SOC 2, PCI DSS, ISO 27001
+npx ecc-agentshield scan --compliance all
+
+# Taint tracking & data flow analysis
+npx ecc-agentshield scan --taint
+```
 
 ### Auto-Fix Workflow
 
 ```bash
 # 1. Run scan
-npx ecc-agentshield scan
+npx ecc-agentshield scan --path .
 
 # 2. Review findings
 # Output shows: [SEVERITY] [CATEGORY] [FILE:LINE] [DESCRIPTION]

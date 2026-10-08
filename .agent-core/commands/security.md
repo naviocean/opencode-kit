@@ -19,14 +19,16 @@ Security Auditor
 ### 1. Security Auditor — Full Scan
 
 ```bash
-npx ecc-agentshield scan                    # full project
-npx ecc-agentshield scan --path .opencode/   # agent configs only
-npx ecc-agentshield scan --changed           # since last commit
-npx ecc-agentshield scan --verbose           # explain each finding
-npx ecc-agentshield scan --fix               # auto-fix safe issues
+npx ecc-agentshield scan                              # full project
+npx ecc-agentshield scan --path .opencode/             # agent configs only
+npx ecc-agentshield scan --supply-chain                # audit MCP & supply chain risks
+npx ecc-agentshield scan --compliance all              # compliance mapping (SOC2, PCI, ISO)
+npx ecc-agentshield scan --taint                       # data flow tracking analysis
+npx ecc-agentshield scan --verbose                     # explain each finding
+npx ecc-agentshield scan --fix                         # auto-fix safe issues
 ```
 
-**Why 5 modes?** Different scan depths catch different issues. `--changed` is fast for pre-commit. `--path .opencode/` for agent-config audits. Full scan for periodic reviews.
+**Why multiple modes?** Different scan depths catch different issues: `--supply-chain` protects against MCP supply-chain / typosquatting attacks, `--compliance` maps findings to audit frameworks, and `--path .opencode/` audits agent configs.
 
 ### 2. Interpret Findings
 

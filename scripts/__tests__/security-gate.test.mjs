@@ -175,3 +175,26 @@ test('security-gate: CLI exits 1 on failing report (Grade D)', () => {
     unlinkSync(tmpFile);
   }
 });
+
+test('security-gate: parseArgs supports --supply-chain flag', () => {
+  const opts = parseArgs(['--supply-chain']);
+  assert.equal(opts.supplyChain, true);
+});
+
+test('security-gate: evaluateSecurityReport supports AgentShield v1.6.0 structured score object', () => {
+  const v16Report = {
+    score: {
+      grade: 'A',
+      numericScore: 94,
+      breakdown: { secrets: 100, permissions: 100, hooks: 100, mcp: 70, agents: 100 },
+    },
+    findings: [],
+  };
+
+  const result = evaluateSecurityReport(v16Report, { minGrade: 'B', failOnSecrets: true });
+  assert.equal(result.passed, true);
+  assert.equal(result.grade, 'A');
+  assert.equal(result.score, 94);
+  assert.equal(result.verdict, 'PASSED');
+});
+
