@@ -70,22 +70,25 @@ test('sync-kit: verifies symlinks point to .agent-core', () => {
   assert.ok(fs.existsSync(claudeStandards), '.claude/standards must exist');
   assert.ok(fs.existsSync(claudeRules), '.claude/rules must exist');
 
-  // Verify symlink resolution
+  // Verify symlink resolution for skills and standards
   const resolvedCoreSkills = fs.realpathSync(path.join(ROOT, '.agent-core', 'skills'));
-  const resolvedCoreCommands = fs.realpathSync(path.join(ROOT, '.agent-core', 'commands'));
   const resolvedCoreStandards = fs.realpathSync(path.join(ROOT, '.agent-core', 'standards'));
 
   assert.equal(fs.realpathSync(opencodeSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
   assert.equal(fs.realpathSync(agentsSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
   assert.equal(fs.realpathSync(claudeSkills), resolvedCoreSkills, 'symlink must resolve to .agent-core/skills');
 
-  assert.equal(fs.realpathSync(opencodeCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
-  assert.equal(fs.realpathSync(agentsCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
-  assert.equal(fs.realpathSync(claudeCommands), resolvedCoreCommands, 'symlink must resolve to .agent-core/commands');
-
   assert.equal(fs.realpathSync(opencodeStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
   assert.equal(fs.realpathSync(agentsStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
   assert.equal(fs.realpathSync(claudeStandards), resolvedCoreStandards, 'symlink must resolve to .agent-core/standards');
+
+  // Verify commands are real directories (copied, not symlinked) for AI CLI compatibility
+  assert.ok(!fs.lstatSync(opencodeCommands).isSymbolicLink(), '.opencode/commands must be a real directory');
+  assert.ok(!fs.lstatSync(agentsCommands).isSymbolicLink(), '.agents/commands must be a real directory');
+  assert.ok(!fs.lstatSync(claudeCommands).isSymbolicLink(), '.claude/commands must be a real directory');
+  assert.ok(fs.existsSync(path.join(opencodeCommands, 'plan.md')), '.opencode/commands/plan.md must exist');
+  assert.ok(fs.existsSync(path.join(agentsCommands, 'plan.md')), '.agents/commands/plan.md must exist');
+  assert.ok(fs.existsSync(path.join(claudeCommands, 'plan.md')), '.claude/commands/plan.md must exist');
 });
 
 test('sync-kit: verifies Antigravity and OpenAI Codex share .agents/ and AGENTS.md', () => {

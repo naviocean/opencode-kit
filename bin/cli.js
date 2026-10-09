@@ -18,7 +18,7 @@ const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'l
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.3.5';
+const VERSION = '1.4.3';
 
 const COLORS = {
   reset: '\x1b[0m',

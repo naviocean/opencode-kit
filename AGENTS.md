@@ -123,6 +123,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.4.3 | 2026-10-09 | Copy slash commands instead of symlinking across all adapters (.opencode, .agents, .claude): fixes command discovery in OpenCode CLI and other AI CLI scanners, safely unlinking existing symlinks before copy. 97 unit tests + 143 verification checks pass. |
 | 1.4.2 | 2026-10-08 | Upgrade AgentShield Security Gating to ECC v1.6.0 specification: align CLI invocation (`--format json --path <path>`), add `--supply-chain` audit support, incorporate OWASP LLM01–LLM10 Prompt Defense Baseline across rules and adapters, and add test coverage. 97 unit tests + 143 verification checks pass. |
 | 1.4.1 | 2026-10-02 | Fix GitNexus code intelligence contract alignment: enforce `repo: "<current-repo>"` parameter across all 11 agents and 3 commands to prevent "Multiple repositories indexed" crash, fix parameter name `search_query` for `gitnexus_query`, and document cross-harness tool naming mappings. Added regression test suite. 95 unit tests pass. |
 | 1.4.0 | 2026-09-14 | Add 12th specialized agent `mobile` (Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, FlashList, MMKV, Fastlane) and modular skill pack `mobile-native` (18 skills). Added framework auto-detection in `repo-scanner.mjs`. 92 unit tests pass. |

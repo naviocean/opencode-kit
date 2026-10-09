@@ -170,7 +170,11 @@ function linkOrCopy(srcPath, destPath, mode, dryRun) {
   if (fs.existsSync(destPath) || fs.lstatSync(destPath, { throwIfNoEntry: false })?.isSymbolicLink?.()) {
     if (!dryRun) {
       try {
-        fs.rmSync(destPath, { recursive: true, force: true });
+        if (fs.lstatSync(destPath, { throwIfNoEntry: false })?.isSymbolicLink?.()) {
+          fs.unlinkSync(destPath);
+        } else {
+          fs.rmSync(destPath, { recursive: true, force: true });
+        }
       } catch (_) {
         // Fallback for dangling symlinks
         fs.unlinkSync(destPath);
@@ -363,12 +367,15 @@ function syncOpenCode(mode, dryRun, presetName) {
   const opencodeAgentsDir = path.join(opencodeDir, 'agents');
   syncAgentsWithPreset(opencodeAgentsDir, opencodeModelsDest, dryRun);
 
-  // Symlink static assets (skills, rules, standards, commands, hooks, memory)
+  // Copy commands directly (NO SYMLINK - ensures OpenCode CLI discovers slash commands natively)
+  const opencodeCommands = path.join(opencodeDir, 'commands');
+  linkOrCopy(path.join(CORE_DIR, 'commands'), opencodeCommands, 'copy', dryRun);
+
+  // Symlink static assets (skills, rules, standards, hooks, memory)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(opencodeDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(opencodeDir, 'rules') },
     { src: path.join(CORE_DIR, 'standards'), dest: path.join(opencodeDir, 'standards') },
-    { src: path.join(CORE_DIR, 'commands'), dest: path.join(opencodeDir, 'commands') },
     { src: path.join(CORE_DIR, 'hooks'), dest: path.join(opencodeDir, 'hooks') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(opencodeDir, 'memory') },
     { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(opencodeDir, 'skill-packs.json') },
@@ -390,7 +397,7 @@ function syncOpenCode(mode, dryRun, presetName) {
     }
   }
 
-  logSuccess('OpenCode adapter synchronized successfully (agents copied & models mapped).');
+  logSuccess('OpenCode adapter synchronized successfully (agents & commands copied, models mapped).');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -428,12 +435,15 @@ function syncAntigravityAndCodex(mode, dryRun, presetName, target) {
   const destAgentsDir = path.join(agentsDir, 'agents');
   syncAgentsWithPreset(destAgentsDir, agentsPreset, dryRun);
 
-  // Symlink static assets (skills, rules, standards, commands, memory, skill-packs)
+  // Copy commands directly (NO SYMLINK - ensures AI CLI tools discover slash commands natively)
+  const destCommands = path.join(agentsDir, 'commands');
+  linkOrCopy(path.join(CORE_DIR, 'commands'), destCommands, 'copy', dryRun);
+
+  // Symlink static assets (skills, rules, standards, memory, skill-packs)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(agentsDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(agentsDir, 'rules') },
     { src: path.join(CORE_DIR, 'standards'), dest: path.join(agentsDir, 'standards') },
-    { src: path.join(CORE_DIR, 'commands'), dest: path.join(agentsDir, 'commands') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(agentsDir, 'memory') },
     { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(agentsDir, 'skill-packs.json') },
   ];
@@ -444,7 +454,7 @@ function syncAntigravityAndCodex(mode, dryRun, presetName, target) {
     }
   }
 
-  logSuccess(`Antigravity & OpenAI Codex adapter synchronized successfully (.agents/agents/ with ${agentsPresetName} preset).`);
+  logSuccess(`Antigravity & OpenAI Codex adapter synchronized successfully (.agents/ with ${agentsPresetName} preset, commands copied).`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -457,12 +467,15 @@ function syncClaudeCode(mode, dryRun) {
     fs.mkdirSync(claudeDir, { recursive: true });
   }
 
-  // Symlink static assets (skills, rules, standards, commands, memory, skill-packs)
+  // Copy commands directly (NO SYMLINK - ensures Claude Code discovers slash commands natively)
+  const claudeCommands = path.join(claudeDir, 'commands');
+  linkOrCopy(path.join(CORE_DIR, 'commands'), claudeCommands, 'copy', dryRun);
+
+  // Symlink static assets (skills, rules, standards, memory, skill-packs)
   const staticTargets = [
     { src: path.join(CORE_DIR, 'skills'), dest: path.join(claudeDir, 'skills') },
     { src: path.join(CORE_DIR, 'rules'), dest: path.join(claudeDir, 'rules') },
     { src: path.join(CORE_DIR, 'standards'), dest: path.join(claudeDir, 'standards') },
-    { src: path.join(CORE_DIR, 'commands'), dest: path.join(claudeDir, 'commands') },
     { src: path.join(ROOT, '.agent-memory'), dest: path.join(claudeDir, 'memory') },
     { src: path.join(CORE_DIR, 'skill-packs.json'), dest: path.join(claudeDir, 'skill-packs.json') },
   ];
