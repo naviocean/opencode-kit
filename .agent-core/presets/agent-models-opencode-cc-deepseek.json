@@ -1,0 +1,80 @@
+{
+  "$schema": "./agent-models.schema.json",
+  "default_fallback": [
+    "commandcode/opencode/deepseek-v4.1-flash"
+  ],
+  "agents": {
+    "tech-lead": {
+      "model": "commandcode/deepseek/deepseek-v4-pro",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "pm": {
+      "model": "commandcode/deepseek/deepseek-v4-pro",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "designer": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "frontend": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "nestjs": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "rustacean": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "qa": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "security-auditor": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "ai-engineer": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "python-backend": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "devops": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    },
+    "mobile": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
+    }
+  }
+}

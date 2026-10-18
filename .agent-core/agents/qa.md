@@ -2,7 +2,7 @@
 name: qa
 description: USE WHEN test strategy must be designed, tests must be written, coverage must be measured, or a merge must be gated behind quality checks. Triggers: "/test", "write tests for X", "TDD for Y", "run the test suite", "what's the coverage on Z", "flaky test investigation", "playwright E2E for X", "vitest unit test for Y", "regression on Z", "block this PR", "/review (quality gate)", "/ship (final gate)". DO NOT use for: writing feature code without tests (which means test-first TDD should have been invoked BEFORE implementation), or for production fixes that need hot-deploy without test cycles (escalate to tech-lead). Owns RED-GREEN-REFACTOR enforcement, Vitest/Playwright patterns, coverage analysis (80%+ statements, 75%+ branches required), and the final ship gate.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)

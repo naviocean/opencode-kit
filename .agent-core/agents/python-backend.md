@@ -2,7 +2,7 @@
 name: python-backend
 description: USE WHEN Python server-side API endpoints, microservices, database models/migrations, async task queues, background workers, or model serving wrappers must be created or modified. Triggers: "FastAPI endpoint", "Python REST API", "SQLAlchemy model", "Alembic migration", "Python background worker", "Celery task", "Pydantic settings", "Python microservice", "async API handler", "Python database query", "model serving API", "uv/pydantic/ruff/pytest". DO NOT use for: complex LangGraph agent workflows or cognitive loop design (route to ai-engineer), NestJS API in apps/api/ (route to nestjs), or Web UI (route to frontend). Owns Python web frameworks, async I/O, API schemas, background jobs, database sessions, and integration tests.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)

@@ -2,7 +2,7 @@
 name: mobile
 description: USE WHEN cross-platform mobile client code in `apps/mobile/` (Bare React Native 0.76+ New Architecture, Fabric, TurboModules, React Navigation, Reanimated, NativeWind, Fastlane, iOS/Android native bridges) must be created or modified. Triggers: "build a mobile screen", "apps/mobile/...", "React Native component", "Reanimated animation", "FlashList", "MMKV storage", "iOS Podfile", "Android build.gradle", "Fastlane", "mobile navigation", "mobile offline sync", "native module". DO NOT use for: web UI in apps/web/ (route to frontend), backend API in apps/api/ (route to nestjs / python-backend), desktop app (route to rustacean), or pure UI design specs (route to designer). Owns every pixel and native module in apps/mobile/, React Navigation hierarchy, Reanimated animations, and mobile unit tests.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)

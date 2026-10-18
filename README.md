@@ -1,6 +1,6 @@
 # OpenCode SaaS Kit
 
-A multi-agent development team kit for OpenCode. Eleven specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
+A multi-agent development team kit for OpenCode. Twelve specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, Mobile, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
 
 ## Quick Start
 
@@ -511,12 +511,13 @@ export CONTEXT7_API_KEY=your_key_here
 
 | Command | Description | Agent Flow |
 |---|---|---|
+| `/meeting` | Multi-agent council deliberation → debate → ADR | Moderator (TL/PM) → Specialists Debate → Verdict |
 | `/plan` | Socratic interview → spec → architecture plan | PM → Designer → Tech Lead |
 | `/build` | Activate full team, parallel execution | Tech Lead → Dynamic Specialists → QA |
 | `/review` | Code review + security audit | Tech Lead + Security Auditor |
 | `/ship` | Final tests + security gate + approval | QA + Security Auditor + Tech Lead |
-| `/security` | Run AgentShield scan | Security Auditor |
 | `/design` | Create UI Kit + UX flow | Designer |
+| `/security` | Run AgentShield scan | Security Auditor |
 | `/test` | Run test suite, analyze coverage | QA |
 | `/hotfix` | Fast-track bugfix or urgent patch | Tech Lead → Specialist → QA → Security Auditor |
 
@@ -578,9 +579,10 @@ Standard templates for all project documentation. Agents use these templates whe
 ### Document Lifecycle
 
 ```
-Size S:  Issue / Bug Log ───────────────→ /hotfix ───→ TDD (Red-Green) ──→ Security Gate
-Size M:  User Request ──→ Mini-Plan ────→ Specialist ─→ Tests ───────────→ Security Gate
-Size L:  User Request ──→ PRD (PM) ─────→ Design Doc ─→ Plan (TL) ───────→ Parallel Build → QA → Ship
+RFC/Debate: Technical Fork ──────────→ /meeting ──→ Council Deliberation ─→ ADR + Memory
+Size S:     Issue / Bug Log ─────────→ /hotfix ───→ TDD (Red-Green) ──────→ Security Gate
+Size M:     User Request ──→ Mini-Plan ───────────→ Specialist ─→ Tests ──→ Security Gate
+Size L:     User Request ──→ PRD (PM) ────────────→ Design Doc ─→ Plan (TL) → Parallel Build → QA → Ship
 ```
 
 ## Superpowers Patterns

@@ -45,7 +45,7 @@ test('dispatch: default mode returns human-readable prompt', () => {
 test('dispatch: prompt includes model from registry', () => {
   const output = run('nestjs "test task"');
   // Should contain the model string from agent-models.json
-  assert.match(output, /opencode\/deepseek|deepseek\/deepseek|commandcode/);
+  assert.match(output, /opencode.*deepseek|deepseek|commandcode/);
 });
 
 test('dispatch: prompt includes skill loading instructions', () => {

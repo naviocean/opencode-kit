@@ -29,18 +29,18 @@
 
 | If the request mentions… | Activate | Model |
 |---|---|---|
-| New feature, requirement unclear, prioritization, stakeholder, scope | **pm** | `commandcode/deepseek/deepseek-v4-pro` |
-| Architecture decision, multi-agent dispatch, code review, final approval, plain-text request | **tech-lead** | `commandcode/deepseek/deepseek-v4-pro` |
-| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** | `commandcode/deepseek/deepseek-v4.1-flash` |
-| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** | `commandcode/deepseek/deepseek-v4.1-flash` |
+| New feature, requirement unclear, prioritization, stakeholder, scope | **pm** | `opencode-go/deepseek-v4-pro` |
+| Architecture decision, multi-agent dispatch, code review, final approval, plain-text request | **tech-lead** | `opencode-go/deepseek-v4-pro` |
+| UI/UX, design tokens, UX flow, wireframe, Pencil/Stitch output, DESIGN.md | **designer** | `opencode-go/deepseek-v4.1-flash` |
+| Next.js, React, Shadcn, Tailwind, `apps/web/`, component, page, RTK Query | **frontend** | `opencode-go/deepseek-v4.1-flash` |
+| NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `opencode-go/deepseek-v4.1-flash` |
+| Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `opencode-go/deepseek-v4.1-flash` |
+| React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `opencode-go/deepseek-v4.1-flash` |
+| LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `opencode-go/deepseek-v4.1-flash` |
+| Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `opencode-go/deepseek-v4.1-flash` |
+| CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `opencode-go/deepseek-v4.1-flash` |
+| Test, coverage, vitest, playwright, flaky, regression, TDD enforcement | **qa** | `opencode-go/deepseek-v4.1-flash` |
+| Audit, scan, CVE, secret, OWASP, prompt injection, permissions | **security-auditor** | `opencode-go/deepseek-v4.1-flash` |
 
 ## File Map
 
@@ -74,6 +74,7 @@ Project-specific memory persists across sessions in `.agent-memory/` (and via IC
 
 | Command | Phase | Reads | Writes |
 |---|---|---|---|
+| `/meeting` | Phase 0 — Architecture & RFC debate | Technical dilemma / RFC topic | `docs/adr/`, `.agent-memory/decisions.md` |
 | `/plan` | Phase 1 — Requirements | User request | `docs/prds/`, `docs/designs/`, `docs/plans/` |
 | `/build` | Phase 2 — Implementation | Approved plan | `apps/`, `libs/` |
 | `/review` | Phase 3 — Code review | `git diff` | Review verdict |
@@ -123,6 +124,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.5.0 | 2026-10-18 | Add 9th command `/meeting` (multi-agent council deliberation and architectural RFC debate with 3-round protocol: Opening Proposals → Adversarial Critique → Synthesis & Verdict, producing binding ADRs in `docs/adr/` and persistent memory). Updated CLI verify, help, and multi-harness sync. 97 unit tests + 144 verification checks pass. |
 | 1.4.3 | 2026-10-09 | Copy slash commands instead of symlinking across all adapters (.opencode, .agents, .claude): fixes command discovery in OpenCode CLI and other AI CLI scanners, safely unlinking existing symlinks before copy. 97 unit tests + 143 verification checks pass. |
 | 1.4.2 | 2026-10-08 | Upgrade AgentShield Security Gating to ECC v1.6.0 specification: align CLI invocation (`--format json --path <path>`), add `--supply-chain` audit support, incorporate OWASP LLM01–LLM10 Prompt Defense Baseline across rules and adapters, and add test coverage. 97 unit tests + 143 verification checks pass. |
 | 1.4.1 | 2026-10-02 | Fix GitNexus code intelligence contract alignment: enforce `repo: "<current-repo>"` parameter across all 11 agents and 3 commands to prevent "Multiple repositories indexed" crash, fix parameter name `search_query` for `gitnexus_query`, and document cross-harness tool naming mappings. Added regression test suite. 95 unit tests pass. |

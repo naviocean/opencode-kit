@@ -2,7 +2,7 @@
 name: nestjs
 description: USE WHEN server-side code in `apps/api/` (NestJS + Prisma + PostgreSQL) or shared DTOs in `libs/shared/types/` must be created or modified. Triggers: "create a X endpoint", "add a Y controller", "implement Z service", "Prisma migration for X", "JWT auth for X", "add a guard/interceptor/pipe", "database schema change", "apps/api/...", "libs/shared/types/...", "REST/GraphQL API for X", "DTOs for X", "write integration test for Y". DO NOT use for: frontend UI work (route to frontend), Python AI/backend services (route to ai-engineer / python-backend), Tauri Rust commands (route to rustacean), or pure architecture planning (route to tech-lead). Owns NestJS API layer, business logic, Prisma schema, migrations, JWT auth, and Supertest integration tests.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)

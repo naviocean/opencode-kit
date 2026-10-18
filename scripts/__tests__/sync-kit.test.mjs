@@ -89,6 +89,9 @@ test('sync-kit: verifies symlinks point to .agent-core', () => {
   assert.ok(fs.existsSync(path.join(opencodeCommands, 'plan.md')), '.opencode/commands/plan.md must exist');
   assert.ok(fs.existsSync(path.join(agentsCommands, 'plan.md')), '.agents/commands/plan.md must exist');
   assert.ok(fs.existsSync(path.join(claudeCommands, 'plan.md')), '.claude/commands/plan.md must exist');
+  assert.ok(fs.existsSync(path.join(opencodeCommands, 'meeting.md')), '.opencode/commands/meeting.md must exist');
+  assert.ok(fs.existsSync(path.join(agentsCommands, 'meeting.md')), '.agents/commands/meeting.md must exist');
+  assert.ok(fs.existsSync(path.join(claudeCommands, 'meeting.md')), '.claude/commands/meeting.md must exist');
 });
 
 test('sync-kit: verifies Antigravity and OpenAI Codex share .agents/ and AGENTS.md', () => {
@@ -155,11 +158,14 @@ test('sync-kit: switches model presets dynamically', () => {
   const opencodeOutput = runSync('--preset opencode --target all');
   assert.match(opencodeOutput, /Selected preset "opencode"/);
 
+  const expectedOpencodeModels = JSON.parse(fs.readFileSync(path.join(ROOT, '.agent-core', 'presets', 'agent-models-opencode.json'), 'utf-8'));
+  const expectedTechLeadModel = expectedOpencodeModels.agents['tech-lead']?.model;
+
   const opencodeModels = JSON.parse(fs.readFileSync(path.join(ROOT, '.opencode', 'agent-models.json'), 'utf-8'));
-  assert.equal(opencodeModels.agents['tech-lead']?.model, 'commandcode/deepseek/deepseek-v4-pro');
+  assert.equal(opencodeModels.agents['tech-lead']?.model, expectedTechLeadModel);
 
   const restoredTechLeadMd = fs.readFileSync(path.join(ROOT, '.opencode', 'agents', 'tech-lead.md'), 'utf-8');
-  assert.match(restoredTechLeadMd, /model: commandcode\/deepseek\/deepseek-v4-pro/);
+  assert.match(restoredTechLeadMd, new RegExp(`model:\\s*${expectedTechLeadModel.replace('/', '\\/')}`));
 });
 
 test('sync-kit: --preset opencode only syncs opencode and does not create .agents or .claude', () => {

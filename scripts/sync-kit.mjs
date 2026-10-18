@@ -59,9 +59,9 @@ function parseArgs() {
       options.target = args[++i];
     } else if (arg.startsWith('--target=')) {
       options.target = arg.split('=')[1];
-    } else if ((arg === '--preset' || arg === '--profile') && args[i + 1]) {
+    } else if ((arg === '--preset' || arg === '--profile' || arg === '--present') && args[i + 1]) {
       options.preset = args[++i];
-    } else if (arg.startsWith('--preset=') || arg.startsWith('--profile=')) {
+    } else if (arg.startsWith('--preset=') || arg.startsWith('--profile=') || arg.startsWith('--present=')) {
       options.preset = arg.split('=')[1];
     } else if (arg === '--mode' && args[i + 1]) {
       options.mode = args[++i];
@@ -83,7 +83,17 @@ function parseArgs() {
   // Target defaults to the preset's harness (e.g. --preset opencode -> target opencode)
   if (!options.target) {
     if (options.preset) {
-      options.target = options.preset;
+      if (options.preset.startsWith('opencode')) {
+        options.target = 'opencode';
+      } else if (options.preset.startsWith('claude')) {
+        options.target = 'claude';
+      } else if (options.preset.startsWith('antigravity')) {
+        options.target = 'antigravity';
+      } else if (options.preset.startsWith('codex')) {
+        options.target = 'codex';
+      } else {
+        options.target = options.preset;
+      }
     } else {
       options.target = 'all';
     }

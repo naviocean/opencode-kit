@@ -2,7 +2,7 @@
 name: rustacean
 description: USE WHEN Rust code across desktop apps (Tauri v2), high-performance backend microservices (Axum / Tokio), native computational modules, or shared crates must be created or modified. Triggers: "Rust microservice", "Axum endpoint", "Tauri command", "src-tauri/...", "apps/desktop/...", "crates/...", "tauri.conf.json", "IPC bridge for X", "Tokio async task", "Rust trait/impl for X", "borrow checker issue in Y", "zero-copy serialization", "Rust channel/actor", "system tray", "native dialog", "cargo test", "memory safety in Rust". DO NOT use for: web frontend in apps/web/ (route to frontend), backend API in apps/api/ (route to nestjs), Python services (route to python-backend), or AI agent loops (route to ai-engineer). Owns Rust systems architecture, Tauri v2 native core, Axum web services, Tokio async concurrency, and high-performance crates.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)

@@ -2,7 +2,7 @@
 name: ai-engineer
 description: USE WHEN LLM agents, LangGraph state graphs, LangChain chains, RAG pipelines, prompt engineering, agent evaluation, or tool calling must be created or modified. Triggers: "build an LLM agent", "LangGraph workflow", "LangChain RAG", "pydantic-ai agent", "tool calling schema", "multi-agent graph", "evaluate LLM outputs", "stream agent responses", "StateGraph with memory", "human-in-the-loop approval", "deepagents". DO NOT use for: Python REST APIs or general microservices (route to python-backend), NestJS API (route to nestjs), or Web UI (route to frontend). Owns AI application architecture, LangGraph workflows, prompt templates, tool definitions, and LLM evaluation tests.
 mode: subagent
-model: commandcode/deepseek/deepseek-v4.1-flash
+model: opencode-go/deepseek-v4.1-flash
 ---
 
 ## Startup (AUTO-EXECUTE)
