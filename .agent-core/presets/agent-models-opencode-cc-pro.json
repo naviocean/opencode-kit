@@ -72,15 +72,15 @@
       ]
     },
     "mobile": {
-      "model": "commandcode/mimo/mimo-v2.6-flash",
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
       "fallback": [
-        "commandcode/deepseek/deepseek-v4.1-flash"
+        "commandcode/deepseek/deepseek-v4-pro"
       ]
     },
     "swift-macos": {
-      "model": "commandcode/mimo/mimo-v2.6-flash",
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
       "fallback": [
-        "commandcode/deepseek/deepseek-v4.1-flash"
+        "commandcode/deepseek/deepseek-v4-pro"
       ]
     }
   }
