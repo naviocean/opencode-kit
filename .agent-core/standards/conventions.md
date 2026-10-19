@@ -47,7 +47,7 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Rust: gratuitous `.clone()` | Hides bad ownership architecture, wastes memory | Pass references (`&str`, `&[T]`) |
 | Symptom masking (swallowing errors or slapping null-checks at crash site) | Hides root cause; bug surfaces unpredictably elsewhere | Trace generator of invalid state; fix at origin (see `fix-root-causes`) |
 | Unparsed raw external data crossing boundary | Breaches boundary discipline; creates undefined bugs deep in core | Parse into typed domain models immediately at ingress (see `boundary-discipline`) |
-| Trivial comments & AI slop (`// set x to 5`, `// function to handle click`) | Pollutes codebase; clutters reader context | Clean, self-documenting code; comment only non-obvious business invariants |
+| Trivial diff comments & AI slop (`// set x to 5`, `// function to handle click`) | Pollutes codebase; clutters reader context | Diff-only check: strip comments restating obvious code. MUST preserve comments explaining non-obvious business invariants, security constraints, or hardware/platform workarounds |
 
 ### Process
 

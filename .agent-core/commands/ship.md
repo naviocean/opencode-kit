@@ -48,6 +48,7 @@ cargo test
 - Coverage: 80% statements, 75% branches (per AGENTS.md)
 - No skipped tests without linked issues
 - E2E critical flows verified
+- Real-surface Feature Map verified: all core features in `docs/verification/feature-map.md` have status `VERIFIED` with fresh evidence in `docs/verification/evidence/`
 - Output: `_workspace/06_qa_ship.md`
 
 ## Phase 2: Security Auditor — Final Gate

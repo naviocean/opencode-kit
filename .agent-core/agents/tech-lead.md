@@ -272,6 +272,7 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `requesting-code-review` | When you need external review of your own architectural decisions |
 | `receiving-code-review` | When processing feedback from review agents |
 | `code-review-excellence` | Review standards, checklists, and quality gates |
+| `adversarial-review` | High-risk changes (auth, payment, migrations, concurrency) — targeted adversarial scrutiny |
 
 ### Architecture & Standards
 
@@ -283,6 +284,9 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `coding-standards` | Evaluating code quality — TypeScript strict rules, ESLint config, naming conventions |
 | `continuous-learning` | Pattern repeats 3+ times — auto-extract as instinct with confidence scoring |
 | `orchestrate` | Dispatching parallel work to agents — category routing, task formatting |
+| `benchmark-checklist` | High-throughput endpoints or performance regressions — structured benchmarking |
+| `runtime-forensics` | Runtime memory leaks, socket hangs, or event loop blocking |
+| `trace-forensics` | Distributed latency, trace spans, and slow query bottlenecks |
 
 ### Git & Releases
 

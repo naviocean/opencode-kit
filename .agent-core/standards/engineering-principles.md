@@ -196,10 +196,16 @@ When an engineering principle appears to conflict with a project rule or human i
   - Never dump thousands of lines of raw compiler output or trace logs into the primary context.
 
 #### 19. `never-block-on-the-human` (Scoped)
-* **Trigger:** Reversible implementation tasks, exploratory spikes, safe refactors, or running diagnostic commands.
+* **Trigger:** Reversible implementation tasks, exploratory spikes, safe refactors, or running diagnostic commands within an approved plan.
 * **Why:** Halting execution to ask trivial permission slows momentum and frustrates users.
 * **Pattern:**
-  - **Proceed autonomously** on reversible work: writing code in branches/worktrees, running tests, exploring code.
+  - **Proceed autonomously** on reversible work: writing code in branches/worktrees, running tests, reading files, exploring code.
+  - **Strict Boundaries (NEVER bypass):** This principle must NEVER be used to skip:
+    1. PM Socratic discovery or requirement interviews
+    2. Implementation plan review and human approval
+    3. Scope change decisions or architectural pivots
+    4. Code review gate (`/review`)
+    5. Hard security and release gates (`/ship`)
   - **Always pause & confirm** on irreversible operations: force-push, production deployment, database drops, deleting customer data.
 
 #### 20. `build-the-lever`

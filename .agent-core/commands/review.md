@@ -41,10 +41,20 @@ Two-stage review (Superpowers pattern):
   - Patterns: follow codebase conventions
   - Architecture: respect module boundaries
   - Quality: no `any`, no `@ts-ignore`, no disabled lint
+  - Comment Quality: strip trivial diff comments (`comment-quality`), preserve invariant & security comments
   - Testing: business logic has tests
+  - Real-Surface Evidence: verify that touched features have passing status and evidence in `docs/verification/evidence/`
   - Security: no hardcoded secrets, proper input validation
 
-**Why two stages?** Stage 1 catches mechanical issues fast. Stage 2 catches design issues. One-stage review misses 40%+ of issues (industry data).
+**Stage 3 — Triggered Adversarial Review (`adversarial-review`):**
+- **Trigger:** `gitnexus_impact` reports HIGH/CRITICAL blast radius, or diff touches auth/billing/cryptography/multi-actor concurrency.
+- **Action:** Dispatch an independent, read-only reviewer subagent with the `adversarial-review` skill.
+- **Probing:** Aggressively hunts for race conditions (TOCTOU), state desynchronization, unhandled error paths, and resource leaks.
+- **Verdict Integration:**
+  - `MUST-FIX`: Review is **BLOCKED** until fixed.
+  - `CONSIDER`: Documented for follow-up.
+  - `REJECT`: Dismissed with technical justification.
+- **Honesty Rule:** If the current harness cannot dispatch an independent reviewer, state `LIMITATION: Independent adversarial review unavailable`. Never fake a pass.
 
 ## Phase 2: Security Auditor — Security Review
 

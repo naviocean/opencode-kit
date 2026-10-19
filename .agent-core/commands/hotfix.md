@@ -19,13 +19,15 @@ Pipeline flow:
 Tech Lead (triage) → Specialist (TDD fix) → QA (regression verify) → Security Auditor (fast check) → Tech Lead (sign-off)
 ```
 
-## Phase 0: Tech Lead — Triage & Blast Radius
+## Phase 0: Tech Lead — Triage, Repro & Blast Radius
 
-1. **Analyze bug report / error stack trace**:
+1. **Document exact reproduction steps and error symptoms**:
+   - Record input, environment, expected vs actual outcome, and stack trace.
    - Determine affected module: Frontend (`apps/web/`), NestJS (`apps/api/`), Python Backend (Python APIs/DB), AI/LLM (LangGraph/prompts), Desktop (`apps/desktop/`), or Infra (`.github/`, Docker, K8s).
-2. **GitNexus Investigation**:
+2. **GitNexus Investigation & Root-Cause Tracing**:
    - Run `gitnexus_context({name: affectedSymbol, repo: "<current-repo>"})` to see callers and callees.
    - Run `gitnexus_impact({target: affectedSymbol, direction: "upstream", repo: "<current-repo>"})` to determine blast radius.
+   - Distinguish symptom site from root-cause generator (`fix-root-causes`): find the first point the system produced invalid state.
    - If blast radius is CRITICAL (e.g. core auth, shared database schema changes), warn user before proceeding.
 3. **Dispatch to single specialist agent**:
    - Web/UI bug → `frontend` (category: `quick` or `deep`)
@@ -35,22 +37,26 @@ Tech Lead (triage) → Specialist (TDD fix) → QA (regression verify) → Secur
    - Desktop/IPC bug → `rustacean` (category: `quick` or `deep`)
    - CI/CD / Docker / Infra bug → `devops` (category: `quick` or `deep`)
 
-## Phase 1: Specialist — Reproduce & Fix (TDD)
+## Phase 1: Specialist — Reproduce & Fix (TDD + Root-Cause)
 
 The assigned specialist agent executes RED → GREEN → REFACTOR:
-1. **RED**: Write an automated test reproducing the bug. Run test → MUST FAIL.
-2. **GREEN**: Apply the minimal, isolated fix to resolve the failure. Run test → MUST PASS.
-3. **REFACTOR**: Clean up without altering logic. Adhere strictly to conventions:
+1. **RED**: Write an automated reproduction test reproducing the bug. Run test → MUST FAIL.
+2. **ROOT-CAUSE FIX**: Fix the generator of the wrong state. Symptom masking (swallowing errors, clamping values, or adding null-checks at crash site when state should never be null) is strictly prohibited.
+3. **GREEN**: Apply minimal isolated fix. Run reproduction test → MUST PASS.
+4. **REFACTOR**: Clean up without altering logic. Adhere strictly to conventions:
    - No `any`, no `@ts-ignore`, no `console.log`.
+   - Strip trivial comments (`comment-quality`); preserve invariant comments.
    - Never cross domain boundaries (e.g. frontend must not edit `apps/api/`).
 
-## Phase 2: QA — Regression Verification
+## Phase 2: QA — Regression & Real-Surface Verification
 
 QA agent verifies:
 1. Run the new regression test to confirm fix.
 2. Run related unit & integration test suites.
-3. Verify test coverage is maintained (>= 80% on affected module).
-4. If tests fail → bounce back to specialist with failure details.
+3. Re-verify touched flow on real surface via `maintain-verification-skill` (if Feature Map exists).
+4. Capture before/after evidence into `docs/verification/evidence/`. If runtime environment is unavailable, report `BLOCKED: Runtime Environment Missing`. Never fake a PASS.
+5. Verify test coverage is maintained (>= 80% on affected module).
+6. If tests fail → bounce back to specialist with failure details.
 
 ## Phase 3: Security Auditor — Fast Gate
 

@@ -44,10 +44,18 @@ Mode: {initial | resume | rebuild}
 Proceed? (y/n)
 ```
 
-## Phase 1: Tech Lead — Dispatch
+## Phase 1: Tech Lead — Dispatch & Architecture Gates
 
 - Reads the approved plan from `docs/plans/`
 - Identifies affected domains (Web, API, AI/Python, Desktop/Rust, DevOps/Infra)
+
+### Fan-Out Checkpoint:
+1. **Identify blocking vs independent workstreams:** Can Backend and Frontend run in parallel, or does Backend migration block Frontend API consumption?
+2. **Isolate shared state & files (`separate-before-serializing-shared-state`):** Ensure each specialist has disjoint file scopes (`_workspace/02_{agent}_*`) or isolated git worktrees. Never let parallel agents edit the same file concurrently.
+
+### Typed Design Sketch Gate:
+- **Trigger:** Any change crossing function/module/API boundaries, or when multiple specialists rely on shared contracts (e.g. NestJS DTOs ↔ Frontend RTK Query endpoints).
+- **Rule:** Tech Lead and specialists MUST establish the exact types, DTO schemas, and database models in `.agent-memory/contracts.md` BEFORE implementing business logic.
 - Breaks work into parallel tasks → `docs/tasks/{name}-task.md`
 - Assigns each task with category:
   - `deep` — complex autonomous work, multi-file/multi-system (uses opus/pro)
@@ -118,6 +126,7 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
   - Rust/Desktop: `cargo test` (when `src-tauri/` affected)
 - Checks coverage thresholds (80% statements / 75% branches per AGENTS.md)
 - Runs Playwright E2E for critical flows listed in plan
+- **Real-surface verification:** Re-verifies touched user journeys from `docs/verification/feature-map.md` using `maintain-verification-skill`. Saves evidence in `docs/verification/evidence/`. If runtime missing, reports `BLOCKED: Runtime Environment Missing`. Never fakes a PASS.
 - **Boundary checks:** verifies contract compatibility across all communicating agents (e.g. NestJS DTOs vs Frontend types)
 - Reports failures with `file:line` context, not just "test failed"
 - Writes `_workspace/03_qa_report.md`

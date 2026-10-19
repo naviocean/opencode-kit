@@ -306,6 +306,7 @@ Load these skills when their context matches:
 | `playwright-best-practices` | When writing E2E tests. Contains Playwright config for Next.js App Router, page object patterns, fixture management.           |
 | `create-verification-skill` | When establishing real-surface verification and scaffolding docs/verification/feature-map.md.                                  |
 | `maintain-verification-skill`| When auditing Feature Map, verifying user journeys on real runtime surfaces, or detecting regressions.                         |
+| `comment-quality`           | When auditing PR diff comments for unslop quality, preserving invariants and security explanations.                            |
 | `coding-standards`          | When evaluating test code quality. Contains TypeScript strict rules, naming conventions for test files.                        |
 | `continuous-learning`       | When a test pattern repeats 3+ times. Auto-extract it as an instinct with confidence scoring.                                  |
 

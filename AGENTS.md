@@ -102,7 +102,7 @@ npx opencode-saas-kit verify
 ## Skill Packs & Modular Presets (Agent-Centric)
 
 The kit groups skills strictly by the **Agents & Squads** that require them (`.agent-core/skill-packs.json`), ensuring zero missing skills and clean AI context:
-- `core`: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 74 skills.
+- `core`: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 81 skills.
 - `web-frontend`: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills.
 - `nestjs-backend`: NestJS & TypeScript Backend Squad (`nestjs`) — 24 skills.
 - `python-ai`: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills.
@@ -124,7 +124,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
-| 1.6.0 | 2026-10-19 | Integrate PStack Engineering Rigor & Runtime Verification Suite: add SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with triggers and hierarchy of authority), add `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/`, update `conventions.md` (anti-patterns: symptom masking, unparsed boundary data, over-mocking, AI slop), assign verification skills to QA agent and `core` pack. All 97 unit tests + 143 verification checks pass. |
+| 1.6.0 | 2026-10-19 | Integrate PStack Engineering Rigor & Runtime Verification Suite: add SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with explicit boundaries), add `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/`, add `adversarial-review`, `comment-quality`, `benchmark-checklist`, `runtime-forensics`, `trace-forensics`, update `/hotfix`, `/build`, `/review`, and `/ship` gates, add `fixtures/sample-app/` runnable surface with automated regression detection test. All unit test suites and `verify.mjs` checks pass with 0 failures. |
 | 1.5.0 | 2026-10-18 | Add 9th command `/meeting` (multi-agent council deliberation and architectural RFC debate with 3-round protocol: Opening Proposals → Adversarial Critique → Synthesis & Verdict, producing binding ADRs in `docs/adr/` and persistent memory). Updated CLI verify, help, and multi-harness sync. 97 unit tests + 144 verification checks pass. |
 | 1.4.3 | 2026-10-09 | Copy slash commands instead of symlinking across all adapters (.opencode, .agents, .claude): fixes command discovery in OpenCode CLI and other AI CLI scanners, safely unlinking existing symlinks before copy. 97 unit tests + 143 verification checks pass. |
 | 1.4.2 | 2026-10-08 | Upgrade AgentShield Security Gating to ECC v1.6.0 specification: align CLI invocation (`--format json --path <path>`), add `--supply-chain` audit support, incorporate OWASP LLM01–LLM10 Prompt Defense Baseline across rules and adapters, and add test coverage. 97 unit tests + 143 verification checks pass. |

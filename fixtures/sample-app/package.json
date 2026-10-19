@@ -1,0 +1,10 @@
+{
+  "name": "sample-saas-fixture",
+  "version": "1.0.0",
+  "description": "Runnable SaaS application fixture for real-surface verification testing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  }
+}
