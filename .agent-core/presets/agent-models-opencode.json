@@ -75,6 +75,12 @@
       "fallback": [
         "opencode-go/deepseek-v4.1-flash"
       ]
+    },
+    "swift-macos": {
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "fallback": [
+        "opencode-go/deepseek-v4.1-flash"
+      ]
     }
   }
 }

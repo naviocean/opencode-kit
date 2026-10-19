@@ -76,6 +76,12 @@
       "fallback": [
         "commandcode/deepseek/deepseek-v4.1-flash"
       ]
+    },
+    "swift-macos": {
+      "model": "commandcode/anthropic/claude-haiku-5.5",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
     }
   }
 }

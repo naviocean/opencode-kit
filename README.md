@@ -397,8 +397,8 @@ npx opencode-saas-kit init --tools
 ```
 
 This will:
-- Run Brownfield repository scan (detecting Node, Python, Rust, Go) → `.agent-memory/project-context.md`
-- Install Single Source of Truth (`.agent-core/`) with 12 agents, 9 commands, 4 rules, 307 skills, standards
+- Run Brownfield repository scan (detecting Node, Python, Rust, Go, Swift) → `.agent-memory/project-context.md`
+- Install Single Source of Truth (`.agent-core/`) with 13 agents, 9 commands, 4 rules, 321 skills, standards
 - Safely inject kit instructions into `AGENTS.md` and `CLAUDE.md` using safe context markers (`<!-- opencode-saas-kit:start/end -->`) preserving human custom rules
 - Set up Universal Persistent Memory in `.agent-memory/`
 - Synchronize adapters across OpenCode (`.opencode/`), Claude Code (`CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex
@@ -551,7 +551,7 @@ Synthetic unit test suites can pass 100% while an application fails in reality (
 
 ## Skills & Skill Packs
 
-The kit includes **307 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
+The kit includes **321 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
 
 - **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 81 skills
 - **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills
@@ -560,6 +560,7 @@ The kit includes **307 skills** organized into modular, **agent-centric skill pa
 - **`rust-systems`**: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills
 - **`devops-infra`**: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills
 - **`mobile-native`**: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills
+- **`swift-macos`**: Native macOS & Apple Systems Squad (`swift-macos`) — 22 skills
 
 ### Skill Pack CLI Management
 
@@ -645,14 +646,14 @@ opencode-kit/
 ├── README.md                          # Human-facing documentation
 ├── AGENTS.md                          # Universal project rules (Antigravity & OpenAI Codex)
 ├── CLAUDE.md                          # Claude Code instructions
-├── package.json                       # npm package config (v1.6.0)
+├── package.json                       # npm package config (v1.7.0)
 │
 ├── .agent-core/                       # Single Source of Truth (SSoT)
-│   ├── agents/ (12)                   # Agent definitions
+│   ├── agents/ (13)                   # Agent definitions
 │   ├── commands/ (9)                  # Slash commands
 │   ├── rules/ (4)                     # Always-follow rules
 │   ├── standards/ (9)                 # Document templates + conventions.md + engineering-principles.md
-│   ├── skills/ (307)                  # Skill library
+│   ├── skills/ (321)                  # Skill library
 │   ├── skill-packs.json               # Modular skill pack definitions (100% agent coverage)
 │   └── hooks/                         # Security hooks (pre-tool-guard.mjs)
 │

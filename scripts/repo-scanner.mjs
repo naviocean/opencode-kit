@@ -243,7 +243,35 @@ export function scanRepo(projectDir = process.cwd()) {
     if (goText.includes('gofiber/fiber')) result.frameworks.push('Fiber');
   }
 
-  // 7. Docker & Infrastructure
+  // 7. Swift & Apple Ecosystem Detection (Package.swift, *.xcodeproj, *.xcworkspace)
+  const packageSwiftPath = path.join(projectDir, 'Package.swift');
+  const hasXcodeProj = fs.existsSync(projectDir) && (() => {
+    try {
+      return fs.readdirSync(projectDir).some(f => f.endsWith('.xcodeproj') || f.endsWith('.xcworkspace'));
+    } catch {
+      return false;
+    }
+  })();
+  const hasMacDir = fs.existsSync(path.join(projectDir, 'apps', 'macos')) || fs.existsSync(path.join(projectDir, 'apps', 'desktop-swift'));
+
+  if (fs.existsSync(packageSwiftPath) || hasXcodeProj || hasMacDir) {
+    result.languages.push('Swift');
+    result.packageManagers.push('spm');
+    if (!result.primaryPackageManager) result.primaryPackageManager = 'spm';
+    result.testRunners.push('swift test');
+    result.frameworks.push('SwiftUI', 'AppKit');
+
+    if (fs.existsSync(path.join(projectDir, '.swiftlint.yml'))) {
+      result.linters.push('SwiftLint');
+    }
+
+    if (fs.existsSync(packageSwiftPath)) {
+      const spmText = readText(packageSwiftPath);
+      if (spmText.includes('Sparkle')) result.frameworks.push('Sparkle');
+    }
+  }
+
+  // 8. Docker & Infrastructure
   if (fs.existsSync(path.join(projectDir, 'Dockerfile')) || fs.existsSync(path.join(projectDir, 'docker-compose.yml')) || fs.existsSync(path.join(projectDir, 'compose.yaml'))) {
     result.docker = true;
   }

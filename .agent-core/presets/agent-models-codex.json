@@ -75,6 +75,12 @@
       "fallback": [
         "gpt-5-luna"
       ]
+    },
+    "swift-macos": {
+      "model": "gpt-5-luna",
+      "fallback": [
+        "gpt-5-luna"
+      ]
     }
   }
 }

@@ -185,6 +185,15 @@ export function detectRecommendedPacks(scanResults = {}) {
     recommended.add('mobile-native');
   }
 
+  // Native macOS & Apple Systems (Swift / SwiftUI / AppKit)
+  if (
+    langs.includes('swift') ||
+    pkgMgr === 'spm' ||
+    frameworks.some(f => ['swiftui', 'appkit', 'macos'].includes(f))
+  ) {
+    recommended.add('swift-macos');
+  }
+
   // DevOps & Cloud
   if (scanResults.docker || scanResults.monorepo) {
     recommended.add('devops-infra');

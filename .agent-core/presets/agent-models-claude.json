@@ -75,6 +75,12 @@
       "fallback": [
         "claude-3-5-haiku"
       ]
+    },
+    "swift-macos": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
     }
   }
 }

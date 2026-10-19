@@ -315,8 +315,8 @@ const AGENTS_DIR = existsSync(join(ROOT, '.opencode', 'agents'))
   ? join(ROOT, '.opencode', 'agents')
   : join(ROOT, '.agent-core', 'agents');
 
-test('integration: all 12 real agent files parse without error', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops', 'mobile'];
+test('integration: all 13 real agent files parse without error', () => {
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops', 'mobile', 'swift-macos'];
   for (const name of expected) {
     const file = join(AGENTS_DIR, `${name}.md`);
     assert.ok(existsSync(file), `${name}.md must exist`);
@@ -330,7 +330,7 @@ test('integration: all 12 real agent files parse without error', () => {
 });
 
 test('integration: every agent has a unique skill set (no two agents share 100%)', () => {
-  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops', 'mobile'];
+  const expected = ['tech-lead', 'pm', 'designer', 'frontend', 'nestjs', 'rustacean', 'qa', 'security-auditor', 'ai-engineer', 'python-backend', 'devops', 'mobile', 'swift-macos'];
   const allSkills = {};
   for (const name of expected) {
     const file = join(AGENTS_DIR, `${name}.md`);
@@ -346,6 +346,8 @@ test('integration: every agent has a unique skill set (no two agents share 100%)
     'frontend and nestjs must have different skill profiles');
   assert.notDeepEqual([...allSkills['ai-engineer']].sort(), [...allSkills['python-backend']].sort(),
     'ai-engineer and python-backend must have different skill profiles');
+  assert.notDeepEqual([...allSkills['swift-macos']].sort(), [...allSkills['mobile']].sort(),
+    'swift-macos and mobile must have different skill profiles');
 });
 
 test('integration: agent-registry.json (generated) matches the schema', () => {

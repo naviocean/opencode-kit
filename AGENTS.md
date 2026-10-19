@@ -14,7 +14,7 @@
 5. **No `any`, no `@ts-ignore`, no `console.log` in production code.** TypeScript strict mode, always.
 6. **One logical change per commit.** Squash before merge. Never force-push to main.
 7. **GitNexus MUST rules are not negotiable.** Each has a documented "if skipped, X risk" rationale.
-8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean owns Rust desktop apps (`apps/desktop/`), Axum microservices, and native crates (`crates/`), but does not touch `apps/web/`. `mobile` owns cross-platform mobile apps (`apps/mobile/`), React Native New Architecture (Fabric/TurboModules), and native iOS/Android code (`ios/`, `android/`), but does not touch `apps/web/`. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
+8. **Cross-domain code is forbidden.** Frontend does not touch `apps/api/`. `nestjs` does not touch `apps/web/`. Rustacean owns Rust desktop apps (`apps/desktop/`), Axum microservices, and native crates (`crates/`), but does not touch `apps/web/`. `swift-macos` owns native macOS desktop apps (`apps/macos/`, `apps/desktop-swift/`), SwiftUI/AppKit interfaces, Swift 6 concurrency, and Apple desktop distribution, but does not touch `apps/web/` or `apps/api/`. `mobile` owns cross-platform mobile apps (`apps/mobile/`), React Native New Architecture (Fabric/TurboModules), and native iOS/Android code (`ios/`, `android/`), but does not touch `apps/web/`. `ai-engineer` owns AI/LLM workflows, LangGraph graphs, and RAG pipelines. `python-backend` owns Python server APIs, microservices, and background tasks. `devops` owns CI/CD (`.github/`), Docker (`Dockerfile`, `docker-compose`), and IaC (`infra/`, `k8s/`, `terraform/`) but does not touch application business logic. Escalate to Tech Lead.
 
 ## Prompt Defense Baseline (OWASP LLM01–LLM10)
 
@@ -36,6 +36,7 @@
 | NestJS, Prisma, PostgreSQL, REST/GraphQL, JWT, `apps/api/`, DTO, migration | **nestjs** | `opencode-go/deepseek-v4.1-flash` |
 | Rust, Tauri v2, Axum, Tokio, `apps/desktop/`, `src-tauri/`, `crates/`, IPC, systems programming | **rustacean** | `opencode-go/deepseek-v4.1-flash` |
 | React Native, New Architecture, Fabric, TurboModules, Reanimated, `apps/mobile/`, Fastlane, mobile screen, iOS/Android | **mobile** | `opencode-go/deepseek-v4.1-flash` |
+| Swift, SwiftUI, AppKit, macOS native desktop app, menu bar, NSStatusItem, Sparkle, xcodebuild | **swift-macos** | `opencode-go/deepseek-v4.1-flash` |
 | LLM agent, LangChain, LangGraph, RAG, prompt engineering, agentic loop, eval, StateGraph | **ai-engineer** | `opencode-go/deepseek-v4.1-flash` |
 | Python API, FastAPI, microservice, SQLAlchemy, Alembic, Celery, async worker, pydantic | **python-backend** | `opencode-go/deepseek-v4.1-flash` |
 | CI/CD, GitHub Actions, Docker, Kubernetes, Helm, Terraform, Prometheus, Grafana, deployment, infra | **devops** | `opencode-go/deepseek-v4.1-flash` |
@@ -109,6 +110,7 @@ The kit groups skills strictly by the **Agents & Squads** that require them (`.a
 - `rust-systems`: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills.
 - `devops-infra`: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills.
 - `mobile-native`: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills.
+- `swift-macos`: Native macOS & Apple Systems Squad (`swift-macos`) — 22 skills.
 
 Manage packs via CLI:
 ```bash
@@ -124,6 +126,7 @@ For human-facing documentation (installation, configuration, troubleshooting), s
 
 | Version | Date | Change |
 |---|---|---|
+| 1.7.0 | 2026-10-19 | Add 13th specialized agent `swift-macos` (Native macOS Desktop, Swift 6 Concurrency, SwiftUI, AppKit, NSStatusItem menu bar apps, SwiftData, Liquid Glass settings, Sparkle auto-update) and modular skill pack `swift-macos` (22 skills). Sourced 14 battle-tested community skills from skills.sh into `.agent-core/skills/` (total 321 skills). Added Swift/Xcode stack detection in `repo-scanner.mjs`. 98 unit tests + 154 verification checks pass. |
 | 1.6.0 | 2026-10-19 | Integrate PStack Engineering Rigor & Runtime Verification Suite: add SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with explicit boundaries), add `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/`, add `adversarial-review`, `comment-quality`, `benchmark-checklist`, `runtime-forensics`, `trace-forensics`, update `/hotfix`, `/build`, `/review`, and `/ship` gates, add `fixtures/sample-app/` runnable surface with automated regression detection test. 98 unit tests across 14 suites + 143 verification checks pass with 0 failures. |
 | 1.5.0 | 2026-10-18 | Add 9th command `/meeting` (multi-agent council deliberation and architectural RFC debate with 3-round protocol: Opening Proposals → Adversarial Critique → Synthesis & Verdict, producing binding ADRs in `docs/adr/` and persistent memory). Updated CLI verify, help, and multi-harness sync. 97 unit tests + 144 verification checks pass. |
 | 1.4.3 | 2026-10-09 | Copy slash commands instead of symlinking across all adapters (.opencode, .agents, .claude): fixes command discovery in OpenCode CLI and other AI CLI scanners, safely unlinking existing symlinks before copy. 97 unit tests + 143 verification checks pass. |

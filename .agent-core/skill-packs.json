@@ -296,6 +296,38 @@
         "typescript-advanced-types",
         "ux-flow"
       ]
+    },
+    "swift-macos": {
+      "name": "Native macOS & Apple Systems Squad",
+      "description": "Native macOS Desktop Engineer. Swift 6 strict concurrency, SwiftUI, AppKit, NSStatusItem menu bar apps, SwiftData persistence, Liquid Glass settings, and Sparkle auto-update.",
+      "agents": [
+        "swift-macos"
+      ],
+      "default": false,
+      "skills": [
+        "apple-design",
+        "code-simplifier",
+        "coding-standards",
+        "continuous-learning",
+        "design-tokens",
+        "git-workflow",
+        "gitnexus-exploring",
+        "gitnexus-refactoring",
+        "macos-auto-update",
+        "macos-build",
+        "macos-notch-ui",
+        "macos-patterns",
+        "macos-release",
+        "macos-settings-ui",
+        "swift-concurrency",
+        "swift-testing",
+        "swiftdata",
+        "swiftlint",
+        "swiftui-expert-skill",
+        "swiftui-navigation",
+        "ux-flow",
+        "write-swift"
+      ]
     }
   }
 }
