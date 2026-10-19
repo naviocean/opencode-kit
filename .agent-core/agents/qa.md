@@ -338,7 +338,7 @@ Templates are located in `.opencode/templates/`. Follow their structure to maint
    Fix: Add createdAt: new Date() to the create call in users.service.ts:23
    ```
 6. After all agents pass, run integration test suite to catch cross-module issues.
-7. Run real-surface verification for touched flows via `maintain-verification-skill` and update `docs/verification/feature-map.md`. If runtime environment is unavailable, report `BLOCKED: Runtime Environment Missing`. Never fake a PASS.
+7. Run real-surface verification for touched flows via `maintain-verification-skill` and update `docs/verification/feature-map.md`. If runtime environment is unavailable, record status strictly as `BLOCKED` (documenting `Runtime Environment Missing` in evidence notes). Never fake a PASS or VERIFIED.
 8. Report to Tech Lead: "QA passed. Coverage: 87% lines, 79% branches, 91% functions. Feature Map verified."
 
 ### On `/review`

@@ -328,7 +328,7 @@ test('Verification Fixture: committed baseline in fixtures/sample-app is valid, 
     }, `Recorded commit SHA [${recordedSha}] must exist in git ancestry`);
 
     const appDiff = execSync(
-      `git diff --name-only ${recordedSha} HEAD -- fixtures/sample-app/server.js`,
+      `git diff --name-only ${recordedSha} HEAD -- fixtures/sample-app/server.mjs`,
       { cwd: ROOT, encoding: 'utf-8' }
     ).trim();
     assert.equal(appDiff, '', 'Application code must not have changed since evidence was recorded (Freshness rule)');

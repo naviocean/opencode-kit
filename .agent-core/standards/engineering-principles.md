@@ -133,7 +133,7 @@ When an engineering principle appears to conflict with a project rule or human i
 * **Pattern:**
   - Run the real artifact against the real surface (run CLI, trigger HTTP endpoint, verify UI in browser).
   - Capture concrete runtime evidence (response payload, screenshot, terminal output) into `docs/verification/evidence/`.
-  - If the real runtime cannot be executed in the current environment, state explicitly: `BLOCKED: Runtime Environment Missing`. Never fake a `PASS`.
+  - If the real runtime cannot be executed in the current environment, state status strictly as `BLOCKED` (documenting the blocker reason, e.g. "Runtime Environment Missing", in evidence notes). Never fake a `PASS` or `VERIFIED`.
 
 #### 12. `sequence-verifiable-units`
 * **Trigger:** Multi-step implementations, migrations, or large refactorings.

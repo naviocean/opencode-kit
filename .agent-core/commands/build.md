@@ -126,7 +126,7 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
   - Rust/Desktop: `cargo test` (when `src-tauri/` affected)
 - Checks coverage thresholds (80% statements / 75% branches per AGENTS.md)
 - Runs Playwright E2E for critical flows listed in plan
-- **Real-surface verification:** Re-verifies touched user journeys from `docs/verification/feature-map.md` using `maintain-verification-skill`. Saves evidence in `docs/verification/evidence/`. If runtime missing, reports `BLOCKED: Runtime Environment Missing`. Never fakes a PASS.
+- **Real-surface verification:** Re-verifies touched user journeys from `docs/verification/feature-map.md` using `maintain-verification-skill`. Saves evidence in `docs/verification/evidence/`. If runtime missing, records status strictly as `BLOCKED` (documenting `Runtime Environment Missing` in evidence notes). Never fakes a PASS or VERIFIED.
 - **Boundary checks:** verifies contract compatibility across all communicating agents (e.g. NestJS DTOs vs Frontend types)
 - Reports failures with `file:line` context, not just "test failed"
 - Writes `_workspace/03_qa_report.md`

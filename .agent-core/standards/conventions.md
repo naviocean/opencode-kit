@@ -58,7 +58,7 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Committing without running tests locally | CI catches what local would have caught | `nx affected -t test` before push |
 | "I'll add tests later" | Later never comes; 80% coverage rule violated | TDD: test first, then code |
 | Testing implementation details over observable behavior | Fragile tests that break during refactoring without catching real bugs | Assert observable behavior, contracts, and side-effects (see `test-behavior-not-implementation`) |
-| Faking verification or reporting PASS without real runtime evidence | Creates false assurance; broken workflows ship | Verify on real surface (browser, CLI, curl) or report `BLOCKED: Runtime Environment Missing` |
+| Faking verification or reporting PASS without real runtime evidence | Creates false assurance; broken workflows ship | Verify on real surface (browser, CLI, curl) or record status strictly as `BLOCKED` (documenting missing environment in evidence notes) |
 | Rejecting code review without specific feedback | Agent can't act on vague "looks bad" | File path + line + issue + suggested fix |
 | Reusing a feature branch across PRs | Mixes review scopes, hard to revert | One branch per logical change |
 | Mixing refactor with feature | Review can't focus; revert is all-or-nothing | Separate commits or separate PRs |
