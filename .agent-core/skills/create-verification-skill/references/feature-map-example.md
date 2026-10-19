@@ -16,9 +16,11 @@ This reference demonstrates the standardized layout for `docs/verification/featu
 ## Status Summary
 
 - Total Features: 4
-- ✅ Verified: 3
-- ⚠️ Blocked / Inconclusive: 1
-- ❌ Regressed: 0
+- ✅ VERIFIED: 3
+- ⚠️ BLOCKED: 1
+- ❌ REGRESSED: 0
+- ⏳ UNVERIFIED: 0
+
 
 ---
 

@@ -36,7 +36,7 @@ Use this skill when modifying, refactoring, or extending code in a repository th
 ### Step 1 — Impact Analysis
 1. Inspect touched files using `gitnexus_detect_changes()` or `git diff --name-only main...HEAD`.
 2. Map modified modules (e.g., `apps/api/src/auth/` or `apps/web/src/components/Dashboard.tsx`) to relevant Feature IDs in `docs/verification/feature-map.md`.
-3. Check evidence freshness: if an existing feature has evidence recorded at a Git Commit SHA differing from current `HEAD` (`git rev-parse HEAD`), it is considered STALE and must be re-verified.
+3. Check evidence freshness: if an existing feature has evidence recorded at a Git Commit SHA where application code has changed between that SHA and current `HEAD` (`git diff --name-only <recorded_sha> HEAD`), it is considered **STALE** and must be re-verified. Commits that only touch documentation or verification evidence logs do not invalidate freshness.
 
 ### Step 2 — Re-run Real Surface Tests
 Execute the verification driver for affected feature IDs:

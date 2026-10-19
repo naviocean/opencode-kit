@@ -51,7 +51,7 @@ Adapt the highest-value engineering heuristics from Lauren Tan's *pstack* and cu
   - [x] Given a target surface, the skill establishes `docs/verification/feature-map.md` with structured user journeys and observable success signals using the unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`).
   - [x] Given missing prerequisites (e.g. no Docker daemon), the agent records status strictly as `BLOCKED` (documenting the prerequisite in evidence notes) and NEVER fakes a `VERIFIED` status.
   - [x] Given `maintain-verification-skill`, the agent audits the map against touched code, re-runs affected flows, and is strictly prohibited from altering the map to mask regressions (status changes to `REGRESSED`).
-  - [x] Given `/ship` or `/review`, evidence is verified as FRESH only if its recorded `Git Commit` matches current `HEAD` exactly and has zero `REGRESSED`, `BLOCKED`, or `UNVERIFIED` statuses.
+  - [x] Given `/ship` or `/review`, evidence is verified as FRESH only if its recorded `Git Commit` has zero application code modifications against `HEAD` (allowing evidence-only commits or CI test artifacts) and has zero `REGRESSED`, `BLOCKED`, or `UNVERIFIED` statuses.
   - [x] Given `fixtures/sample-app/`, an automated integration test deterministically validates the verification contract, schema, and process lifecycle.
 
 ### US-002: Root-Cause Bugfix in `/hotfix` (P0)

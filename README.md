@@ -541,7 +541,7 @@ Synthetic unit test suites can pass 100% while an application fails in reality (
   - `REGRESSED`: Regression detected upon re-execution against new changes.
   - `BLOCKED`: Environment prerequisites missing (honesty gate, never fake a pass). Blocker documented in evidence notes.
   - `UNVERIFIED`: Defined journey awaiting execution.
-- **Verifiable Fresh Evidence:** Evidence logs stored at `docs/verification/evidence/` with Git Commit SHA metadata. If the recorded `Git Commit` SHA differs from current `HEAD` (`git rev-parse HEAD`), evidence is STALE and blocks `/ship`.
+- **Verifiable Fresh Evidence:** Evidence logs stored at `docs/verification/evidence/` with Git Commit SHA metadata. If application code has changed between the recorded `Git Commit` SHA and `HEAD` (`git diff --name-only <SHA> HEAD`), evidence is STALE and blocks `/ship`. Commits containing only evidence or docs do not invalidate freshness. CI build artifacts tied to test build SHA are also supported.
 - **Verification Skills:** `create-verification-skill` (survey runtime and scaffold map) and `maintain-verification-skill` (audit diffs, re-verify touched flows, detect regressions without masking).
 
 ### 3. Rigor Skills & Gate Integrations
@@ -734,19 +734,13 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.3.4 (Current)
-
-- ✅ **CLI ReferenceError Fix** — Fixed `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`.
-- ✅ **Automated CLI Regression Test Suite** — Added `scripts/__tests__/cli.test.mjs` verifying subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`).
-- ✅ **Test & Verification Suite** — 90 unit tests across 12 test suites + 132 E2E verification checks passing.
-
 ### v1.6.0 (Current)
 
 - ✅ **PStack Engineering Rigor & Runtime Verification Suite** — Added SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with triggers and bounded autonomy).
-- ✅ **Real-Surface Verification Skills & Feature Map** — Added `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/` with unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`) and fresh evidence standard (commit SHA + timestamp).
+- ✅ **Real-Surface Verification Skills & Feature Map** — Added `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/` with unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`) and code-path diff fresh evidence standard.
 - ✅ **Rigor & Forensics Skills** — Added `adversarial-review` (targeted TOCTOU and race condition audit), `comment-quality` (diff-only unslop audit preserving invariants), `benchmark-checklist`, `runtime-forensics` (live process profiles/heaps), and `trace-forensics` (post-mortem trace artifacts).
 - ✅ **Command Workflow Gates** — Upgraded `/hotfix` (reproduction-first, root-cause state generator fix, real-surface re-verify), `/build` (fan-out checkpoint, Typed Design Sketch in contracts.md), `/review` (triggered adversarial review), and `/ship` (fresh evidence check).
-- ✅ **Runnable Fixture App & Automated Test Suite** — Added `fixtures/sample-app/` with standalone HTTP server and `scripts/__tests__/verification-fixture.test.mjs` verifying real-surface skill protocols in isolated workspaces. 14 test suites (98 unit tests) pass cleanly.
+- ✅ **Runnable Fixture App & Automated Test Suite** — Added `fixtures/sample-app/` with standalone HTTP server and `scripts/__tests__/verification-fixture.test.mjs` verifying real-surface skill protocols in isolated workspaces. 14 test suites (98 unit tests) and 143 verification checks pass cleanly.
 
 ### v1.5.0
 
@@ -756,6 +750,12 @@ SOFTWARE.
 
 - ✅ **12th Specialized Agent `mobile`** — Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, FlashList, MMKV, Fastlane.
 - ✅ **Modular Skill Pack `mobile-native`** — 18 mobile skills with automated stack detection.
+
+### v1.3.4
+
+- ✅ **CLI ReferenceError Fix** — Fixed `ReferenceError: kitDir is not defined` in `bin/cli.js` `initProject()`.
+- ✅ **Automated CLI Regression Test Suite** — Added `scripts/__tests__/cli.test.mjs` verifying subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`).
+- ✅ **Test & Verification Suite** — 90 unit tests across 12 test suites + 132 E2E verification checks passing.
 
 ### v1.3.3
 

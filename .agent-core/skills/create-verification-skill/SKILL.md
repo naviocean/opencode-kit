@@ -62,13 +62,14 @@ Each evidence log must contain an explicit metadata header:
 === Feature Verification Evidence ===
 Feature ID: <FEATURE-ID>
 Status: VERIFIED | REGRESSED | BLOCKED
-Git Commit: <HEAD_SHA>
+Git Commit: <TESTED_CODE_SHA>
 Timestamp: <ISO-8601>
 Driver: <Playwright | PTY | cURL>
 Surface URL: <URL>
 ```
-- Evidence is considered **FRESH** if and only if `Status` is `VERIFIED` and the recorded `Git Commit` SHA exactly matches the current `git rev-parse HEAD`.
-- If `HEAD` differs from the recorded `Git Commit` SHA, the evidence is deemed **STALE** and must be re-executed before `/review` or `/ship`.
+- **Freshness Definition:** Evidence is considered **FRESH** if and only if `Status` is `VERIFIED`, the recorded `Git Commit` SHA exists in git history as an ancestor of current `HEAD` (or matches `HEAD`), and `git diff --name-only <TESTED_CODE_SHA> HEAD` contains **no modifications to application code paths** (commits that only add/update verification logs, Feature Maps, or docs in `docs/` do not invalidate evidence).
+- If any application code (e.g., in `apps/`, `libs/`, `src/`) has been modified since the recorded `Git Commit`, or if the commit SHA is missing or invalid, the evidence is deemed **STALE** and must be re-executed before `/review` or `/ship`.
+- In CI/CD pipelines, evidence may also be collected as build artifacts tied to the build commit SHA without checking log files into the git repository.
 - Evidence files must persist AFTER application shutdown or container teardown. Never store evidence only in volatile `/tmp` or unrecorded terminal output.
 
 ---

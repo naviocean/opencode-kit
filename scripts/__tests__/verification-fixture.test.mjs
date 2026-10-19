@@ -302,7 +302,7 @@ test('Verification Fixture: validates verification contract, lifecycle, and evid
   await stopProcess(regServer);
 });
 
-test('Verification Fixture: committed baseline in fixtures/sample-app is valid and clean', () => {
+test('Verification Fixture: committed baseline in fixtures/sample-app is valid, fresh, and clean', () => {
   const baselineMapFile = join(FIXTURE_DIR, 'docs', 'verification', 'feature-map.md');
   assert.ok(existsSync(baselineMapFile), 'Committed baseline feature-map.md must exist');
 
@@ -317,5 +317,20 @@ test('Verification Fixture: committed baseline in fixtures/sample-app is valid a
     const evidenceRelativePath = parts[5];
     const evidenceFullPath = join(FIXTURE_DIR, evidenceRelativePath);
     assert.ok(existsSync(evidenceFullPath), `Evidence file must exist at ${evidenceFullPath}`);
+
+    // Validate Freshness contract: Git Commit is ancestor and application code has zero diff
+    const logContent = readFileSync(evidenceFullPath, 'utf-8');
+    const commitMatch = logContent.match(/Git Commit:\s*([a-f0-9]+)/i);
+    assert.ok(commitMatch, 'Evidence log must record a Git Commit SHA');
+    const recordedSha = commitMatch[1];
+    assert.doesNotThrow(() => {
+      execSync(`git merge-base --is-ancestor ${recordedSha} HEAD`, { cwd: ROOT });
+    }, `Recorded commit SHA [${recordedSha}] must exist in git ancestry`);
+
+    const appDiff = execSync(
+      `git diff --name-only ${recordedSha} HEAD -- fixtures/sample-app/server.js`,
+      { cwd: ROOT, encoding: 'utf-8' }
+    ).trim();
+    assert.equal(appDiff, '', 'Application code must not have changed since evidence was recorded (Freshness rule)');
   }
 });

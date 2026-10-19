@@ -1,7 +1,7 @@
 === Feature Verification Evidence ===
 Feature ID: AUTH-001
 Status: VERIFIED
-Git Commit: f2fa3391b106f2eecdaae9e5595ba381b16ee979
+Git Commit: f2fa339d434ece79b4f11dfbeeac84312948f1bc
 Timestamp: 2026-10-19T11:00:00.000Z
 Driver: cURL / HTTP
 Surface URL: http://localhost:49152/api/login

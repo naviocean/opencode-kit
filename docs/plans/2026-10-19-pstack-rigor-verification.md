@@ -68,9 +68,9 @@
     - `REGRESSED`: Regression detected upon re-execution against new code changes.
     - `BLOCKED`: Environment prerequisite missing (honesty gate). Blocker details documented in evidence notes.
     - `UNVERIFIED`: Defined user journey cataloged, awaiting live execution.
-- [x] **Step 2: Define Fresh Evidence Standard (Exact HEAD Match)**
-  - Evidence log header metadata: `Feature ID`, `Status`, `Git Commit` (HEAD SHA), `Timestamp`, `Driver`, `Surface URL`.
-  - Freshness rule: Evidence is STALE if the recorded `Git Commit` SHA differs from current `git rev-parse HEAD`. Exact HEAD match required for `/review` and `/ship`.
+- [x] **Step 2: Define Fresh Evidence Standard (Code-Path Diff Semantics)**
+  - Evidence log header metadata: `Feature ID`, `Status`, `Git Commit` (code commit SHA), `Timestamp`, `Driver`, `Surface URL`.
+  - Freshness rule: Evidence is STALE if application code has changed between recorded `Git Commit` and current `HEAD` (`git diff --name-only <recorded_sha> HEAD`). Commits containing only verification evidence/docs do not invalidate freshness. CI artifacts tied to test build SHA are also supported.
 - [x] **Step 3: Enforce Cardinal Rule in `maintain-verification-skill`**
   - Prohibit regression masking: never delete features, never weaken observable signal assertions. Mark status as `REGRESSED` and link failure log `...-REGRESSED.log`.
 
@@ -123,7 +123,7 @@
   - Add diff comment quality check.
   - Add real-surface evidence verification check in `docs/verification/evidence/` with commit SHA matching.
 - [x] **Step 4: Upgrade `ship.md`**
-  - Verify all core features in `docs/verification/feature-map.md` are marked `VERIFIED` with fresh evidence (commit SHA matching HEAD, zero `REGRESSED`, `BLOCKED`, or `UNVERIFIED`).
+  - Verify all core features in `docs/verification/feature-map.md` are marked `VERIFIED` with fresh evidence (recorded SHA has zero application diff against HEAD, zero `REGRESSED`, `BLOCKED`, or `UNVERIFIED`).
 
 ---
 
