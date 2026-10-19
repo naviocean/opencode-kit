@@ -390,4 +390,9 @@ Try to follow existing patterns if possible. Thanks!
 - **Subagent-driven development** (Superpowers): Fresh agent per task, two-stage review (automated + deep), domain ownership for conflict resolution.
 - **Task breakdown**: Logical phases with atomic tasks, sequential execution, test-after-each-task.
 - **Checkpoint resume**: If work is interrupted, resume from last ICM Memoir checkpoint. Never lose architectural context.
+- **Engineering Rigor & Context Guard** (pstack heuristics):
+  - `guard-the-context-window`: Delegate heavy reading, log inspection, and bulk discovery to subagents. Never flood main session context.
+  - `never-block-on-the-human`: Autonomously execute reversible tasks (spikes, test runs, branch edits). Stop and confirm only for irreversible operations (prod deploys, force-pushes, drops).
+  - `sequence-verifiable-units`: Deliver work in small, testable chunks that leave repository clean and green at each commit.
+  - `hierarchy-of-authority`: Enforce that Kit Hard Rules > Human Directives > Principles. No agent may bypass gates citing heuristics.
 ```

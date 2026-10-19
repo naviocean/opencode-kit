@@ -15,9 +15,10 @@ Sections are alphabetically ordered. Skim the table of contents first.
 
 1. [Anti-Patterns](#anti-patterns) — actions that always fail review
 2. [Coding](#coding) — TypeScript strict, naming, imports, errors
-3. [Git](#git) — branches, commits, PRs
-4. [Security](#security) — AgentShield, OWASP, secrets
-5. [Testing](#testing) — TDD, coverage, framework
+3. [Engineering Principles](#engineering-principles) — 24 rigor heuristics (pstack SSoT)
+4. [Git](#git) — branches, commits, PRs
+5. [Security](#security) — AgentShield, OWASP, secrets
+6. [Testing](#testing) — TDD, coverage, framework
 
 ---
 
@@ -44,6 +45,9 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Python: `import *` | Pollutes namespace, breaks static analysis | Explicit imports only |
 | Rust: `.unwrap()` / `.expect()` in production | Panics crash process/webview | Return `Result<T, E>` and handle with `?` |
 | Rust: gratuitous `.clone()` | Hides bad ownership architecture, wastes memory | Pass references (`&str`, `&[T]`) |
+| Symptom masking (swallowing errors or slapping null-checks at crash site) | Hides root cause; bug surfaces unpredictably elsewhere | Trace generator of invalid state; fix at origin (see `fix-root-causes`) |
+| Unparsed raw external data crossing boundary | Breaches boundary discipline; creates undefined bugs deep in core | Parse into typed domain models immediately at ingress (see `boundary-discipline`) |
+| Trivial comments & AI slop (`// set x to 5`, `// function to handle click`) | Pollutes codebase; clutters reader context | Clean, self-documenting code; comment only non-obvious business invariants |
 
 ### Process
 
@@ -53,6 +57,8 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Force-push to `main` | Destroys team history | Branch + PR + squash merge |
 | Committing without running tests locally | CI catches what local would have caught | `nx affected -t test` before push |
 | "I'll add tests later" | Later never comes; 80% coverage rule violated | TDD: test first, then code |
+| Testing implementation details over observable behavior | Fragile tests that break during refactoring without catching real bugs | Assert observable behavior, contracts, and side-effects (see `test-behavior-not-implementation`) |
+| Faking verification or reporting PASS without real runtime evidence | Creates false assurance; broken workflows ship | Verify on real surface (browser, CLI, curl) or report `BLOCKED: Runtime Environment Missing` |
 | Rejecting code review without specific feedback | Agent can't act on vague "looks bad" | File path + line + issue + suggested fix |
 | Reusing a feature branch across PRs | Mixes review scopes, hard to revert | One branch per logical change |
 | Mixing refactor with feature | Review can't focus; revert is all-or-nothing | Separate commits or separate PRs |
@@ -189,6 +195,21 @@ if (result.ok) {
   return handleError(result.error);
 }
 ```
+---
+
+## Engineering Principles
+
+All agents adhere to the 24 Software Engineering Principles defined in [engineering-principles.md](./engineering-principles.md). These principles codify Staff-level engineering rigor:
+
+- **Hierarchy of Authority:** Kit Hard Rules (Anti-Patterns, TDD 80%, AgentShield Grade >= B, Socratic Sizing) > Human Directives > Engineering Principles.
+- **Boundary Discipline:** Validate, narrow types, and parse external data strictly at system boundaries (`boundary-discipline`, `type-system-discipline`). Trust internal types.
+- **Root-Cause First:** Never patch a symptom by swallowing errors or slapping null-checks at the crash site (`fix-root-causes`). Reproduce first, find the state generator, and fix at origin.
+- **Test Behavior, Not Internals:** Assert observable caller/user contracts; never couple unit tests to private helpers or arbitrary mock sequences (`test-behavior-not-implementation`).
+- **Prove It Works:** Never declare done without runtime evidence on real surfaces (`prove-it-works`). Never hand the human a check you could run.
+- **Context Guard:** Delegate bulk discovery to subagents; never pollute the primary context window with thousands of lines of raw trace/log dumps (`guard-the-context-window`).
+- **Autonomy Scoping:** The `never-block-on-the-human` principle applies ONLY to reversible implementation tasks (tests, code exploration). Irreversible writes (force-push, prod deploy, destructive migration) ALWAYS require explicit confirmation.
+
+For the complete 24-principle catalog and situational triggers, read `.agent-core/standards/engineering-principles.md`.
 
 ---
 

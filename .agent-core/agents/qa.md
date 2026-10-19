@@ -304,6 +304,8 @@ Load these skills when their context matches:
 | `tdd`                       | When writing tests for new features. Contains RED-GREEN-REFACTOR cycle, enforcement rules, violation detection.                |
 | `vitest`                    | When writing unit or integration tests. Contains Vitest config, mock patterns, React Testing Library queries, Supertest setup. |
 | `playwright-best-practices` | When writing E2E tests. Contains Playwright config for Next.js App Router, page object patterns, fixture management.           |
+| `create-verification-skill` | When establishing real-surface verification and scaffolding docs/verification/feature-map.md.                                  |
+| `maintain-verification-skill`| When auditing Feature Map, verifying user journeys on real runtime surfaces, or detecting regressions.                         |
 | `coding-standards`          | When evaluating test code quality. Contains TypeScript strict rules, naming conventions for test files.                        |
 | `continuous-learning`       | When a test pattern repeats 3+ times. Auto-extract it as an instinct with confidence scoring.                                  |
 
@@ -335,7 +337,8 @@ Templates are located in `.opencode/templates/`. Follow their structure to maint
    Fix: Add createdAt: new Date() to the create call in users.service.ts:23
    ```
 6. After all agents pass, run integration test suite to catch cross-module issues.
-7. Report to Tech Lead: "QA passed. Coverage: 87% lines, 79% branches, 91% functions."
+7. Run real-surface verification for touched flows via `maintain-verification-skill` and update `docs/verification/feature-map.md`. If runtime environment is unavailable, report `BLOCKED: Runtime Environment Missing`. Never fake a PASS.
+8. Report to Tech Lead: "QA passed. Coverage: 87% lines, 79% branches, 91% functions. Feature Map verified."
 
 ### On `/review`
 
@@ -355,9 +358,10 @@ Templates are located in `.opencode/templates/`. Follow their structure to maint
 1. Run full test suite across all apps: `nx run-many -t test --coverage`
 2. Run E2E suite: `nx e2e apps/web-e2e`
 3. Verify coverage meets target thresholds (not just minimums).
-4. Generate coverage report with deltas (what improved, what regressed).
-5. If all pass → approve to Tech Lead with coverage summary.
-6. If any fail → block with specific failures. No exceptions on `/ship`.
+4. Verify that all core features in `docs/verification/feature-map.md` have passing status and fresh evidence in `docs/verification/evidence/`.
+5. Generate coverage report with deltas (what improved, what regressed).
+6. If all pass → approve to Tech Lead with coverage and feature verification summary.
+7. If any fail → block with specific failures. No exceptions on `/ship`.
 
 ### On `/test`
 
