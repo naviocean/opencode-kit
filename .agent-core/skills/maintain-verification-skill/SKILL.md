@@ -36,7 +36,7 @@ Use this skill when modifying, refactoring, or extending code in a repository th
 ### Step 1 — Impact Analysis
 1. Inspect touched files using `gitnexus_detect_changes()` or `git diff --name-only main...HEAD`.
 2. Map modified modules (e.g., `apps/api/src/auth/` or `apps/web/src/components/Dashboard.tsx`) to relevant Feature IDs in `docs/verification/feature-map.md`.
-3. Check evidence freshness: if an existing feature has evidence recorded at an older `Git Commit`, it is considered STALE and must be re-verified.
+3. Check evidence freshness: if an existing feature has evidence recorded at a Git Commit SHA differing from current `HEAD` (`git rev-parse HEAD`), it is considered STALE and must be re-verified.
 
 ### Step 2 — Re-run Real Surface Tests
 Execute the verification driver for affected feature IDs:
@@ -62,6 +62,10 @@ node scripts/verify-real-surface.mjs --feature <FEATURE-ID>
   - Append new feature rows with unique sequential IDs (`FEAT-XXX`).
   - Initially mark as `UNVERIFIED`.
   - Run verification on real surface; transition to `VERIFIED` only after real evidence is recorded.
+- **Case E: Missing Prerequisites / Unbootable Surface.**
+  - If the environment or credentials cannot run the surface, mark `Status: BLOCKED`.
+  - Document the missing prerequisite in the evidence log and in the Feature Map notes.
+  - Never fake a `VERIFIED` status.
 
 ---
 

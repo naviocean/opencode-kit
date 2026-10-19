@@ -539,9 +539,9 @@ Synthetic unit test suites can pass 100% while an application fails in reality (
 - **Unified Status Vocabulary:**
   - `VERIFIED`: User journey probed and passed on real surface with fresh evidence.
   - `REGRESSED`: Regression detected upon re-execution against new changes.
-  - `BLOCKED`: Environment prerequisites missing (honesty gate, never fake a pass).
+  - `BLOCKED`: Environment prerequisites missing (honesty gate, never fake a pass). Blocker documented in evidence notes.
   - `UNVERIFIED`: Defined journey awaiting execution.
-- **Verifiable Fresh Evidence:** Evidence logs stored at `docs/verification/evidence/` with Git Commit SHA metadata. If code changes since the recorded SHA, evidence is STALE and blocks `/ship`.
+- **Verifiable Fresh Evidence:** Evidence logs stored at `docs/verification/evidence/` with Git Commit SHA metadata. If the recorded `Git Commit` SHA differs from current `HEAD` (`git rev-parse HEAD`), evidence is STALE and blocks `/ship`.
 - **Verification Skills:** `create-verification-skill` (survey runtime and scaffold map) and `maintain-verification-skill` (audit diffs, re-verify touched flows, detect regressions without masking).
 
 ### 3. Rigor Skills & Gate Integrations

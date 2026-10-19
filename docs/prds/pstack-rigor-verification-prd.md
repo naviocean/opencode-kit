@@ -49,10 +49,10 @@ Adapt the highest-value engineering heuristics from Lauren Tan's *pstack* and cu
 - **Acceptance Criteria:**
   - [x] Given a project with runnable services, `create-verification-skill` surveys startup commands, readiness probes, authentication, and seed data.
   - [x] Given a target surface, the skill establishes `docs/verification/feature-map.md` with structured user journeys and observable success signals using the unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`).
-  - [x] Given a verification run, evidence (logs, screenshots) is saved to `docs/verification/evidence/` with explicit metadata (`Git Commit`, `Timestamp`, `Status`) and persists after application teardown.
-  - [x] Given missing prerequisites (e.g. no Docker daemon), the agent reports `BLOCKED: Runtime Environment Missing` and NEVER fakes a PASS.
+  - [x] Given missing prerequisites (e.g. no Docker daemon), the agent records status strictly as `BLOCKED` (documenting the prerequisite in evidence notes) and NEVER fakes a `VERIFIED` status.
   - [x] Given `maintain-verification-skill`, the agent audits the map against touched code, re-runs affected flows, and is strictly prohibited from altering the map to mask regressions (status changes to `REGRESSED`).
-  - [x] Given `/ship` or `/review`, evidence is verified as FRESH only if its recorded `Git Commit` matches current `HEAD` and has zero `REGRESSED` or `BLOCKED` statuses.
+  - [x] Given `/ship` or `/review`, evidence is verified as FRESH only if its recorded `Git Commit` matches current `HEAD` exactly and has zero `REGRESSED`, `BLOCKED`, or `UNVERIFIED` statuses.
+  - [x] Given `fixtures/sample-app/`, an automated integration test deterministically validates the verification contract, schema, and process lifecycle.
 
 ### US-002: Root-Cause Bugfix in `/hotfix` (P0)
 - **As a** maintainer,

@@ -3,8 +3,9 @@
 /**
  * Verification Fixture Integration Test
  *
- * Verifies that create-verification-skill and maintain-verification-skill protocols
- * operate reliably against real surfaces:
+ * NOTE: This integration test validates the verification contract, runtime lifecycle,
+ * and evidence protocols defined by create-verification-skill and maintain-verification-skill.
+ * It provides deterministic contract and protocol verification, exercising:
  * 1. Surveys target application (fixtures/sample-app) and selects interaction driver.
  * 2. Launches the runtime service on an ephemeral port in an isolated test environment.
  * 3. Awaits readiness probe (/health) before executing journeys.
@@ -86,7 +87,7 @@ function stopProcess(child, timeoutMs = 2000) {
   });
 }
 
-test('Verification Fixture: runs real-surface skill protocols with isolated workspace and process lifecycle', async (t) => {
+test('Verification Fixture: validates verification contract, lifecycle, and evidence schema (contract & protocol verification)', async (t) => {
   // 1. Create an isolated temporary workspace for this test run
   const tempWorkspace = mkdtempSync(join(tmpdir(), 'saas-verify-test-'));
   const tempDocsDir = join(tempWorkspace, 'docs', 'verification');

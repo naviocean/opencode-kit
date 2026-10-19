@@ -67,8 +67,8 @@ Timestamp: <ISO-8601>
 Driver: <Playwright | PTY | cURL>
 Surface URL: <URL>
 ```
-- Evidence is considered **FRESH** only when `Status` is `VERIFIED` and the recorded `Git Commit` matches current `HEAD` (or no commits touching the feature's code paths have been made since).
-- If commits touch the feature's implementation files after the recorded SHA, the evidence is deemed **STALE** and must be re-executed before `/review` or `/ship`.
+- Evidence is considered **FRESH** if and only if `Status` is `VERIFIED` and the recorded `Git Commit` SHA exactly matches the current `git rev-parse HEAD`.
+- If `HEAD` differs from the recorded `Git Commit` SHA, the evidence is deemed **STALE** and must be re-executed before `/review` or `/ship`.
 - Evidence files must persist AFTER application shutdown or container teardown. Never store evidence only in volatile `/tmp` or unrecorded terminal output.
 
 ---
@@ -114,5 +114,6 @@ For reference and detailed syntax, see [references/feature-map-example.md](./ref
 5. **Step 5 — Honesty Gate (Non-Negotiable):**
    - If the local host cannot run the runtime (e.g., missing Docker daemon, no display server for browser, missing credentials):
      - **DO NOT** fake a passing result.
-     - Record status `BLOCKED: Runtime Environment Missing`.
+     - Record status strictly as `BLOCKED` in `feature-map.md`.
+     - Document the missing prerequisite (e.g. `Missing Docker daemon`, `Missing API key`) in evidence notes and in the Feature Map notes/evidence path.
      - Output the exact missing prerequisite to the user.

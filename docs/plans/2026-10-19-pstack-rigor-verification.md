@@ -24,8 +24,7 @@
 
 1. **Self-Reference Elimination:** The plan references `docs/prds/pstack-rigor-verification-prd.md`, not itself.
 2. **Comprehensive Scope Coverage:** Includes tasks for `/hotfix`, `/build`, `/review`, `/ship`, adversarial review, comment quality, and performance forensics.
-3. **Fixture Validation:** A standalone working app (`fixtures/sample-app/`) proves that `create-verification-skill` and `maintain-verification-skill` execute against real surfaces and retain evidence after teardown.
-4. **Honesty Gate:** Verification skills must explicitly report `BLOCKED: Runtime Environment Missing` when real surfaces cannot be run, never faking a `PASS`.
+4. **Honesty Gate:** Verification skills must record status strictly as `BLOCKED` (documenting the specific prerequisite blocker in evidence notes) when real surfaces cannot be run, never faking a `VERIFIED` status.
 5. **No Regression Masking:** `maintain-verification-skill` strictly prohibits updating Feature Maps to legitimize actual product regressions.
 
 ---
@@ -67,11 +66,11 @@
   - Standardize on exactly 4 statuses across all skills, commands, fixtures, and reports:
     - `VERIFIED`: User journey probed and passed on real surface with matching observable signals & fresh evidence.
     - `REGRESSED`: Regression detected upon re-execution against new code changes.
-    - `BLOCKED`: Environment prerequisite missing (honesty gate). Must explain why.
+    - `BLOCKED`: Environment prerequisite missing (honesty gate). Blocker details documented in evidence notes.
     - `UNVERIFIED`: Defined user journey cataloged, awaiting live execution.
-- [x] **Step 2: Define Fresh Evidence Standard**
+- [x] **Step 2: Define Fresh Evidence Standard (Exact HEAD Match)**
   - Evidence log header metadata: `Feature ID`, `Status`, `Git Commit` (HEAD SHA), `Timestamp`, `Driver`, `Surface URL`.
-  - Freshness rule: Evidence is STALE if code paths mapped to the feature were modified after the recorded commit SHA. Stale evidence blocks `/ship`.
+  - Freshness rule: Evidence is STALE if the recorded `Git Commit` SHA differs from current `git rev-parse HEAD`. Exact HEAD match required for `/review` and `/ship`.
 - [x] **Step 3: Enforce Cardinal Rule in `maintain-verification-skill`**
   - Prohibit regression masking: never delete features, never weaken observable signal assertions. Mark status as `REGRESSED` and link failure log `...-REGRESSED.log`.
 
@@ -159,7 +158,8 @@
 - [x] **Step 1: Create `fixtures/sample-app/`**
   - Lightweight standalone Node HTTP server with `/health`, `/api/login`, and `/api/dashboard`.
   - Clean baseline Feature Map and evidence logs committed in `fixtures/sample-app/docs/`.
-- [x] **Step 2: Create `scripts/__tests__/verification-fixture.test.mjs` with Workspace Isolation**
+- [x] **Step 2: Create `scripts/__tests__/verification-fixture.test.mjs` (Contract & Lifecycle Validation)**
+  - Validate the verification contract, schema, and process lifecycle defined by `create-verification-skill` and `maintain-verification-skill` (deterministic contract validation, not autonomous LLM subagent simulation).
   - Run verification tests in an isolated temporary directory (`tmpdir`) per run, preventing mutation of committed baseline files.
   - Await readiness probe `/health`.
   - Execute live user journeys (`AUTH-001` and `DASH-001`).
