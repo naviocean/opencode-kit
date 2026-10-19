@@ -33,12 +33,12 @@ const ROOT = join(__dirname, '..', '..');
 const FIXTURE_DIR = join(ROOT, 'fixtures', 'sample-app');
 const SERVER_SCRIPT = join(FIXTURE_DIR, 'server.mjs');
 
-// Current Git Commit SHA for evidence metadata
-let currentGitCommit = 'unknown';
+// Current Git Commit SHA for evidence metadata (verification requires active git repository)
+let currentGitCommit;
 try {
   currentGitCommit = execSync('git rev-parse HEAD', { cwd: ROOT, encoding: 'utf-8' }).trim();
-} catch {
-  currentGitCommit = 'f2fa3391b106f2eecdaae9e5595ba381b16ee979';
+} catch (err) {
+  throw new Error(`Verification fixture requires an active git repository to test freshness contract: ${err.message}`);
 }
 
 // Unified status vocabulary

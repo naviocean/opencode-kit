@@ -24,6 +24,7 @@
 
 1. **Self-Reference Elimination:** The plan references `docs/prds/pstack-rigor-verification-prd.md`, not itself.
 2. **Comprehensive Scope Coverage:** Includes tasks for `/hotfix`, `/build`, `/review`, `/ship`, adversarial review, comment quality, and performance forensics.
+3. **Runnable Fixture & Evidence:** Adds a runnable fixture app (`fixtures/sample-app/`) and automated contract test verifying runtime launch, probes, and evidence persistence.
 4. **Honesty Gate:** Verification skills must record status strictly as `BLOCKED` (documenting the specific prerequisite blocker in evidence notes) when real surfaces cannot be run, never faking a `VERIFIED` status.
 5. **No Regression Masking:** `maintain-verification-skill` strictly prohibits updating Feature Maps to legitimize actual product regressions.
 
