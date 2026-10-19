@@ -1,0 +1,19 @@
+=== Feature Verification Evidence ===
+Feature ID: DASH-001
+Status: VERIFIED
+Git Commit: f2fa3391b106f2eecdaae9e5595ba381b16ee979
+Timestamp: 2026-10-19T11:00:00.000Z
+Driver: cURL / HTTP
+Surface URL: http://localhost:49152/api/dashboard
+
+--- Request ---
+GET /api/dashboard
+Authorization: Bearer jwt-fixture-token-valid-2026
+
+--- Response ---
+HTTP/1.1 200 OK
+Content-Type: application/json
+Body: {"metrics":{"activeUsers":42,"mrr":12000,"churnRate":"1.2%"},"services":["billing","auth","analytics"],"status":"healthy"}
+
+--- Verdict ---
+VERIFIED: Metric aggregation returned 42 active users and $12k MRR.

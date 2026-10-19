@@ -398,7 +398,7 @@ npx opencode-saas-kit init --tools
 
 This will:
 - Run Brownfield repository scan (detecting Node, Python, Rust, Go) → `.agent-memory/project-context.md`
-- Install Single Source of Truth (`.agent-core/`) with 11 agents, 8 commands, 4 rules, skills, standards
+- Install Single Source of Truth (`.agent-core/`) with 12 agents, 9 commands, 4 rules, 307 skills, standards
 - Safely inject kit instructions into `AGENTS.md` and `CLAUDE.md` using safe context markers (`<!-- opencode-saas-kit:start/end -->`) preserving human custom rules
 - Set up Universal Persistent Memory in `.agent-memory/`
 - Synchronize adapters across OpenCode (`.opencode/`), Claude Code (`CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex
@@ -520,12 +520,40 @@ export CONTEXT7_API_KEY=your_key_here
 | `/security` | Run AgentShield scan | Security Auditor |
 | `/test` | Run test suite, analyze coverage | QA |
 | `/hotfix` | Fast-track bugfix or urgent patch | Tech Lead → Specialist → QA → Security Auditor |
+| `/meeting` | Multi-agent council deliberation & RFC debate | Tech Lead (deliberation council) |
+
+## Engineering Rigor & Runtime Verification (v1.6.0)
+
+OpenCode SaaS Kit v1.6.0 integrates Staff-level engineering rigor and real-surface verification inspired by *pstack*:
+
+### 1. 24 Staff-Level Engineering Principles
+Single source of truth at `.agent-core/standards/engineering-principles.md` covering:
+- **Root-Cause Bugfix:** Strictly prohibits symptom masking (e.g. null-checks at crash site). Enforces reproduction first and fixing the invalid state generator.
+- **Separate Before Serializing Shared State:** Parallel agent fan-out requires decoupled state or Typed Design Sketches before concurrency.
+- **Bounded Autonomy:** The `never-block-on-the-human` rule applies ONLY to reversible implementation tasks; it NEVER bypasses PM discovery, plan approvals, scope decisions, `/review`, or `/ship` gates.
+- **Explain the Number:** Performance optimization requires establishing baselines, isolating single variables, and explaining the exact mechanism behind measured speedups.
+
+### 2. Real-Surface Verification Suite & Feature Map
+Synthetic unit test suites can pass 100% while an application fails in reality (blank screens, broken sessions, CORS errors). The verification suite bridges this gap:
+- **Feature Map (`docs/verification/feature-map.md`):** Catalogs critical user journeys with observable signals on real surfaces (Playwright, PTY, cURL).
+- **Unified Status Vocabulary:**
+  - `VERIFIED`: User journey probed and passed on real surface with fresh evidence.
+  - `REGRESSED`: Regression detected upon re-execution against new changes.
+  - `BLOCKED`: Environment prerequisites missing (honesty gate, never fake a pass).
+  - `UNVERIFIED`: Defined journey awaiting execution.
+- **Verifiable Fresh Evidence:** Evidence logs stored at `docs/verification/evidence/` with Git Commit SHA metadata. If code changes since the recorded SHA, evidence is STALE and blocks `/ship`.
+- **Verification Skills:** `create-verification-skill` (survey runtime and scaffold map) and `maintain-verification-skill` (audit diffs, re-verify touched flows, detect regressions without masking).
+
+### 3. Rigor Skills & Gate Integrations
+- **Adversarial Review (`adversarial-review`):** Automatically triggered during `/review` on high-risk diffs (auth, payments, migrations, concurrency) to probe for TOCTOU race conditions and leaks.
+- **Comment Quality & Unslop (`comment-quality`):** Diff-only audit eliminating trivial AI comments while strictly preserving invariants and security explanations.
+- **Forensics Suite:** `benchmark-checklist`, `runtime-forensics` (live process profiles/heaps), and `trace-forensics` (post-mortem trace artifacts).
 
 ## Skills & Skill Packs
 
-The kit includes **273 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
+The kit includes **307 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
 
-- **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 74 skills
+- **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 81 skills
 - **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills
 - **`nestjs-backend`**: NestJS & TypeScript Backend Squad (`nestjs`) — 24 skills
 - **`python-ai`**: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills
@@ -617,14 +645,14 @@ opencode-kit/
 ├── README.md                          # Human-facing documentation
 ├── AGENTS.md                          # Universal project rules (Antigravity & OpenAI Codex)
 ├── CLAUDE.md                          # Claude Code instructions
-├── package.json                       # npm package config (v1.3.4)
+├── package.json                       # npm package config (v1.6.0)
 │
 ├── .agent-core/                       # Single Source of Truth (SSoT)
-│   ├── agents/ (11)                   # Agent definitions
-│   ├── commands/ (8)                  # Slash commands
+│   ├── agents/ (12)                   # Agent definitions
+│   ├── commands/ (9)                  # Slash commands
 │   ├── rules/ (4)                     # Always-follow rules
-│   ├── standards/ (8)                 # Document templates + conventions.md + mini-plan
-│   ├── skills/ (273)                  # Skill library
+│   ├── standards/ (9)                 # Document templates + conventions.md + engineering-principles.md
+│   ├── skills/ (307)                  # Skill library
 │   ├── skill-packs.json               # Modular skill pack definitions (100% agent coverage)
 │   └── hooks/                         # Security hooks (pre-tool-guard.mjs)
 │
@@ -633,6 +661,9 @@ opencode-kit/
 │   ├── decisions.md                   # Architecture decisions log
 │   ├── contracts.md                   # Verified endpoints & schemas
 │   └── instincts.json                 # Continuous learning
+│
+├── fixtures/                          # Runnable test fixtures
+│   └── sample-app/                    # Runnable SaaS app with Feature Map & verification logs
 │
 ├── .opencode/                         # OpenCode Adapter (symlinks + opencode.json)
 ├── .agents/                           # Antigravity & OpenAI Codex Adapter
@@ -645,7 +676,7 @@ opencode-kit/
 │   ├── skill-pack-manager.mjs         # Skill pack manager & CLI
 │   ├── security-gate.mjs              # AgentShield programmatic security gate
 │   ├── verify.mjs                     # E2E test verification
-│   └── __tests__/ (12 suites)         # 90 unit tests
+│   └── __tests__/ (14 suites)         # 98 unit tests
 │
 └── docs/                              # Document output directories
     ├── prds/                          # PRDs from /plan
@@ -709,9 +740,26 @@ SOFTWARE.
 - ✅ **Automated CLI Regression Test Suite** — Added `scripts/__tests__/cli.test.mjs` verifying subcommands (`init --dry-run`, `sync`, `pack list`, `--help`, `verify`).
 - ✅ **Test & Verification Suite** — 90 unit tests across 12 test suites + 132 E2E verification checks passing.
 
+### v1.6.0 (Current)
+
+- ✅ **PStack Engineering Rigor & Runtime Verification Suite** — Added SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with triggers and bounded autonomy).
+- ✅ **Real-Surface Verification Skills & Feature Map** — Added `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/` with unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`) and fresh evidence standard (commit SHA + timestamp).
+- ✅ **Rigor & Forensics Skills** — Added `adversarial-review` (targeted TOCTOU and race condition audit), `comment-quality` (diff-only unslop audit preserving invariants), `benchmark-checklist`, `runtime-forensics` (live process profiles/heaps), and `trace-forensics` (post-mortem trace artifacts).
+- ✅ **Command Workflow Gates** — Upgraded `/hotfix` (reproduction-first, root-cause state generator fix, real-surface re-verify), `/build` (fan-out checkpoint, Typed Design Sketch in contracts.md), `/review` (triggered adversarial review), and `/ship` (fresh evidence check).
+- ✅ **Runnable Fixture App & Automated Test Suite** — Added `fixtures/sample-app/` with standalone HTTP server and `scripts/__tests__/verification-fixture.test.mjs` verifying real-surface skill protocols in isolated workspaces. 14 test suites (98 unit tests) pass cleanly.
+
+### v1.5.0
+
+- ✅ **9th Command `/meeting`** — Multi-agent council deliberation and architectural RFC debate with 3-round protocol: Opening Proposals → Adversarial Critique → Synthesis & Verdict, producing binding ADRs in `docs/adr/`.
+
+### v1.4.0
+
+- ✅ **12th Specialized Agent `mobile`** — Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, FlashList, MMKV, Fastlane.
+- ✅ **Modular Skill Pack `mobile-native`** — 18 mobile skills with automated stack detection.
+
 ### v1.3.3
 
-- ✅ **Skill Packs & Modular Presets (BMad Borrowed Pattern)** — Defined 6 agent-centric domain packs in `.agent-core/skill-packs.json` guaranteeing 100% agent skill coverage with zero deficit.
+- ✅ **Skill Packs & Modular Presets (BMad Borrowed Pattern)** — Defined agent-centric domain packs in `.agent-core/skill-packs.json` guaranteeing 100% agent skill coverage with zero deficit.
 - ✅ **Skill Pack Manager CLI** — Added `scripts/skill-pack-manager.mjs` and CLI commands `npx opencode-saas-kit pack [list/add/remove/auto]`.
 - ✅ **Auto-detection Integration** — Integrated pack auto-detection into repo scanner to automatically activate domain packs matching codebase.
 

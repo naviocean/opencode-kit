@@ -27,7 +27,7 @@ Use this skill when modifying, refactoring, or extending code in a repository th
 > - **DO NOT** loosen the assertion (e.g. changing "redirects to /dashboard" to "displays error page").
 > - **DO NOT** mark it as "DEPRECATED" without explicit PM approval.
 > 
-> **Correct Action:** Mark the feature status as `FAILED (REGRESSION)` in the Feature Map, link the failure evidence log, and block the build/ship gate.
+> **Correct Action:** Mark the feature status as `REGRESSED` in the Feature Map, link the failure evidence log (`docs/verification/evidence/[YYYY-MM-DD]-[FEATURE-ID]-REGRESSED.log`), and block the build/ship gate.
 
 ---
 
@@ -36,6 +36,7 @@ Use this skill when modifying, refactoring, or extending code in a repository th
 ### Step 1 — Impact Analysis
 1. Inspect touched files using `gitnexus_detect_changes()` or `git diff --name-only main...HEAD`.
 2. Map modified modules (e.g., `apps/api/src/auth/` or `apps/web/src/components/Dashboard.tsx`) to relevant Feature IDs in `docs/verification/feature-map.md`.
+3. Check evidence freshness: if an existing feature has evidence recorded at an older `Git Commit`, it is considered STALE and must be re-verified.
 
 ### Step 2 — Re-run Real Surface Tests
 Execute the verification driver for affected feature IDs:
@@ -45,11 +46,12 @@ node scripts/verify-real-surface.mjs --feature <FEATURE-ID>
 
 ### Step 3 — Evaluate Outcome
 - **Case A: Pass.**
-  - Save fresh evidence to `docs/verification/evidence/[YYYY-MM-DD]-[FEATURE-ID].log`.
+  - Save fresh evidence with current HEAD SHA to `docs/verification/evidence/[YYYY-MM-DD]-[FEATURE-ID]-VERIFIED.log`.
   - Update `Status: VERIFIED` and timestamp in `feature-map.md`.
 - **Case B: Failure (Regression).**
-  - Save failure log to `docs/verification/evidence/[YYYY-MM-DD]-[FEATURE-ID]-FAIL.log`.
-  - Update `Status: REGRESSED`.
+  - Save failure log to `docs/verification/evidence/[YYYY-MM-DD]-[FEATURE-ID]-REGRESSED.log`.
+  - Update `Status: REGRESSED` in `feature-map.md`.
+  - Preserve the original `User Journey` and `Observable Signal` (never mask the breakage).
   - Halt workflow and escalate bug details to Tech Lead and the responsible domain agent.
 - **Case C: Legitimate Feature Evolution (Intentional Spec Change).**
   - If a new PR intentionally changes a UX flow (e.g. changing 2-step checkout to 1-click):
@@ -58,7 +60,8 @@ node scripts/verify-real-surface.mjs --feature <FEATURE-ID>
     - Run verification to produce new baseline evidence.
 - **Case D: New Feature Added.**
   - Append new feature rows with unique sequential IDs (`FEAT-XXX`).
-  - Run initial verification; mark `VERIFIED` only after real evidence is recorded.
+  - Initially mark as `UNVERIFIED`.
+  - Run verification on real surface; transition to `VERIFIED` only after real evidence is recorded.
 
 ---
 

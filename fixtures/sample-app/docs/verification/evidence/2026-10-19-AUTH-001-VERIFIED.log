@@ -1,0 +1,20 @@
+=== Feature Verification Evidence ===
+Feature ID: AUTH-001
+Status: VERIFIED
+Git Commit: f2fa3391b106f2eecdaae9e5595ba381b16ee979
+Timestamp: 2026-10-19T11:00:00.000Z
+Driver: cURL / HTTP
+Surface URL: http://localhost:49152/api/login
+
+--- Request ---
+POST /api/login
+Content-Type: application/json
+Body: {"username":"admin","password":"secret123"}
+
+--- Response ---
+HTTP/1.1 200 OK
+Content-Type: application/json
+Body: {"token":"jwt-fixture-token-valid-2026","user":{"id":"user-001","username":"admin","role":"owner"}}
+
+--- Verdict ---
+VERIFIED: Session token returned successfully.

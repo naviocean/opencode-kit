@@ -43,7 +43,7 @@ Two-stage review (Superpowers pattern):
   - Quality: no `any`, no `@ts-ignore`, no disabled lint
   - Comment Quality: strip trivial diff comments (`comment-quality`), preserve invariant & security comments
   - Testing: business logic has tests
-  - Real-Surface Evidence: verify that touched features have passing status and evidence in `docs/verification/evidence/`
+  - Real-Surface Evidence: verify that touched features in `docs/verification/feature-map.md` have status `VERIFIED` with fresh evidence in `docs/verification/evidence/` (matching `Git Commit` SHA; zero `REGRESSED` or `BLOCKED`)
   - Security: no hardcoded secrets, proper input validation
 
 **Stage 3 — Triggered Adversarial Review (`adversarial-review`):**

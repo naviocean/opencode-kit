@@ -16,7 +16,7 @@ In `opencode-saas-kit` v1.5.0, testing and verification are largely confined to 
 1. **Synthetic vs Real-Surface Gap:** `/test` runs unit and integration tests (Vitest, Jest, Cargo test). A suite can pass 100%, yet the application may fail in reality (white screen, broken cookies, CORS misconfigurations, unhandled network disconnects).
 2. **Symptom Masking during Bugfixes:** Agents fixing bugs frequently apply superficial guards (e.g. `if (!data) return null;` or swallowing errors) at the crash site instead of tracing the root cause back to the invalid state generator.
 3. **Over-Mocking Fragility:** Unit tests often mock internal private helpers, causing tests to shatter upon refactoring even when public observable behavior is completely preserved.
-4. **AI Code Slop & Conversational Fluff:** Agents generate redundant in-code comments (`// set x to 5`) and verbose conversational explanations, cluttering context and repository history.
+4. **AI Code Slop in Diffs:** Agents generate redundant in-code comments (`// set x to 5`), cluttering pull requests and code review diffs.
 5. **Missing Forensics & Adversarial Gates:** When handling performance issues or high-risk architectural diffs, agents lack structured playbooks for profiling artifacts (CPU profiles, heap snapshots, spindumps) and adversarial review.
 
 ### Desired State:
@@ -48,10 +48,11 @@ Adapt the highest-value engineering heuristics from Lauren Tan's *pstack* and cu
 - **So that** user journeys are verified against the real running application with persistent evidence.
 - **Acceptance Criteria:**
   - [x] Given a project with runnable services, `create-verification-skill` surveys startup commands, readiness probes, authentication, and seed data.
-  - [x] Given a target surface, the skill establishes `docs/verification/feature-map.md` with structured user journeys and observable success signals.
-  - [x] Given a verification run, evidence (logs, screenshots) is saved to `docs/verification/evidence/` and persists after application teardown.
+  - [x] Given a target surface, the skill establishes `docs/verification/feature-map.md` with structured user journeys and observable success signals using the unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`).
+  - [x] Given a verification run, evidence (logs, screenshots) is saved to `docs/verification/evidence/` with explicit metadata (`Git Commit`, `Timestamp`, `Status`) and persists after application teardown.
   - [x] Given missing prerequisites (e.g. no Docker daemon), the agent reports `BLOCKED: Runtime Environment Missing` and NEVER fakes a PASS.
-  - [x] Given `maintain-verification-skill`, the agent audits the map against touched code, re-runs affected flows, and is strictly prohibited from altering the map to mask regressions.
+  - [x] Given `maintain-verification-skill`, the agent audits the map against touched code, re-runs affected flows, and is strictly prohibited from altering the map to mask regressions (status changes to `REGRESSED`).
+  - [x] Given `/ship` or `/review`, evidence is verified as FRESH only if its recorded `Git Commit` matches current `HEAD` and has zero `REGRESSED` or `BLOCKED` statuses.
 
 ### US-002: Root-Cause Bugfix in `/hotfix` (P0)
 - **As a** maintainer,

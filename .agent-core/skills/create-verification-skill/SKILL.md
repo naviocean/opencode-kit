@@ -39,16 +39,37 @@ Before generating any verification instructions, determine:
 
 ---
 
-## 3. Evidence Storage Specification
+## 3. Unified Status Vocabulary & Evidence Specification
 
-All real-surface verification runs MUST save observable evidence to:
+### Standard Status Vocabulary
+Every entry in `docs/verification/feature-map.md` MUST use exactly one of these 4 statuses:
+- **`VERIFIED`**: The feature user journey was executed against the real runtime surface, all observable signals matched specifications, and fresh evidence was recorded.
+- **`REGRESSED`**: A previously verified feature failed upon re-execution against recent code changes. Must link failure evidence.
+- **`BLOCKED`**: Verification cannot execute due to missing host prerequisites (e.g. Docker daemon inactive, headless browser dependencies missing, credentials unset). Never fake a pass.
+- **`UNVERIFIED`**: The feature journey is cataloged in the map but has not yet been executed on the live runtime surface.
+
+### Fresh Evidence Standard
+Evidence files MUST be saved to:
 ```
 docs/verification/evidence/
-├── [YYYY-MM-DD]-[feature-id]-[run-status].log
+├── [YYYY-MM-DD]-[feature-id]-[STATUS].log
 └── [YYYY-MM-DD]-[feature-id]-screenshot.png (for Web UI)
 ```
 
-**Rule:** Evidence files must persist AFTER application shutdown or container teardown. Never store evidence only in volatile `/tmp` or unrecorded terminal output.
+**Verifiable Freshness Rule:**
+Each evidence log must contain an explicit metadata header:
+```text
+=== Feature Verification Evidence ===
+Feature ID: <FEATURE-ID>
+Status: VERIFIED | REGRESSED | BLOCKED
+Git Commit: <HEAD_SHA>
+Timestamp: <ISO-8601>
+Driver: <Playwright | PTY | cURL>
+Surface URL: <URL>
+```
+- Evidence is considered **FRESH** only when `Status` is `VERIFIED` and the recorded `Git Commit` matches current `HEAD` (or no commits touching the feature's code paths have been made since).
+- If commits touch the feature's implementation files after the recorded SHA, the evidence is deemed **STALE** and must be re-executed before `/review` or `/ship`.
+- Evidence files must persist AFTER application shutdown or container teardown. Never store evidence only in volatile `/tmp` or unrecorded terminal output.
 
 ---
 

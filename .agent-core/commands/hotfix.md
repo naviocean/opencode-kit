@@ -54,7 +54,7 @@ QA agent verifies:
 1. Run the new regression test to confirm fix.
 2. Run related unit & integration test suites.
 3. Re-verify touched flow on real surface via `maintain-verification-skill` (if Feature Map exists).
-4. Capture before/after evidence into `docs/verification/evidence/`. If runtime environment is unavailable, report `BLOCKED: Runtime Environment Missing`. Never fake a PASS.
+4. Capture before/after evidence into `docs/verification/evidence/` and update feature status to `VERIFIED` (or `REGRESSED` if fix fails). If runtime environment is unavailable, report `BLOCKED: Runtime Environment Missing`. Never fake a `VERIFIED` status.
 5. Verify test coverage is maintained (>= 80% on affected module).
 6. If tests fail → bounce back to specialist with failure details.
 
