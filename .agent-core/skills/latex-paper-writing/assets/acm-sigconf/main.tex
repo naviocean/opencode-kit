@@ -1,0 +1,49 @@
+% ACM SIGCONF starter template (acmart)
+% For double-blind review add: \documentclass[sigconf,review,anonymous]{acmart}
+\documentclass[sigconf]{acmart}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{subfig}
+
+\begin{document}
+
+\title{Your Paper Title Here}
+
+\author{First Author}
+\affiliation{%
+  \institution{Institution Name}
+  \city{City}
+  \country{Country}
+}
+\email{first.author@example.com}
+
+\author{Second Author}
+\affiliation{%
+  \institution{Institution Name}
+  \city{City}
+  \country{Country}
+}
+\email{second.author@example.com}
+
+% Abstract and keywords must precede \maketitle in acmart
+\input{chapters/abstract}
+
+% Generate real CCS XML blocks at https://dl.acm.org/ccs before camera-ready
+\keywords{keyword one, keyword two, keyword three}
+
+\maketitle
+
+\input{chapters/introduction}
+\input{chapters/background}
+\input{chapters/methodology}
+\input{chapters/evaluation}
+\input{chapters/conclusion}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}
+

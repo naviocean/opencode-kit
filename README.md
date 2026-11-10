@@ -1,6 +1,6 @@
 # OpenCode SaaS Kit
 
-A multi-agent development team kit for OpenCode. Twelve specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, Mobile, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
+A multi-agent development team kit for OpenCode. Fourteen specialized AI agents work together like a real product team — PM, Tech Lead, Designer, Frontend, NestJS, AI Engineer, Python Backend, Rustacean, Mobile, Swift & macOS, Document Specialist, DevOps, QA, and Security Auditor — to build SaaS products from spec to ship.
 
 ## Quick Start
 
@@ -28,6 +28,9 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 - **AI Engineer** builds LangGraph multi-agent workflows, RAG pipelines, and LLM evaluation suites
 - **Python Backend** builds FastAPI microservices, SQLAlchemy data layers, and async workers
 - **Rustacean** owns Tauri desktop apps (`apps/desktop/`), Axum microservices, Tokio concurrency, and native crates (`crates/`)
+- **Mobile** owns cross-platform Bare React Native apps (`apps/mobile/`), New Architecture (Fabric/TurboModules), and Fastlane releases
+- **Swift & macOS** owns native macOS desktop apps (`apps/macos/`), Swift 6, SwiftUI, AppKit, SwiftData, and Sparkle auto-updates
+- **Document Specialist** owns Office, PDF & LaTeX pipelines (`pdf`, `docx`, `xlsx`, `pptx`, `.tex`/`.bib`) with pure Python, Node.js, and local TeX tools (zero LibreOffice)
 - **DevOps** owns CI/CD, Docker, Kubernetes, Terraform, and Observability
 - **QA** enforces testing strategy and verifies coverage
 - **Security Auditor** scans for vulnerabilities before ship
@@ -50,11 +53,11 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
      │  (Orchestrator) │
      └────────┬────────┘
               │
-     ┌────────┼────────┬───────────────┬────────────────┬───────────┬─────────┬────────┬─────────────────┐
-     │        │        │               │                │           │         │        │                 │
-     ▼        ▼        ▼               ▼                ▼           ▼         ▼        ▼                 ▼
- Frontend   NestJS   AI Engineer  Python Backend   Rustacean    DevOps       QA   Security Auditor
- /build     /build   /build       /build           /build       /build      /test  /review + /ship
+     ┌────────┴──────────────────────────────────────────────────────────────────────────────┐
+     ▼                                                                                       ▼
+ Domain Specialists (/build in parallel)                                            Quality & Safety Gates
+ • Frontend • NestJS • AI Engineer • Python Backend • Rustacean                     • QA (/test)
+ • Mobile • Swift & macOS • Document Specialist • DevOps                            • Security Auditor (/review + /ship)
 ```
 
 ### Agent Responsibilities
@@ -69,6 +72,9 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 | **AI Engineer** | LangGraph, LangChain, Pydantic-AI, RAG, prompt engineering, agentic loops, eval suites. | LangGraph, Pydantic v2, pytest, GitNexus |
 | **Python Backend** | FastAPI, Starlette, SQLAlchemy, Alembic, Celery, async background workers, model serving APIs. | FastAPI, uv, pydantic, pytest, GitNexus |
 | **Rustacean** | Tauri v2, Rust systems, Axum microservices, Tokio async, shared crates (`crates/`). Owns desktop apps and high-performance Rust services. | Cargo, Tokio, Axum, Tauri CLI, GitNexus |
+| **Mobile** | Bare React Native 0.76+ New Architecture, Fabric/TurboModules, React Navigation, Reanimated, Fastlane releases. | React Native CLI, Xcode/Gradle, GitNexus |
+| **Swift & macOS** | Native macOS apps (`apps/macos/`), Swift 6 strict concurrency, SwiftUI, AppKit, menu bar apps, SwiftData, Sparkle auto-update. | Swift 6, xcodebuild, SwiftLint, GitNexus |
+| **Document Specialist** | Pure Python & Node.js Office/PDF pipelines (PDF, DOCX, XLSX, PPTX), OOXML templates, Excel formula validation, and local Overleaf-style LaTeX/BibTeX workflows (zero LibreOffice). | ReportLab, openpyxl, pdfplumber, docx-js, pptxgenjs, pdflatex/bibtex |
 | **DevOps** | CI/CD pipelines, Docker, Kubernetes/Helm, Terraform, Prometheus/Grafana observability. | GitHub Actions, Docker, Helm, Prometheus, Grafana |
 | **QA** | Test strategy, Vitest unit tests, Playwright E2E, coverage analysis. Enforces TDD. | GitNexus (detect changes), ICM (test memory) |
 | **Security Auditor** | AgentShield scans, OWASP checks, secret detection, permission audits. Gates deployment. | AgentShield CLI, ICM (security memory) |
@@ -77,7 +83,7 @@ OpenCode SaaS Kit brings that structure to AI-assisted development:
 
 ### ICM (Intelligent Context Manager)
 
-Persistent memory across sessions. All 10 agents share one SQLite database per project.
+Persistent memory across sessions. All 14 agents share one SQLite database per project.
 
 ```bash
 icm init --project
@@ -146,19 +152,22 @@ Each agent runs on its own model. Configure in `.opencode/agent-models.json`:
 
 ```jsonc
 {
-  "default_fallback": ["my_xiaomi/mimo-v2.5"],
+  "default_fallback": ["opencode-go/deepseek-v4.1-flash"],
   "agents": {
-    "tech-lead": { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
-    "pm":        { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
-    "designer":  { "model": "my_xiaomi/mimo-v2.5-pro", "fallback": ["my_xiaomi/mimo-v2.5"] },
-    "frontend":  { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "nestjs":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "rustacean": { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "mobile":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "python":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "devops":    { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "qa":        { "model": "my_xiaomi/mimo-v2.5",     "fallback": ["my_xiaomi/mimo-v2.5-pro"] },
-    "security-auditor": { "model": "my_xiaomi/mimo-v2.5", "fallback": ["my_xiaomi/mimo-v2.5-pro"] }
+    "tech-lead":           { "model": "opencode-go/deepseek-v4-pro",   "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "pm":                  { "model": "opencode-go/deepseek-v4-pro",   "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "designer":            { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "frontend":            { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "nestjs":              { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "rustacean":           { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "mobile":              { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "swift-macos":         { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "document-specialist": { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "ai-engineer":         { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "python-backend":      { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "devops":              { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "qa":                  { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] },
+    "security-auditor":    { "model": "opencode-go/deepseek-v4.1-flash", "fallback": ["opencode-go/deepseek-v4.1-flash"] }
   }
 }
 ```
@@ -397,8 +406,8 @@ npx opencode-saas-kit init --tools
 ```
 
 This will:
-- Run Brownfield repository scan (detecting Node, Python, Rust, Go, Swift) → `.agent-memory/project-context.md`
-- Install Single Source of Truth (`.agent-core/`) with 13 agents, 9 commands, 4 rules, 321 skills, standards
+- Run Brownfield repository scan (detecting Node, Python, Rust, Go, Swift, Office/PDF, LaTeX) → `.agent-memory/project-context.md`
+- Install Single Source of Truth (`.agent-core/`) with 14 agents, 9 commands, 4 rules, 326 skills, standards
 - Safely inject kit instructions into `AGENTS.md` and `CLAUDE.md` using safe context markers (`<!-- opencode-saas-kit:start/end -->`) preserving human custom rules
 - Set up Universal Persistent Memory in `.agent-memory/`
 - Synchronize adapters across OpenCode (`.opencode/`), Claude Code (`CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex
@@ -520,7 +529,6 @@ export CONTEXT7_API_KEY=your_key_here
 | `/security` | Run AgentShield scan | Security Auditor |
 | `/test` | Run test suite, analyze coverage | QA |
 | `/hotfix` | Fast-track bugfix or urgent patch | Tech Lead → Specialist → QA → Security Auditor |
-| `/meeting` | Multi-agent council deliberation & RFC debate | Tech Lead (deliberation council) |
 
 ## Engineering Rigor & Runtime Verification (v1.6.0)
 
@@ -551,7 +559,7 @@ Synthetic unit test suites can pass 100% while an application fails in reality (
 
 ## Skills & Skill Packs
 
-The kit includes **321 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
+The kit includes **326 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
 
 - **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 81 skills
 - **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills
@@ -561,6 +569,7 @@ The kit includes **321 skills** organized into modular, **agent-centric skill pa
 - **`devops-infra`**: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills
 - **`mobile-native`**: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills
 - **`swift-macos`**: Native macOS & Apple Systems Squad (`swift-macos`) — 22 skills
+- **`document-office`**: Office & Document Processing Squad (`document-specialist`) — 10 skills
 
 ### Skill Pack CLI Management
 
@@ -646,14 +655,14 @@ opencode-kit/
 ├── README.md                          # Human-facing documentation
 ├── AGENTS.md                          # Universal project rules (Antigravity & OpenAI Codex)
 ├── CLAUDE.md                          # Claude Code instructions
-├── package.json                       # npm package config (v1.7.0)
+├── package.json                       # npm package config (v1.8.0)
 │
 ├── .agent-core/                       # Single Source of Truth (SSoT)
-│   ├── agents/ (13)                   # Agent definitions
+│   ├── agents/ (14)                   # Agent definitions
 │   ├── commands/ (9)                  # Slash commands
 │   ├── rules/ (4)                     # Always-follow rules
-│   ├── standards/ (9)                 # Document templates + conventions.md + engineering-principles.md
-│   ├── skills/ (321)                  # Skill library
+│   ├── standards/ (10)                # Document templates + conventions.md + engineering-principles.md
+│   ├── skills/ (326)                  # Skill library
 │   ├── skill-packs.json               # Modular skill pack definitions (100% agent coverage)
 │   └── hooks/                         # Security hooks (pre-tool-guard.mjs)
 │
@@ -677,7 +686,7 @@ opencode-kit/
 │   ├── skill-pack-manager.mjs         # Skill pack manager & CLI
 │   ├── security-gate.mjs              # AgentShield programmatic security gate
 │   ├── verify.mjs                     # E2E test verification
-│   └── __tests__/ (14 suites)         # 98 unit tests
+│   └── __tests__/ (14 suites)         # 106 unit tests
 │
 └── docs/                              # Document output directories
     ├── prds/                          # PRDs from /plan
@@ -735,7 +744,19 @@ SOFTWARE.
 
 ## Roadmap
 
-### v1.6.0 (Current)
+### v1.8.0 (Current)
+
+- ✅ **14th Specialized Agent `document-specialist`** — Owns Office, PDF & LaTeX automation pipelines (`.pdf`, `.docx`/`.dotx`, `.xlsx`/`.xlsm`/`.csv`, `.pptx`, `.tex`/`.bib`), OOXML template preservation, local TeX workflows, and PDF raster/form QA under a **strict Zero-LibreOffice architecture**.
+- ✅ **4 Pure-Python/Node Document Skills (`docx`, `xlsx`, `pptx`, `pdf`) + Clean-Room `latex-paper-writing`** — Cleaned Office skills of all `soffice`/LibreOffice scripts, replaced spreadsheet recalc with pure-Python `validate_formulas.py` (`openpyxl`), and added a MIT-clean local LaTeX/BibTeX skill (`check_latex_env.sh`, `new_paper.sh`, `compile.sh`, IEEE/ACM/arXiv templates) bringing the library to **326 skills**.
+- ✅ **Modular Skill Pack `document-office`** — 10 skills with 100% agent coverage and automated dependency/workspace detection (`docx`, `pptxgenjs`, `pdf-lib`, `openpyxl`, `reportlab`, `pdfplumber`, `pypdf`, `.tex`/`.bib`/`LaTeX`) in `repo-scanner.mjs`.
+- ✅ **Safe Preset Backfill in Sync Engine** — `sync-kit.mjs` backfills newly added kit agents into existing `.opencode/agent-models.json` without overwriting user-customized agent models. 14 test suites (106 unit tests) and 165 verification checks pass cleanly.
+
+### v1.7.0
+
+- ✅ **13th Specialized Agent `swift-macos`** — Native macOS desktop applications, Swift 6 concurrency, SwiftUI, AppKit, menu bar apps (`NSStatusItem`), SwiftData, Liquid Glass settings, and Sparkle auto-update.
+- ✅ **Modular Skill Pack `swift-macos`** — 22 skills (with 14 community skills added for 321 total) and Swift/Xcode detection in `repo-scanner.mjs`. 98 unit tests and 154 verification checks pass cleanly.
+
+### v1.6.0
 
 - ✅ **PStack Engineering Rigor & Runtime Verification Suite** — Added SSoT `.agent-core/standards/engineering-principles.md` (24 Staff-level engineering principles with triggers and bounded autonomy).
 - ✅ **Real-Surface Verification Skills & Feature Map** — Added `create-verification-skill` & `maintain-verification-skill` for real-surface verification and Feature Map scaffolding under `docs/verification/` with unified status vocabulary (`VERIFIED`, `REGRESSED`, `BLOCKED`, `UNVERIFIED`) and code-path diff fresh evidence standard.

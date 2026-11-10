@@ -1,0 +1,40 @@
+% arXiv preprint starter template (single-column article)
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+
+\begin{document}
+
+\title{Your Paper Title Here}
+
+\author{
+  First Author\thanks{Institution Name, \texttt{first.author@example.com}} \and
+  Second Author\thanks{Institution Name, \texttt{second.author@example.com}}
+}
+
+\date{}
+
+\maketitle
+
+\input{chapters/abstract}
+\input{chapters/introduction}
+\input{chapters/background}
+\input{chapters/methodology}
+\input{chapters/evaluation}
+\input{chapters/conclusion}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
+

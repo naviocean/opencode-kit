@@ -20,7 +20,7 @@ Activate implementation. Right-fits execution based on task sizing:
 ## Agent Flow
 
 ```
-Tech Lead → Dynamic Specialists (Frontend / NestJS / AI Engineer / Python Backend / Rustacean / DevOps in parallel) → QA → Security Auditor
+Tech Lead → Dynamic Specialists (Frontend / NestJS / AI Engineer / Python Backend / Rustacean / Mobile / Swift-macOS / Document Specialist / DevOps in parallel) → QA → Security Auditor
 ```
 
 ## Phase 0: Context Check (enables resume)
@@ -47,7 +47,7 @@ Proceed? (y/n)
 ## Phase 1: Tech Lead — Dispatch & Architecture Gates
 
 - Reads the approved plan from `docs/plans/`
-- Identifies affected domains (Web, API, AI/Python, Desktop/Rust, DevOps/Infra)
+- Identifies affected domains (Web, API, AI/Python, Desktop/Rust, Mobile, macOS/Swift, Document/Office, DevOps/Infra)
 
 ### Fan-Out Checkpoint:
 1. **Identify blocking vs independent workstreams:** Can Backend and Frontend run in parallel, or does Backend migration block Frontend API consumption?
@@ -102,6 +102,12 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - Writes Rust unit, integration & property tests (`cargo test`, `mockall`, `proptest`)
 - Outputs to `_workspace/02_rustacean_*.rs`
 
+**Document Specialist Agent (Office, PDF & LaTeX Pipelines):**
+- Reads tasks from `docs/tasks/document-specialist-*.md`
+- Implements pure-Python / Node.js / local-TeX document workflows: OOXML template fill/unpack/pack scripts, Excel formula validation (`validate_formulas.py`), PDF generation/extraction (`reportlab`, `pdfplumber`, `pypdf`), and LaTeX manuscript builds (`compile.sh`) without LibreOffice
+- Writes document schema & output validation tests (`pytest` / `vitest`)
+- Outputs to `_workspace/02_document-specialist_*.{py,js,ts,tex}`
+
 **DevOps Agent (Infra, CI/CD & Containers):**
 - Reads tasks from `docs/tasks/devops-*.md`
 - Implements Dockerfiles, docker-compose, GitHub Actions workflows, Terraform, K8s manifests
@@ -113,6 +119,7 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - Web / NestJS ↔ Python Backend: HTTP/event/SSE contracts verified in Phase 3.
 - AI Engineer ↔ Python Backend: Graph state schema and tool invocation contracts verified in Phase 3.
 - Desktop ↔ Native Rust: Tauri IPC invoke schema verified in Phase 3.
+- API / Worker ↔ Document Specialist: Document schemas, stream/buffer contracts, and pure-Python/Node dependencies verified without LibreOffice in Phase 3.
 - Services ↔ DevOps: Container ports, health probes (`/health/live`, `/health/ready`), environment variables verified in Phase 3.
 
 ## Phase 3: QA Agent — Multi-Stack Verification

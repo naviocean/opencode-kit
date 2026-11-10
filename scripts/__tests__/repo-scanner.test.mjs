@@ -126,3 +126,48 @@ test('repo-scanner: formats markdown with detected metadata', () => {
   assert.match(md, /Docker detected/);
   assert.match(md, /\.agent-memory\/decisions\.md/);
 });
+
+test('repo-scanner: detects Office / PDF dependencies across Node.js and Python and recommends document-office pack', () => {
+  const nodeTmp = createTempDir();
+  const pyTmp = createTempDir();
+  try {
+    fs.writeFileSync(path.join(nodeTmp, 'package.json'), JSON.stringify({
+      dependencies: {
+        docx: '9.0.0',
+        pptxgenjs: '3.12.0',
+      },
+    }));
+    const nodeScan = scanRepo(nodeTmp);
+    assert.ok(nodeScan.frameworks.includes('Office / PDF Processing'));
+    assert.ok(nodeScan.recommendedSkillPacks.includes('document-office'));
+
+    fs.writeFileSync(path.join(pyTmp, 'pyproject.toml'), `
+[project]
+name = "doc-pipeline"
+dependencies = [
+    "openpyxl>=3.1.0",
+    "reportlab>=4.1.0",
+    "pdfplumber>=0.11.0",
+]
+    `);
+    const pyScan = scanRepo(pyTmp);
+    assert.ok(pyScan.frameworks.includes('Office / PDF Processing'));
+    assert.ok(pyScan.recommendedSkillPacks.includes('document-office'));
+  } finally {
+    fs.rmSync(nodeTmp, { recursive: true, force: true });
+    fs.rmSync(pyTmp, { recursive: true, force: true });
+  }
+});
+
+test('repo-scanner: detects LaTeX manuscripts (.tex, .bib) and recommends document-office pack', () => {
+  const texTmp = createTempDir();
+  try {
+    fs.writeFileSync(path.join(texTmp, 'main.tex'), '\\documentclass{article}\n\\begin{document}\nHello\\end{document}\n');
+    fs.writeFileSync(path.join(texTmp, 'references.bib'), '@article{key2026, title={Paper}, year={2026}}\n');
+    const scan = scanRepo(texTmp);
+    assert.ok(scan.frameworks.includes('LaTeX'));
+    assert.ok(scan.recommendedSkillPacks.includes('document-office'));
+  } finally {
+    fs.rmSync(texTmp, { recursive: true, force: true });
+  }
+});

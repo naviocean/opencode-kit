@@ -82,6 +82,12 @@
       "fallback": [
         "commandcode/deepseek/deepseek-v4-pro"
       ]
+    },
+    "document-specialist": {
+      "model": "commandcode/deepseek/deepseek-v4.1-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4-pro"
+      ]
     }
   }
 }

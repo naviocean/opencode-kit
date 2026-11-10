@@ -18,7 +18,7 @@ const { injectMarkedContent } = require(path.join(__dirname, '..', 'scripts', 'l
 // ─── Constants ──────────────────────────────────────────────────────────────
 
 const KIT_NAME = 'opencode-saas-kit';
-const VERSION = '1.7.0';
+const VERSION = '1.8.0';
 
 const COLORS = {
   reset: '\x1b[0m',
@@ -114,7 +114,7 @@ ${COLORS.bold}Options:${COLORS.reset}
   --yes, -y     Skip confirmation prompts
 
 ${COLORS.bold}What gets installed:${COLORS.reset}
-  .agent-core/   Single Source of Truth (13 agents, 9 commands, 4 rules, skills, standards)
+  .agent-core/   Single Source of Truth (14 agents, 9 commands, 4 rules, skills, standards)
   .agent-memory/ Universal persistent memory (decisions, contracts, context)
   .opencode/     OpenCode integration (symlinks + opencode.json)
   AGENTS.md      Universal project rules (Antigravity & OpenAI Codex)
@@ -378,7 +378,7 @@ function initProject(projectDir, options = {}) {
   logStep('Installing kit files...');
 
   const copyTasks = [
-    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 13 agents, 9 commands, rules, skills, standards' },
+    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 14 agents, 9 commands, rules, skills, standards' },
     { src: 'scripts', dest: 'scripts', desc: 'Universal sync engine and tool scripts' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Universal project rules' },
   ];
@@ -465,10 +465,10 @@ function initProject(projectDir, options = {}) {
   logStep('Installation complete!');
   log(`
 ${COLORS.bold}What was installed:${COLORS.reset}
-  .opencode/agents/         13 agent definitions
+  .opencode/agents/         14 agent definitions
   .opencode/commands/       9 slash commands
   .opencode/rules/          4 always-follow rules
-  .opencode/skills/         157 skills (146 from skills.sh + 11 custom)
+  .opencode/skills/         326 skills (pure multi-domain library)
   .opencode/standards/      7 document templates
   .agent-memory/            Universal persistent memory (decisions, contracts, context)
   AGENTS.md                 Project rules
@@ -514,7 +514,7 @@ function updateProject(projectDir, options = {}) {
   logStep('Updating kit files...');
 
   const updateTasks = [
-    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 13 agents, 9 commands, rules, skills, standards' },
+    { src: '.agent-core', dest: '.agent-core', desc: 'Single Source of Truth: 14 agents, 9 commands, rules, skills, standards' },
     { src: 'scripts', dest: 'scripts', desc: 'Universal sync engine and tool scripts' },
     { src: 'AGENTS.md', dest: 'AGENTS.md', desc: 'Project rules' },
   ];
@@ -625,7 +625,7 @@ function updateProject(projectDir, options = {}) {
   logStep('Update complete!');
   log(`
 ${COLORS.bold}What was updated:${COLORS.reset}
-  .agent-core/              Single Source of Truth (13 agents, 9 commands, rules, skills, standards)
+  .agent-core/              Single Source of Truth (14 agents, 9 commands, rules, skills, standards)
   scripts/                  Universal sync engine and tool scripts
   AGENTS.md                 Project rules
   Harness adapters          Synchronized (.opencode/, .agents/, .claude/)

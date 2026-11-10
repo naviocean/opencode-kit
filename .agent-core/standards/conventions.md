@@ -76,6 +76,8 @@ These are **automatic review failures**. No exceptions, no "but it's a small cas
 | Rustacean editing standalone web frontend | Breaks domain ownership | Escalate to Tech Lead; frontend edits |
 | AI Engineer editing general REST APIs | Breaks domain ownership; API agent must review | Escalate to Tech Lead; python-backend / nestjs edits |
 | Python Backend editing LangGraph cognitive graphs | Breaks domain ownership; AI engineer must review | Escalate to Tech Lead; ai-engineer edits |
+| Document Specialist editing `apps/web/` UI or `apps/api/` HTTP routes/DB | Breaks domain ownership; export logic must decouple via typed service contract | Escalate to Tech Lead; document-specialist owns doc pipeline, frontend/nestjs own routes/UI |
+| Feature agent writing custom raw OOXML/PDF/TeX builders duplicating doc pipelines | Creates broken XML, unescaped TeX, memory leaks, or LibreOffice runtime assumptions | Delegate PDF/DOCX/XLSX/PPTX/LaTeX automation to `document-specialist` |
 | DevOps editing business logic in `apps/` | DevOps owns infra/CI/CD, not business logic | Escalate to Tech Lead; feature agent edits |
 | Designer writing production logic | Design owns spec, not code | Designer → handoff → Frontend implements |
 | QA skipping test review on a "trivial" PR | Trivial PRs have 30% of bugs | Always run affected tests |

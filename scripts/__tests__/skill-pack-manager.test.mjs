@@ -19,7 +19,7 @@ import {
 
 test('skill-pack-manager: loads agent-centric pack definitions and guarantees 100% agent coverage', () => {
   const packs = loadPackDefinitions();
-  const expectedPacks = ['core', 'web-frontend', 'nestjs-backend', 'python-ai', 'rust-systems', 'devops-infra', 'mobile-native', 'swift-macos'];
+  const expectedPacks = ['core', 'web-frontend', 'nestjs-backend', 'python-ai', 'rust-systems', 'devops-infra', 'mobile-native', 'swift-macos', 'document-office'];
 
   const regFile = join(ROOT, '.opencode', 'agent-registry.json');
   const reg = JSON.parse(readFileSync(regFile, 'utf-8'));
@@ -52,7 +52,7 @@ test('skill-pack-manager: loads agent-centric pack definitions and guarantees 10
     }
   }
 
-  // Verify all 11 agents in registry belong to a pack
+  // Verify all 14 agents in registry belong to a pack
   assert.deepEqual(Array.from(coveredAgents).sort(), allAgentsInRegistry);
 });
 
@@ -142,4 +142,23 @@ test('skill-pack-manager: recommends packs based on detected repo stack', () => 
   });
   assert.ok(swiftPacks.includes('core'));
   assert.ok(swiftPacks.includes('swift-macos'));
+
+  // Office & PDF Document Processing
+  const docPacks = detectRecommendedPacks({
+    languages: ['Python'],
+    frameworks: ['Office / PDF Processing'],
+    primaryPackageManager: 'uv',
+  });
+  assert.ok(docPacks.includes('core'));
+  assert.ok(docPacks.includes('python-ai'));
+  assert.ok(docPacks.includes('document-office'));
+
+  // LaTeX Technical Papers
+  const texPacks = detectRecommendedPacks({
+    languages: [],
+    frameworks: ['LaTeX'],
+    primaryPackageManager: null,
+  });
+  assert.ok(texPacks.includes('core'));
+  assert.ok(texPacks.includes('document-office'));
 });

@@ -7,7 +7,7 @@ Do NOT use for: Routine bugfixes (use `/hotfix`), standard feature planning with
 
 **HARD-GATES:**
 1. **Socratic Framing First:** The Host MUST interview the user with 1 to 3 targeted clarifying questions **ONE AT A TIME** before opening the floor. Never batch questions. Debates without clarified constraints are invalid.
-2. **Bounded Attendance:** Maximum 3 to 4 specialist agents summoned per meeting (plus Moderator). Never run an all-hands meeting across all 12 agents.
+2. **Bounded Attendance:** Maximum 3 to 4 specialist agents summoned per meeting (plus Moderator). Never run an all-hands meeting across all 14 agents.
 3. **Bounded Rounds:** Maximum 2 debate rounds (Round 1: Opening Proposals, Round 2: Adversarial Critique) before Moderator synthesis (Round 3) to prevent token exhaustion and circular arguments.
 4. **Mandatory Devil's Advocate:** At least one summoned agent MUST explicitly challenge the leading proposal with worst-case failure modes, security attack vectors, and operational complexity. "Yes-man" echo chambers are strictly forbidden.
 5. **Binding ADR Output:** Every meeting MUST conclude with a formal ADR in `docs/adr/ADR-{YYYYMMDD}-{slug}.md` using `adr-template.md` and be recorded into `.agent-memory/decisions.md`.
@@ -79,6 +79,7 @@ Using the Framed RFC Statement, the Moderator summons **2 to 4 specialist agents
 | **High-Throughput / Systems** (Axum, Tokio, Tauri) | `tech-lead` (Host), `rustacean`, `devops`, `nestjs` | Extreme performance & memory safety vs team cognitive load & build times |
 | **Mobile & Cross-Platform** (Native, Sync, Storage) | `tech-lead` (Host), `mobile`, `frontend`, `nestjs` | Native responsiveness & offline-first sync vs cross-platform code sharing |
 | **AI Workflows & RAG** (LangGraph, Prompts, Evals) | `tech-lead` (Host), `ai-engineer`, `python-backend`, `devops` | Agentic flexibility & reasoning power vs token cost, latency & deterministic evals |
+| **Document & Export Pipelines** (PDF, DOCX, XLSX, PPTX) | `tech-lead` (Host), `document-specialist`, `python-backend`, `security-auditor` | Template fidelity & zero-LibreOffice constraints vs streaming latency & XML/XXE sanitization |
 | **Product Scope vs Dev Velocity** (MVP Feasibility) | `pm` (Host), `tech-lead`, `frontend`, `nestjs` | Time-to-market & rich UX vs technical debt & architectural rigidity |
 
 *User Override:* If user explicitly provides `--attendees agent1,agent2,...`, adhere strictly to user-specified attendees.

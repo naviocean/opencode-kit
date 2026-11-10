@@ -371,6 +371,27 @@ function syncOpenCode(mode, dryRun, presetName) {
     if (!dryRun) {
       fs.copyFileSync(defaultPreset, opencodeModelsDest);
     }
+  } else {
+    // Backfill newly introduced kit agents without overwriting user customizations
+    const defaultPreset = path.join(PRESETS_DIR, 'agent-models-opencode.json');
+    if (fs.existsSync(defaultPreset)) {
+      try {
+        const current = JSON.parse(fs.readFileSync(opencodeModelsDest, 'utf-8'));
+        const presetData = JSON.parse(fs.readFileSync(defaultPreset, 'utf-8'));
+        current.agents = current.agents || {};
+        let added = 0;
+        for (const [agentName, cfg] of Object.entries(presetData.agents || {})) {
+          if (!current.agents[agentName]) {
+            current.agents[agentName] = cfg;
+            added++;
+          }
+        }
+        if (added > 0 && !dryRun) {
+          fs.writeFileSync(opencodeModelsDest, JSON.stringify(current, null, 2) + '\n', 'utf-8');
+          logInfo(`Backfilled ${added} newly added agent(s) into .opencode/agent-models.json`);
+        }
+      } catch (_) {}
+    }
   }
 
   // Copy agents and replace model per active .opencode/agent-models.json (NO SYMLINK)
@@ -500,7 +521,7 @@ function syncClaudeCode(mode, dryRun) {
   const claudeMdPath = path.join(ROOT, 'CLAUDE.md');
   const claudeMdContent = `# Claude Code Project Instructions
 
-> Universal Agent Kit for SaaS Development. This project is configured with 12 specialized AI agent roles, 160+ skills, TDD enforcement, and AgentShield security gating.
+> Universal Agent Kit for SaaS Development. This project is configured with 14 specialized AI agent roles, 326+ skills, TDD enforcement, and AgentShield security gating.
 
 ## Project Rules & Guidelines
 - Primary Rules: See [AGENTS.md](AGENTS.md) for full agent trigger mapping and HARD RULES.

@@ -81,6 +81,12 @@
       "fallback": [
         "claude-3-5-haiku"
       ]
+    },
+    "document-specialist": {
+      "model": "claude-3-5-sonnet",
+      "fallback": [
+        "claude-3-5-haiku"
+      ]
     }
   }
 }

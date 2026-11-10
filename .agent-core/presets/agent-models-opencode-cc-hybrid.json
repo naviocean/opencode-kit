@@ -82,6 +82,12 @@
       "fallback": [
         "commandcode/deepseek/deepseek-v4.1-flash"
       ]
+    },
+    "document-specialist": {
+      "model": "commandcode/qwen/qwen-3.8-27b",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
     }
   }
 }

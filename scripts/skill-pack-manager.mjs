@@ -194,6 +194,13 @@ export function detectRecommendedPacks(scanResults = {}) {
     recommended.add('swift-macos');
   }
 
+  // Office & Document Processing Squad
+  if (
+    frameworks.some(f => ['office / pdf processing', 'office-pdf', 'latex', 'openpyxl', 'reportlab', 'pptxgenjs', 'docx', 'xlsx', 'pptx', 'pdf'].includes(f))
+  ) {
+    recommended.add('document-office');
+  }
+
   // DevOps & Cloud
   if (scanResults.docker || scanResults.monorepo) {
     recommended.add('devops-infra');

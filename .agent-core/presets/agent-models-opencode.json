@@ -81,6 +81,12 @@
       "fallback": [
         "opencode-go/deepseek-v4.1-flash"
       ]
+    },
+    "document-specialist": {
+      "model": "opencode-go/deepseek-v4.1-flash",
+      "fallback": [
+        "opencode-go/deepseek-v4.1-flash"
+      ]
     }
   }
 }

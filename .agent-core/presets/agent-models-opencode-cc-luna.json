@@ -82,6 +82,12 @@
       "fallback": [
         "commandcode/deepseek/deepseek-v4.1-flash"
       ]
+    },
+    "document-specialist": {
+      "model": "commandcode/mimo/mimo-v2.6-flash",
+      "fallback": [
+        "commandcode/deepseek/deepseek-v4.1-flash"
+      ]
     }
   }
 }

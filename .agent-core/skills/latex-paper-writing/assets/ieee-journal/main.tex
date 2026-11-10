@@ -1,0 +1,44 @@
+% IEEE journal starter template (IEEEtran journal mode)
+\documentclass[journal]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{subfig}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\begin{document}
+
+\title{Your Paper Title Here}
+
+\author{First Author,~\IEEEmembership{Member,~IEEE,}
+        and~Second Author,~\IEEEmembership{Member,~IEEE}%
+\thanks{Manuscript submitted October 2026. Authors are with Department, Institution, City, Country (e-mail: author@example.com).}}
+
+\markboth{IEEE Transactions / Journal Name}%
+{Author \MakeLowercase{\textit{et al.}}: Short Running Title}
+
+\maketitle
+
+\input{chapters/abstract}
+
+\begin{IEEEkeywords}
+keyword one, keyword two, keyword three
+\end{IEEEkeywords}
+
+\input{chapters/introduction}
+\input{chapters/background}
+\input{chapters/methodology}
+\input{chapters/evaluation}
+\input{chapters/conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
+

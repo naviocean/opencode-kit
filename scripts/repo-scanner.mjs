@@ -145,6 +145,11 @@ export function scanRepo(projectDir = process.cwd()) {
       result.frameworks.push('Fastify');
     }
 
+    // Office & PDF Document Processing (Node.js)
+    if (allDeps.docx || allDeps.pptxgenjs || allDeps['pdf-lib'] || allDeps.pdfkit || allDeps.exceljs || allDeps.xlsx) {
+      result.frameworks.push('Office / PDF Processing');
+    }
+
     // Styling
     if (allDeps.tailwindcss || fs.existsSync(path.join(projectDir, 'tailwind.config.js')) || fs.existsSync(path.join(projectDir, 'tailwind.config.ts'))) {
       result.frameworks.push('Tailwind CSS');
@@ -224,6 +229,9 @@ export function scanRepo(projectDir = process.cwd()) {
     if (pyText.includes('langgraph')) result.frameworks.push('LangGraph');
     if (pyText.includes('langchain')) result.frameworks.push('LangChain');
     if (pyText.includes('sqlalchemy')) result.database.push('SQLAlchemy');
+    if (/openpyxl|python-docx|python-pptx|reportlab|pypdf|pdfplumber/.test(pyText)) {
+      result.frameworks.push('Office / PDF Processing');
+    }
 
     if (pyText.includes('pytest') || fs.existsSync(path.join(projectDir, 'pytest.ini'))) {
       result.testRunners.push('pytest');
@@ -271,7 +279,17 @@ export function scanRepo(projectDir = process.cwd()) {
     }
   }
 
-  // 8. Docker & Infrastructure
+  // 8. LaTeX / Document Workspace Detection (.tex, .bib, latexmkrc)
+  try {
+    if (fs.existsSync(projectDir)) {
+      const rootEntries = fs.readdirSync(projectDir);
+      if (rootEntries.some(f => f.endsWith('.tex') || f.endsWith('.bib') || f === '.latexmkrc' || f === 'latexmkrc')) {
+        result.frameworks.push('LaTeX');
+      }
+    }
+  } catch (_) {}
+
+  // 9. Docker & Infrastructure
   if (fs.existsSync(path.join(projectDir, 'Dockerfile')) || fs.existsSync(path.join(projectDir, 'docker-compose.yml')) || fs.existsSync(path.join(projectDir, 'compose.yaml'))) {
     result.docker = true;
   }

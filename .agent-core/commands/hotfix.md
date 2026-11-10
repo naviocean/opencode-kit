@@ -35,6 +35,9 @@ Tech Lead (triage) → Specialist (TDD fix) → QA (regression verify) → Secur
    - Python API/DB/Worker bug → `python-backend` (category: `quick` or `deep`)
    - AI/LLM/LangGraph bug → `ai-engineer` (category: `quick` or `deep`)
    - Desktop/IPC bug → `rustacean` (category: `quick` or `deep`)
+   - Mobile bug → `mobile` (category: `quick` or `deep`)
+   - Native macOS bug → `swift-macos` (category: `quick` or `deep`)
+   - Document / Office / PDF / LaTeX pipeline bug → `document-specialist` (category: `quick` or `deep`)
    - CI/CD / Docker / Infra bug → `devops` (category: `quick` or `deep`)
 
 ## Phase 1: Specialist — Reproduce & Fix (TDD + Root-Cause)

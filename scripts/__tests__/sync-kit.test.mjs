@@ -227,4 +227,27 @@ test('sync-kit: verifies skill-packs.json is synced to adapters', () => {
   assert.equal(fs.realpathSync(agentsPacks), resolvedCore, '.agents/skill-packs.json must resolve to .agent-core');
 });
 
+test('sync-kit: backfills newly added kit agents into existing .opencode/agent-models.json without overwriting customizations', () => {
+  runSync('--preset opencode --target all');
+  const modelsPath = path.join(ROOT, '.opencode', 'agent-models.json');
+  const original = fs.readFileSync(modelsPath, 'utf-8');
+
+  try {
+    const parsed = JSON.parse(original);
+    parsed.agents['tech-lead'].model = 'custom-provider/my-pro-model';
+    delete parsed.agents['document-specialist'];
+    fs.writeFileSync(modelsPath, JSON.stringify(parsed, null, 2) + '\n', 'utf-8');
+
+    const output = runSync();
+    assert.match(output, /Backfilled 1 newly added agent\(s\) into \.opencode\/agent-models\.json/);
+
+    const after = JSON.parse(fs.readFileSync(modelsPath, 'utf-8'));
+    assert.equal(after.agents['tech-lead']?.model, 'custom-provider/my-pro-model', 'existing customized model must be preserved');
+    assert.ok(after.agents['document-specialist']?.model, 'newly added agent must be backfilled');
+  } finally {
+    fs.writeFileSync(modelsPath, original, 'utf-8');
+    runSync('--preset opencode --target all');
+  }
+});
+
 

@@ -328,6 +328,26 @@
         "ux-flow",
         "write-swift"
       ]
+    },
+    "document-office": {
+      "name": "Office & Document Processing Squad",
+      "description": "Document Specialist Engineer. Pure Python & Node.js Office automation (PDF, DOCX, XLSX, PPTX) and local Overleaf-style LaTeX authoring without LibreOffice.",
+      "agents": [
+        "document-specialist"
+      ],
+      "default": false,
+      "skills": [
+        "coding-standards",
+        "continuous-learning",
+        "docx",
+        "file-conversion",
+        "git-workflow",
+        "gitnexus-exploring",
+        "latex-paper-writing",
+        "pdf",
+        "pptx",
+        "xlsx"
+      ]
     }
   }
 }
