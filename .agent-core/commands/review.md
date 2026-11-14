@@ -23,9 +23,14 @@ Tech Lead + Security Auditor (parallel)
 
 ## Phase 0: Context Check
 
-1. Run `gitnexus_detect_changes({repo: "<current-repo>"})` — confirm there ARE changes
-2. If no changes → return HARD-GATE error
-3. List changed files for review scope
+1. **Check FSM gate** (when `_workspace/harness-state.json` is active):
+   ```bash
+   node scripts/harness-state.mjs check-gate --phase=review
+   ```
+   - Exit code `1` → return HARD-GATE error with the reported reason
+2. Run `gitnexus_detect_changes({repo: "<current-repo>"})` — confirm there ARE changes
+3. If no changes → return HARD-GATE error
+4. List changed files for review scope
 
 ## Phase 1: Tech Lead — Code Review
 

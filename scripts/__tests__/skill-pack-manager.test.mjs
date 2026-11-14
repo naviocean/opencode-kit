@@ -2,7 +2,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, rmSync, readFileSync } from 'fs';
+import { mkdtempSync, rmSync, readFileSync, mkdirSync, writeFileSync, existsSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import {
@@ -14,6 +14,8 @@ import {
   getActiveAgents,
   getActiveSkills,
   detectRecommendedPacks,
+  isKitSourceRepo,
+  syncActivePacksToRegistry,
   ROOT
 } from '../skill-pack-manager.mjs';
 
@@ -161,4 +163,119 @@ test('skill-pack-manager: recommends packs based on detected repo stack', () => 
   });
   assert.ok(texPacks.includes('core'));
   assert.ok(texPacks.includes('document-office'));
+});
+
+test('skill-pack-manager: default getActivePacks returns valid pack IDs', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'skill-packs-default-'));
+  try {
+    const packs = loadPackDefinitions();
+    const active = getActivePacks(tempDir);
+    assert.deepEqual(active, ['core', 'web-frontend', 'nestjs-backend']);
+    for (const p of active) {
+      assert.ok(packs[p], `Default pack "${p}" must exist in skill-packs.json`);
+    }
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('skill-pack-manager: isKitSourceRepo detects kit source vs user project', () => {
+  assert.equal(isKitSourceRepo(ROOT), true, 'ROOT should be detected as kit source repo');
+
+  const pkgDir = mkdtempSync(join(tmpdir(), 'kit-pkg-'));
+  const presetsDir = mkdtempSync(join(tmpdir(), 'kit-presets-'));
+  const appDir = mkdtempSync(join(tmpdir(), 'user-app-'));
+  const emptyDir = mkdtempSync(join(tmpdir(), 'empty-dir-'));
+  try {
+    writeFileSync(join(pkgDir, 'package.json'), JSON.stringify({ name: 'opencode-saas-kit' }), 'utf-8');
+    assert.equal(isKitSourceRepo(pkgDir), true);
+
+    mkdirSync(join(presetsDir, '.agent-core', 'presets'), { recursive: true });
+    assert.equal(isKitSourceRepo(presetsDir), true);
+
+    writeFileSync(join(appDir, 'package.json'), JSON.stringify({ name: 'my-saas-app' }), 'utf-8');
+    assert.equal(isKitSourceRepo(appDir), false);
+
+    assert.equal(isKitSourceRepo(emptyDir), false);
+  } finally {
+    rmSync(pkgDir, { recursive: true, force: true });
+    rmSync(presetsDir, { recursive: true, force: true });
+    rmSync(appDir, { recursive: true, force: true });
+    rmSync(emptyDir, { recursive: true, force: true });
+  }
+});
+
+test('skill-pack-manager: pack operations never delete files in .agent-core/', () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'ssot-guard-'));
+  try {
+    const presetFile = join(tempDir, '.agent-core', 'presets', 'sample.json');
+    const skillFile = join(tempDir, '.agent-core', 'skills', 'frontend-design', 'SKILL.md');
+    mkdirSync(join(tempDir, '.agent-core', 'presets'), { recursive: true });
+    mkdirSync(join(tempDir, '.agent-core', 'skills', 'frontend-design'), { recursive: true });
+    writeFileSync(presetFile, '{"name":"sample"}\n', 'utf-8');
+    writeFileSync(skillFile, '# Frontend Design\n', 'utf-8');
+
+    setActivePacks(tempDir, ['web-frontend', 'rust-systems']);
+    addPack(tempDir, 'python-ai');
+    removePack(tempDir, 'web-frontend');
+
+    assert.equal(existsSync(presetFile), true, '.agent-core/presets file must remain intact');
+    assert.equal(existsSync(skillFile), true, '.agent-core/skills file must remain intact');
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
+});
+
+test('skill-pack-manager: syncActivePacksToRegistry is safe in isolated tempDir and projects active flags', async () => {
+  const tempDir = mkdtempSync(join(tmpdir(), 'sync-registry-'));
+  try {
+    // Isolated tempDir without skill-registry.mjs or agent-registry.json -> safe no-op
+    setActivePacks(tempDir, ['rust-systems']);
+    const noopResult = syncActivePacksToRegistry(tempDir);
+    assert.equal(noopResult.synced, false);
+
+    // Real registry projection check on generated .opencode/agent-registry.json
+    const { generateRegistry } = await import('../skill-registry.mjs');
+    const isoDir = mkdtempSync(join(tmpdir(), 'iso-registry-'));
+    try {
+      mkdirSync(join(isoDir, '.opencode', 'agents'), { recursive: true });
+      mkdirSync(join(isoDir, '.agent-memory'), { recursive: true });
+      writeFileSync(
+        join(isoDir, '.opencode', 'agent-models.json'),
+        JSON.stringify({ default_fallback: [], agents: { 'tech-lead': { model: 'm1' }, frontend: { model: 'm2' }, rustacean: { model: 'm3' } } }),
+        'utf-8'
+      );
+      writeFileSync(
+        join(isoDir, '.opencode', 'agents', 'tech-lead.md'),
+        '---\nname: tech-lead\nmodel: m1\n---\n## Skills\n| `tdd` | TDD | Always |\n',
+        'utf-8'
+      );
+      writeFileSync(
+        join(isoDir, '.opencode', 'agents', 'frontend.md'),
+        '---\nname: frontend\nmodel: m2\n---\n## Skills\n| `frontend-design` | UI |\n',
+        'utf-8'
+      );
+      writeFileSync(
+        join(isoDir, '.opencode', 'agents', 'rustacean.md'),
+        '---\nname: rustacean\nmodel: m3\n---\n## Skills\n| `rust-best-practices` | Rust | Always |\n',
+        'utf-8'
+      );
+      setActivePacks(isoDir, ['rust-systems']);
+
+      const regOutput = generateRegistry({ rootDir: isoDir });
+      assert.deepEqual(regOutput.activePacks, ['core', 'rust-systems']);
+      assert.equal(regOutput.agents['tech-lead'].active, true);
+      assert.equal(regOutput.agents['rustacean'].active, true);
+      assert.equal(regOutput.agents['frontend'].active, false);
+
+      const written = JSON.parse(readFileSync(join(isoDir, '.opencode', 'agent-registry.json'), 'utf-8'));
+      assert.deepEqual(written.activePacks, ['core', 'rust-systems']);
+      assert.equal(written.agents['tech-lead'].active, true);
+      assert.equal(written.agents['frontend'].active, false);
+    } finally {
+      rmSync(isoDir, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(tempDir, { recursive: true, force: true });
+  }
 });

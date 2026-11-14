@@ -27,11 +27,16 @@ Tech Lead → Dynamic Specialists (Frontend / NestJS / AI Engineer / Python Back
 
 Before dispatch, scan existing state:
 
-1. **Read `docs/plans/`** — find latest approved plan
+1. **Check FSM gate** (when `_workspace/harness-state.json` is active):
+   ```bash
+   node scripts/harness-state.mjs check-gate --phase=build
+   ```
+   - Exit code `1` → return HARD-GATE error with the reported reason
+2. **Read `docs/plans/`** — find latest approved plan
    - Missing → return HARD-GATE error (see above)
-2. **List `docs/tasks/*-task.md`** — completed tasks
-3. **Check `_workspace/`** — intermediate artifacts from previous run
-4. **Determine mode:**
+3. **List `docs/tasks/*-task.md`** — completed tasks
+4. **Check `_workspace/`** — intermediate artifacts from previous run
+5. **Determine mode:**
    - `0 tasks exist` → **initial run** → Phase 1
    - `N tasks exist` → **resume** → ask user which to skip, mark done ones with `status: done`
    - `_workspace/` exists + user says "rebuild" → **archive** current to `_workspace_{YYYYMMDD_HHMMSS}/` then initial run

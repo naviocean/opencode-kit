@@ -43,11 +43,78 @@ const DANGEROUS_COMMAND_PATTERNS = [
     regex: /chmod\s+(-R\s+)?777/,
     reason: 'Global read/write/execute permission (chmod 777) is blocked by AgentShield Runtime Guard',
   },
-  {
-    regex: /(cat|head|tail|less|more|bat)\s+.*\.env(\s|$)/,
-    reason: 'Direct credential access (.env dump) is blocked by AgentShield Runtime Guard',
-  },
 ];
+
+/**
+ * Strip `-m "..."` / `--message="..."` payloads from git commit commands
+ * so prose in commit messages does not trigger false positives.
+ */
+function stripGitCommitMessages(cmd) {
+  return cmd.replace(
+    /(\bgit\s+commit\b[^;&|]*?)(?:-[a-zA-Z]*m|--message(?:=|\s+))\s*(?:"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')/g,
+    '$1',
+  );
+}
+
+/**
+ * Check for git force-push to main/master or hook bypasses (--no-verify / -n).
+ */
+function checkGitSafety(cmd) {
+  const sanitized = stripGitCommitMessages(cmd);
+  const segments = sanitized.split(/[;&|]+/);
+
+  for (const rawSeg of segments) {
+    const seg = rawSeg.trim();
+    if (!seg) continue;
+
+    if (/\bgit\s+push\b/.test(seg)) {
+      const hasForce = /(?:^|\s)(?:-f|--force)(?:\s|$)/.test(seg);
+      const targetsProtected = /(?:^|\s|:)(?:main|master)(?:\s|$)/.test(seg);
+      if (hasForce && targetsProtected) {
+        return {
+          blocked: true,
+          reason: 'Force-pushing to main/master is blocked by AgentShield Runtime Guard',
+        };
+      }
+    }
+
+    if (/\bgit\s+commit\b/.test(seg) && /(?:^|\s)(?:--no-verify|-n)(?:\s|$)/.test(seg)) {
+      return {
+        blocked: true,
+        reason: 'Bypassing git hooks (--no-verify / -n) is blocked by AgentShield Runtime Guard',
+      };
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Scan shell command tokens (including subshells, utilities, and inline
+ * interpreter snippets) for references to sensitive credential files.
+ */
+function findSensitiveFileInCommand(cmd) {
+  const sanitized = stripGitCommitMessages(cmd);
+  const tokens = sanitized.split(/[\s"'`()[\]{},;<>|&=]+/);
+
+  for (const rawToken of tokens) {
+    if (!rawToken) continue;
+    const candidate = rawToken.replace(/^@/, '');
+    if (isSensitiveFile(candidate)) {
+      return candidate;
+    }
+
+    const colonIdx = candidate.lastIndexOf(':');
+    if (colonIdx !== -1 && colonIdx < candidate.length - 1) {
+      const remotePath = candidate.slice(colonIdx + 1);
+      if (isSensitiveFile(remotePath)) {
+        return remotePath;
+      }
+    }
+  }
+
+  return null;
+}
 
 /**
  * Check if a file path points to a sensitive credential file
@@ -122,6 +189,19 @@ export function checkToolInvocation(toolName, toolArgs = {}) {
             reason: dangerous.reason,
           };
         }
+      }
+
+      const gitViolation = checkGitSafety(cmd);
+      if (gitViolation) {
+        return gitViolation;
+      }
+
+      const sensitiveTarget = findSensitiveFileInCommand(cmd);
+      if (sensitiveTarget) {
+        return {
+          blocked: true,
+          reason: `Direct credential access ("${basename(sensitiveTarget)}") is blocked by AgentShield Runtime Guard`,
+        };
       }
     }
   }

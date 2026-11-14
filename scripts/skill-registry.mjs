@@ -9,10 +9,11 @@
  * Usage: node .opencode/scripts/skill-registry.mjs
  */
 
-import { readFileSync, writeFileSync, readdirSync } from 'fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { execSync } from 'child_process';
+import { getActivePacks, loadPackDefinitions } from './skill-pack-manager.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -123,30 +124,73 @@ function updateFrontmatterModel(content, newModel) {
 // ──────────────────────────────────────────────
 // Load agent models config
 // ──────────────────────────────────────────────
-function loadModels() {
+function loadModels(modelsFile = MODELS_FILE) {
   try {
-    return JSON.parse(readFileSync(MODELS_FILE, 'utf-8'));
+    return JSON.parse(readFileSync(modelsFile, 'utf-8'));
   } catch {
-    console.warn(`⚠ ${MODELS_FILE} not found, using defaults`);
+    console.warn(`⚠ ${modelsFile} not found, using defaults`);
     return { default_fallback: [], agents: {} };
   }
 }
 
 // ──────────────────────────────────────────────
-// Main
+// Resolve active packs and agents
 // ──────────────────────────────────────────────
-function main() {
-  const models = loadModels();
+function resolveActivePackState(rootDir = ROOT) {
+  const activePacksFile = join(rootDir, '.agent-memory', 'active-packs.json');
+  let activePacks = null;
+  if (existsSync(activePacksFile)) {
+    try {
+      const parsed = JSON.parse(readFileSync(activePacksFile, 'utf-8'));
+      if (Array.isArray(parsed.packs)) {
+        activePacks = parsed.packs;
+      }
+    } catch {
+      // Fallback to getActivePacks
+    }
+  }
+  if (!activePacks) {
+    activePacks = getActivePacks(rootDir);
+  }
+
+  const activeAgentSet = new Set();
+  try {
+    const packDefs = loadPackDefinitions();
+    for (const packId of activePacks) {
+      const pack = packDefs[packId];
+      if (pack && Array.isArray(pack.agents)) {
+        for (const agent of pack.agents) {
+          activeAgentSet.add(agent);
+        }
+      }
+    }
+  } catch {
+    // If skill-packs.json is unavailable, leave activeAgentSet empty
+  }
+
+  return { activePacks, activeAgentSet };
+}
+
+// ──────────────────────────────────────────────
+// Generate registry (exportable for tests & CLI)
+// ──────────────────────────────────────────────
+export function generateRegistry({ rootDir = ROOT, quiet = false } = {}) {
+  const agentsDir = join(rootDir, '.opencode', 'agents');
+  const modelsFile = join(rootDir, '.opencode', 'agent-models.json');
+  const outputFile = join(rootDir, '.opencode', 'agent-registry.json');
+
+  const models = loadModels(modelsFile);
+  const { activePacks, activeAgentSet } = resolveActivePackState(rootDir);
   const registry = {};
   const synced = [];
   
   // Read all agent MD files
-  const agentFiles = readdirSync(AGENTS_DIR)
+  const agentFiles = readdirSync(agentsDir)
     .filter(f => f.endsWith('.md'))
     .sort();
   
   for (const file of agentFiles) {
-    const filePath = join(AGENTS_DIR, file);
+    const filePath = join(agentsDir, file);
     let content = readFileSync(filePath, 'utf-8');
     const frontmatter = parseFrontmatter(content);
     const name = frontmatter.name || file.replace('.md', '');
@@ -176,6 +220,7 @@ function main() {
     registry[name] = {
       description,
       mode,
+      active: activeAgentSet.has(name),
       model,
       fallback,
       ...(variant && { variant }),
@@ -188,28 +233,40 @@ function main() {
   const output = {
     _generated: new Date().toISOString(),
     _source: 'node scripts/skill-registry.mjs',
+    activePacks,
     agents: registry
   };
   
-  writeFileSync(OUTPUT_FILE, JSON.stringify(output, null, 2) + '\n');
+  writeFileSync(outputFile, JSON.stringify(output, null, 2) + '\n');
   
-  // Summary
-  if (synced.length > 0) {
-    console.log(`\n🔄 Auto-synced ${synced.length} agent model(s) to frontmatter:`);
-    for (const item of synced) {
-      console.log(`   • ${item.name}: ${item.from} → ${item.to}`);
+  if (!quiet) {
+    // Summary
+    if (synced.length > 0) {
+      console.log(`\n🔄 Auto-synced ${synced.length} agent model(s) to frontmatter:`);
+      for (const item of synced) {
+        console.log(`   • ${item.name}: ${item.from} → ${item.to}`);
+      }
+    }
+
+    console.log(`\n✅ Generated ${outputFile}`);
+    console.log(`   ${Object.keys(registry).length} agents processed:`);
+    for (const [name, data] of Object.entries(registry)) {
+      const alwaysCount = data.skills.always.length;
+      const condCount = data.skills.conditional.length;
+      const modelStr = data.model || 'no model';
+      const fbStr = data.fallback.length ? ` → ${data.fallback.join(' → ')}` : '';
+      console.log(`   • ${name}: ${modelStr}${fbStr} | ${alwaysCount} always, ${condCount} conditional skills`);
     }
   }
 
-  console.log(`\n✅ Generated ${OUTPUT_FILE}`);
-  console.log(`   ${Object.keys(registry).length} agents processed:`);
-  for (const [name, data] of Object.entries(registry)) {
-    const alwaysCount = data.skills.always.length;
-    const condCount = data.skills.conditional.length;
-    const modelStr = data.model || 'no model';
-    const fbStr = data.fallback.length ? ` → ${data.fallback.join(' → ')}` : '';
-    console.log(`   • ${name}: ${modelStr}${fbStr} | ${alwaysCount} always, ${condCount} conditional skills`);
-  }
+  return output;
+}
+
+// ──────────────────────────────────────────────
+// Main
+// ──────────────────────────────────────────────
+function main() {
+  generateRegistry({ rootDir: ROOT, quiet: false });
 
   // Optional: run health check
   if (process.argv.includes('--health') || process.argv.includes('--check-health')) {

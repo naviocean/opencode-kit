@@ -23,9 +23,14 @@ QA → Security Auditor → Tech Lead
 
 ## Phase 0: Context Check
 
-1. Verify `_workspace/05_review_*.md` exists with Approved verdict
-2. If not → return HARD-GATE error
-3. Read prior `/review` summary
+1. **Check FSM gate & commit freshness**:
+   ```bash
+   node scripts/harness-state.mjs check-gate --phase=ship
+   ```
+   - Exit code `1` (e.g., review not approved or `Review gate is stale (commit mismatch)`) → return HARD-GATE error
+2. Verify `_workspace/05_review_*.md` exists with Approved verdict
+3. If not → return HARD-GATE error
+4. Read prior `/review` summary
 
 ## Phase 1: QA Agent — Full Test Suite
 

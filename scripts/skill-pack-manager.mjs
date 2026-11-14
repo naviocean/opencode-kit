@@ -18,6 +18,7 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { execFileSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, '..');
@@ -50,8 +51,79 @@ export function getActivePacks(projectDir = ROOT) {
       // Fallback
     }
   }
-  // Default to core and web-fullstack if not configured
-  return ['core', 'web-fullstack'];
+  // Default to core, web-frontend, and nestjs-backend if not configured
+  return ['core', 'web-frontend', 'nestjs-backend'];
+}
+
+/**
+ * Check whether projectDir is the opencode-saas-kit source repository itself.
+ * Prevents destructive pack pruning inside the SSoT kit repository.
+ * @param {string} projectDir
+ * @returns {boolean}
+ */
+export function isKitSourceRepo(projectDir = ROOT) {
+  if (existsSync(join(projectDir, '.agent-core', 'presets'))) {
+    return true;
+  }
+  const pkgFile = join(projectDir, 'package.json');
+  if (existsSync(pkgFile)) {
+    try {
+      const pkg = JSON.parse(readFileSync(pkgFile, 'utf-8'));
+      if (pkg && pkg.name === 'opencode-saas-kit') {
+        return true;
+      }
+    } catch {
+      // Ignore malformed package.json
+    }
+  }
+  return false;
+}
+
+/**
+ * Safely regenerate .opencode/agent-registry.json when active packs change.
+ * Never deletes SSoT files in .agent-core/, and is a safe no-op in isolated
+ * directories that do not contain skill-registry.mjs or agent-registry.json.
+ * @param {string} projectDir
+ * @returns {{ synced: boolean, registryPath?: string, reason?: string }}
+ */
+export function syncActivePacksToRegistry(projectDir = ROOT) {
+  const registryScript = join(projectDir, 'scripts', 'skill-registry.mjs');
+  const registryFile = join(projectDir, '.opencode', 'agent-registry.json');
+
+  if (existsSync(registryScript)) {
+    execFileSync(process.execPath, [registryScript], {
+      cwd: projectDir,
+      stdio: 'pipe',
+    });
+    return { synced: true, registryPath: registryFile };
+  }
+
+  if (existsSync(registryFile)) {
+    try {
+      const existing = JSON.parse(readFileSync(registryFile, 'utf-8'));
+      const activePacks = getActivePacks(projectDir);
+      const activeAgentSet = new Set(getActiveAgents(projectDir));
+      const updatedAgents = {};
+      for (const [name, data] of Object.entries(existing.agents || {})) {
+        updatedAgents[name] = {
+          ...data,
+          active: activeAgentSet.has(name),
+        };
+      }
+      const updated = {
+        ...existing,
+        _generated: new Date().toISOString(),
+        activePacks,
+        agents: updatedAgents,
+      };
+      writeFileSync(registryFile, JSON.stringify(updated, null, 2) + '\n', 'utf-8');
+      return { synced: true, registryPath: registryFile };
+    } catch {
+      return { synced: false, reason: 'failed to update existing agent-registry.json' };
+    }
+  }
+
+  return { synced: false, reason: 'no registry script or agent-registry.json present' };
 }
 
 /**
@@ -237,7 +309,12 @@ if (process.argv[1] && process.argv[1].endsWith('skill-pack-manager.mjs')) {
       process.exit(1);
     }
     const updated = addPack(targetDir, pack);
-    console.log(`\n✅ Activated pack: [${pack}]. Active packs: ${updated.join(', ')}\n`);
+    const syncRes = syncActivePacksToRegistry(targetDir);
+    console.log(`\n✅ Activated pack: [${pack}]. Active packs: ${updated.join(', ')}`);
+    if (syncRes.synced) {
+      console.log(`   Synced active packs to ${syncRes.registryPath}`);
+    }
+    console.log('');
   } else if (command === 'remove') {
     const pack = args[1];
     if (!pack) {
@@ -245,15 +322,25 @@ if (process.argv[1] && process.argv[1].endsWith('skill-pack-manager.mjs')) {
       process.exit(1);
     }
     const updated = removePack(targetDir, pack);
-    console.log(`\n🗑️  Removed pack: [${pack}]. Active packs: ${updated.join(', ')}\n`);
+    const syncRes = syncActivePacksToRegistry(targetDir);
+    console.log(`\n🗑️  Removed pack: [${pack}]. Active packs: ${updated.join(', ')}`);
+    if (syncRes.synced) {
+      console.log(`   Synced active packs to ${syncRes.registryPath}`);
+    }
+    console.log('');
   } else if (command === 'auto') {
     // Scan projectDir and configure
     import('./repo-scanner.mjs').then(({ scanRepo }) => {
       const scan = scanRepo(targetDir);
       const recommended = detectRecommendedPacks(scan);
       const updated = setActivePacks(targetDir, recommended);
+      const syncRes = syncActivePacksToRegistry(targetDir);
       console.log(`\n🔍 Auto-detected and enabled packs based on codebase:`);
-      console.log(`   Active: ${updated.join(', ')}\n`);
+      console.log(`   Active: ${updated.join(', ')}`);
+      if (syncRes.synced) {
+        console.log(`   Synced active packs to ${syncRes.registryPath}`);
+      }
+      console.log('');
     });
   } else {
     console.log('Usage: node scripts/skill-pack-manager.mjs [list|add <pack>|remove <pack>|auto]');
