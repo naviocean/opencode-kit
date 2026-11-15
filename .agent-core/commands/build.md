@@ -142,6 +142,7 @@ Tech Lead dispatches only the specialists whose domains are touched by the appro
 - **Boundary checks:** verifies contract compatibility across all communicating agents (e.g. NestJS DTOs vs Frontend types)
 - Reports failures with `file:line` context, not just "test failed"
 - Writes `_workspace/03_qa_report.md`
+- **Contrastive Escalation (PStack #8):** If any task hits `consecutiveFailures >= 2` (`requiresContrastiveProbe: true` in `_workspace/harness-state.json`), run `node scripts/propose-probe-compose.mjs` (guarded by `harness-surface.mjs`) before retrying implementation.
 
 ## Phase 4: Security Auditor — Scan
 

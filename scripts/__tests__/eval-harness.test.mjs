@@ -14,13 +14,13 @@ test('eval-harness: parseArgs supports --json, --output, and --min-hci', () => {
   assert.equal(opts.output, '_workspace/report.md');
 });
 
-test('eval-harness: evaluates all 5 behavioral compliance dimensions with HCI >= 95%', async () => {
+test('eval-harness: evaluates all 6 behavioral compliance dimensions with HCI >= 95%', async () => {
   const report = await evaluateHarness();
 
   assert.equal(typeof report.hci, 'number');
   assert.ok(report.hci >= 95, `Expected HCI >= 95%, got ${report.hci}% (failures: ${JSON.stringify(report.failures)})`);
   assert.equal(report.passed, true);
-  assert.equal(report.dimensions.length, 5);
+  assert.equal(report.dimensions.length, 6);
 
   const dimNames = report.dimensions.map((d) => d.id);
   assert.deepEqual(dimNames, [
@@ -29,6 +29,7 @@ test('eval-harness: evaluates all 5 behavioral compliance dimensions with HCI >=
     'domain-ownership',
     'evidence-honesty',
     'multi-harness-parity',
+    'recursive-harnessing',
   ]);
 
   for (const dim of report.dimensions) {

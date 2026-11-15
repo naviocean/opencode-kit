@@ -624,7 +624,7 @@ function ensureAgentMemory(dryRun) {
         const srcFile = path.join(coreMemoryDir, entry);
         const destFile = path.join(rootMemoryDir, entry);
         if (!fs.existsSync(destFile)) {
-          fs.copyFileSync(srcFile, destFile);
+          copyRecursive(srcFile, destFile);
         }
       }
     }

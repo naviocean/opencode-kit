@@ -102,7 +102,7 @@ When an engineering principle appears to conflict with a project rule or human i
 * **Why:** When multiple fixes fail, the underlying mental model of how the system works is wrong.
 * **Pattern:**
   - **STOP coding.** Write down the core assumption explicitly (e.g., *"We assumed function X runs synchronously before Y"*).
-  - Devise a small, direct probe (log, breakpoint, isolated test) to verify or falsify that assumption.
+  - Devise a small, direct probe (log, breakpoint, isolated test) or trigger `scripts/propose-probe-compose.mjs` (when `harness-state.json` flags `requiresContrastiveProbe: true`) to verify or falsify competing hypotheses.
   - Redesign the solution from the verified reality, not the failed hypothesis.
 
 #### 9. `explain-the-number`

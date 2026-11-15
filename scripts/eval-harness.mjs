@@ -18,6 +18,13 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { classifyTask } from './triage-sizer.mjs';
 import { checkToolInvocation } from '../.agent-core/hooks/pre-tool-guard.mjs';
+import {
+  validateAlwaysOnBudget,
+  validateHarnessProposal,
+  validateSkillScripts,
+} from './harness-surface.mjs';
+import { hasValidExperience } from './experience-library.mjs';
+import { evaluateProbes } from './propose-probe-compose.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 export const ROOT = join(__dirname, '..');
@@ -224,6 +231,79 @@ function evaluateMultiHarnessParity(rootDir) {
   return dim;
 }
 
+function evaluateRecursiveHarnessing(rootDir) {
+  const dim = makeDimension('recursive-harnessing', 'Guarded Harness2 & PStack Synergy');
+
+  // 1. Immutable surface protection
+  for (const immutableTarget of [
+    'AGENTS.md',
+    '.agent-core/hooks/pre-tool-guard.mjs',
+    '.agent-core/skills/create-verification-skill/SKILL.md',
+    'docs/verification/feature-map.md',
+  ]) {
+    const res = validateHarnessProposal({ [immutableTarget]: '# malicious overwrite' });
+    recordCheck(
+      dim,
+      res.valid === false,
+      `Immutable surface "${immutableTarget}" was NOT protected by validateHarnessProposal`
+    );
+  }
+
+  // 2. Always-on context budget cap
+  const budget = validateAlwaysOnBudget(rootDir);
+  recordCheck(
+    dim,
+    budget.passed === true,
+    `Always-on context budget exceeded: ${JSON.stringify(budget.results.filter((r) => !r.ok))}`
+  );
+
+  // 3. Skill scripts compile/syntax check
+  const scriptsCheck = validateSkillScripts(rootDir);
+  recordCheck(
+    dim,
+    scriptsCheck.passed === true && scriptsCheck.checked > 0,
+    `Skill scripts syntax check failed (${scriptsCheck.errors.length} errors)`
+  );
+
+  // 4. Experience library triad & honesty gate
+  const vagueExp = hasValidExperience({
+    domain: 'core',
+    taskId: 'T-1',
+    cue: 'when failing',
+    lesson: 'retry',
+    evidence: 'looks good',
+  });
+  recordCheck(dim, vagueExp === false, 'Experience library accepted vague unverified evidence');
+
+  const validExp = hasValidExperience({
+    domain: 'core',
+    taskId: 'T-2',
+    cue: 'when tests fail',
+    lesson: 'check mock setup',
+    evidence: 'npm test passed 10/10 at commit abc1234',
+  });
+  recordCheck(dim, validExp === true, 'Experience library rejected valid verified experience');
+
+  // 5. Propose-Probe-Compose PStack hard disqualification filter
+  const probeEval = evaluateProbes([
+    {
+      id: 'cand-regressed',
+      testsPassed: true,
+      securityGrade: 'A',
+      featureMapStatus: 'REGRESSED',
+      score: 99,
+      evidence: 'npm test passed',
+    },
+  ]);
+  recordCheck(
+    dim,
+    probeEval.verdict === 'ALL_CANDIDATES_REJECTED',
+    `Propose-Probe-Compose failed to disqualify REGRESSED candidate (verdict: ${probeEval.verdict})`
+  );
+
+  return dim;
+}
+
 export async function evaluateHarness(options = {}) {
   const rootDir = options.rootDir || ROOT;
   const minHci = typeof options.minHci === 'number' ? options.minHci : 95;
@@ -236,6 +316,7 @@ export async function evaluateHarness(options = {}) {
     evaluateDomainOwnership(rootDir),
     evaluateEvidenceHonesty(rootDir, scenarios),
     evaluateMultiHarnessParity(rootDir),
+    evaluateRecursiveHarnessing(rootDir),
   ];
 
   const totalChecks = dimensions.reduce((acc, d) => acc + d.total, 0);

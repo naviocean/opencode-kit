@@ -280,3 +280,65 @@ test('CLI interface: init, transition, gate, check-gate, and status', () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('failure tracking: initializes counters and escalates at >=2 consecutive FAILED', () => {
+  const dir = createTempDir();
+  try {
+    const statePath = join(dir, '_workspace', 'harness-state.json');
+    initState(statePath, { sizing: 'M', gitHead: 'sha1' });
+
+    const registered = registerTask(statePath, 'auth-fix', { agent: 'nestjs' });
+    assert.equal(registered.attempts, 0);
+    assert.equal(registered.consecutiveFailures, 0);
+    assert.equal(registered.requiresContrastiveProbe, false);
+
+    const fail1 = updateTaskStatus(statePath, 'auth-fix', 'FAILED', { error: 'attempt 1 failed' });
+    assert.equal(fail1.attempts, 1);
+    assert.equal(fail1.consecutiveFailures, 1);
+    assert.equal(fail1.requiresContrastiveProbe, false);
+    assert.equal(fail1.escalationReason, undefined);
+
+    const fail2 = updateTaskStatus(statePath, 'auth-fix', 'FAILED', { error: 'attempt 2 failed' });
+    assert.equal(fail2.attempts, 2);
+    assert.equal(fail2.consecutiveFailures, 2);
+    assert.equal(fail2.requiresContrastiveProbe, true);
+    assert.equal(
+      fail2.escalationReason,
+      'PStack #8 attack-the-premise: >=2 consecutive failures — trigger Harness2 Propose-Probe-Compose',
+    );
+
+    const fail3 = updateTaskStatus(statePath, 'auth-fix', 'FAILED', { error: 'attempt 3 failed' });
+    assert.equal(fail3.attempts, 3);
+    assert.equal(fail3.consecutiveFailures, 3);
+    assert.equal(fail3.requiresContrastiveProbe, true);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('failure tracking: resets consecutiveFailures, requiresContrastiveProbe, and clears escalationReason on DONE', () => {
+  const dir = createTempDir();
+  try {
+    const statePath = join(dir, '_workspace', 'harness-state.json');
+    initState(statePath, { sizing: 'M', gitHead: 'sha1' });
+
+    registerTask(statePath, 'auth-fix', { agent: 'nestjs' });
+    updateTaskStatus(statePath, 'auth-fix', 'FAILED', { error: 'fail 1' });
+    const escalated = updateTaskStatus(statePath, 'auth-fix', 'FAILED', { error: 'fail 2' });
+    assert.equal(escalated.requiresContrastiveProbe, true);
+
+    const done = updateTaskStatus(statePath, 'auth-fix', 'DONE', { summary: 'resolved via probe' });
+    assert.equal(done.status, 'DONE');
+    assert.equal(done.attempts, 2);
+    assert.equal(done.consecutiveFailures, 0);
+    assert.equal(done.requiresContrastiveProbe, false);
+    assert.equal(done.escalationReason, undefined);
+
+    const persisted = readState(statePath);
+    assert.equal(persisted.tasks['auth-fix'].consecutiveFailures, 0);
+    assert.equal(persisted.tasks['auth-fix'].requiresContrastiveProbe, false);
+    assert.equal('escalationReason' in persisted.tasks['auth-fix'], false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

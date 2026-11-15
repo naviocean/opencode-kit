@@ -83,6 +83,7 @@ The Tech Lead:
 - `gitnexus_detect_changes({repo: "<current-repo>"})` for final diff summary
 - Verifies all acceptance criteria from spec are met
 - Approves or lists remaining issues
+- **Harnessing-Level Reflection (Optional):** Record verified architectural or debugging lessons into `.agent-memory/experiences/<domain>/` via `node scripts/experience-library.mjs record` (requires `cue`, `lesson`, and concrete `evidence`).
 
 **Why Tech Lead at the end?** Two automated gates are not enough for production. Human-like judgment ("is this actually ready?") is the final filter.
 

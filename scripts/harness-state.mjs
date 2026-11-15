@@ -218,6 +218,9 @@ export function transitionPhase(target, targetPhase, options = {}) {
   return state;
 }
 
+const ESCALATION_REASON_CONSECUTIVE_FAILURES =
+  'PStack #8 attack-the-premise: >=2 consecutive failures — trigger Harness2 Propose-Probe-Compose';
+
 /**
  * Register a subagent task in the harness state for crash/timeout tracking.
  */
@@ -232,6 +235,9 @@ export function registerTask(target, taskId, meta = {}) {
   const task = {
     id: taskId,
     status: meta.status || 'pending',
+    attempts: 0,
+    consecutiveFailures: 0,
+    requiresContrastiveProbe: false,
     ...meta,
     registeredAt: now,
     updatedAt: now,
@@ -259,13 +265,37 @@ export function updateTaskStatus(target, taskId, status, detail = {}) {
 
   const now = new Date().toISOString();
   const extra = typeof detail === 'string' ? { message: detail } : detail || {};
+  let attempts = typeof existing.attempts === 'number' ? existing.attempts : 0;
+  let consecutiveFailures =
+    typeof existing.consecutiveFailures === 'number' ? existing.consecutiveFailures : 0;
+  let requiresContrastiveProbe = Boolean(existing.requiresContrastiveProbe);
+
   const updated = {
     ...existing,
     ...extra,
     id: taskId,
     status,
+    attempts,
+    consecutiveFailures,
+    requiresContrastiveProbe,
     updatedAt: now,
   };
+
+  if (status === 'FAILED') {
+    attempts += 1;
+    consecutiveFailures += 1;
+    updated.attempts = attempts;
+    updated.consecutiveFailures = consecutiveFailures;
+    if (consecutiveFailures >= 2) {
+      updated.requiresContrastiveProbe = true;
+      updated.escalationReason = ESCALATION_REASON_CONSECUTIVE_FAILURES;
+    }
+  } else if (status === 'DONE') {
+    updated.consecutiveFailures = 0;
+    updated.requiresContrastiveProbe = false;
+    delete updated.escalationReason;
+  }
+
   state.tasks[taskId] = updated;
   state.updatedAt = now;
 

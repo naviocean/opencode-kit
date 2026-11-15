@@ -50,6 +50,7 @@ The assigned specialist agent executes RED → GREEN → REFACTOR:
    - No `any`, no `@ts-ignore`, no `console.log`.
    - Strip trivial comments (`comment-quality`); preserve invariant comments.
    - Never cross domain boundaries (e.g. frontend must not edit `apps/api/`).
+5. **Contrastive Escalation (PStack #8 `attack-the-premise` + Harness²):** If 2 consecutive fix attempts fail (`requiresContrastiveProbe: true` in `harness-state.json`), STOP patching and run `node scripts/propose-probe-compose.mjs` to probe competing hypotheses before a 3rd edit.
 
 ## Phase 2: QA — Regression & Real-Surface Verification
 

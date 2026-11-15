@@ -2,30 +2,38 @@
 
 This directory holds **runtime state only** — never committed.
 
-## 1. Harness checkpoints
+## 1. Orchestration State Machine
 
-`_workspace/0[1-9]_<agent>_<artifact>.md`
+`_workspace/harness-state.json`
 
-Intermediate artifacts between phases of a multi-phase workflow
-(`/plan` → `/build` → `/review` → `/ship`). Examples:
-
-- `01_pm_interview.md` — Socratic interview transcript
-- `02_designer_spec.md` — UX flow + design tokens draft
-- `03_tech_lead_plan.md` — implementation plan draft
-- `04_tech_lead_review.md` — review verdict
-- `05_tech_lead_ship.md` — final ship approval
-- `06_qa_report.md` — test results
-- `07_security_report.md` — AgentShield scan + OWASP
-
-These are workspace state, not deliverables. Final deliverables go to
-`docs/{prds,designs,plans,tasks,adr}/` (committed).
-
-## 2. Model routing (opencode-native)
-
-Agent models are routed by opencode via the `model:` field in each agent's
-frontmatter — there is no runtime override layer. To diagnose model
-availability, run (read-only, does not change config):
+Tracks the deterministic workflow lifecycle (`IDLE → PLAN → BUILD → REVIEW → SHIP → COMPLETED`), parallel subagent task status, and commit-SHA freshness for quality gates.
 
 ```bash
-node .opencode/scripts/model-health-check.mjs
+node scripts/harness-state.mjs status
+```
+
+## 2. Harness Checkpoints
+
+`_workspace/0[1-9]_<phase>_<artifact>.md`
+
+Intermediate artifacts between phases of a multi-phase workflow (`/plan` → `/build` → `/review` → `/ship`). Examples:
+
+- `01_pm_interview.md` — Socratic interview transcript
+- `02_<agent>_*` — Specialist parallel implementation outputs
+- `03_qa_report.md` — QA verification results (`/build`)
+- `04_security_report.md` — Security scan results (`/build`)
+- `05_review_code.md` & `05_review_security.md` — `/review` gate reports
+- `06_qa_ship.md` & `06_security_ship.md` — `/ship` final gate reports
+- `harness-compliance-report.md` — Behavioral compliance scorecard (`npm run eval`)
+
+These are workspace state, not deliverables. Final deliverables go to `docs/{prds,designs,plans,tasks,adr,verification}/` (committed).
+
+## 3. Model Routing & Health Check
+
+Agent models are routed by each harness via the `model:` field in each agent's frontmatter (synced from `.agent-core/presets/`). To diagnose model availability (read-only, does not change config):
+
+```bash
+node scripts/model-health-check.mjs
+# or
+npm run health
 ```

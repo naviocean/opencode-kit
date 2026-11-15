@@ -113,6 +113,8 @@ To eliminate LLM agreeableness ("Yes-man bias"), every agent is required to act 
 - **`frontend` / `mobile`**: *What is the impact on bundle size, UI responsiveness, or offline usability?*
 - **`tech-lead`**: *Does this introduce accidental complexity or tight coupling? What is the rollback cost?*
 
+*Empirical Probe (Optional):* For high-stakes architectural forks, run `node scripts/propose-probe-compose.mjs` (with `harness-surface.mjs` guard) to benchmark or prototype competing candidates before Round 3 synthesis.
+
 *Format:*
 ```markdown
 ### [Agent Name] Cross-Examination & Critiques

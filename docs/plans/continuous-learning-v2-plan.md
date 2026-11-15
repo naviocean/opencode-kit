@@ -1,6 +1,6 @@
 # Implementation Plan: Continuous Learning v2 (ECC-Based Instinct Engine)
 
-> **Status**: Draft (Deferred / Future)  
+> **Status**: Superseded by [Guarded Harness² Integration Plan (v2.0)](./2026-11-15-harness2-guarded-evolution-plan.md)  
 > **Author**: Tech Lead Agent  
 > **Created**: 2026-09-03  
 > **Version**: 1.0.0  

@@ -19,6 +19,7 @@ import {
   loadRegistry,
   ROOT,
 } from './lib/config.mjs';
+import { validateAlwaysOnBudget, validateSkillScripts } from './harness-surface.mjs';
 
 const AGENTS_DIR = getAgentsDir();
 
@@ -222,6 +223,19 @@ if (existsSync(packsFile) && existsSync(registryFile)) {
     check('Zero skill deficit: every agent has 100% skill coverage in its pack', true);
   }
 }
+
+// 10. Guarded Harness² Surface & Budget Verification
+console.log('\n10. Guarded Harness2 Surface, Context Budget & Script Syntax');
+const budgetResult = validateAlwaysOnBudget(ROOT);
+check('Always-on context budget within always_on_max caps', budgetResult.passed,
+  budgetResult.results.filter(r => !r.ok).map(r => `${r.file} (${r.bytes}/${r.maxBytes})`).join(', '));
+
+const scriptSyntaxResult = validateSkillScripts(ROOT);
+check(`Skill scripts syntax valid (${scriptSyntaxResult.checked} scripts checked)`, scriptSyntaxResult.passed,
+  scriptSyntaxResult.errors.map(e => `${e.file}: ${e.error}`).join('; '));
+
+check('experience-library.mjs exists', existsSync(join(ROOT, 'scripts', 'experience-library.mjs')));
+check('propose-probe-compose.mjs exists', existsSync(join(ROOT, 'scripts', 'propose-probe-compose.mjs')));
 
 
 // ──────────────────────────────────────────────
