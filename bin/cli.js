@@ -468,7 +468,7 @@ ${COLORS.bold}What was installed:${COLORS.reset}
   .opencode/agents/         14 agent definitions
   .opencode/commands/       9 slash commands
   .opencode/rules/          4 always-follow rules
-  .opencode/skills/         326 skills (pure multi-domain library)
+  .opencode/skills/         189 skills (pure multi-domain library)
   .opencode/standards/      7 document templates
   .agent-memory/            Universal persistent memory (decisions, contracts, context)
   AGENTS.md                 Project rules
@@ -576,40 +576,11 @@ function updateProject(projectDir, options = {}) {
   if (updateSkills) {
     logStep('Updating skills from registry...');
     if (dryRun) {
-      logInfo('Would run: npx skills add ... (all skill sources)');
+      logInfo('Would run: npx -y skills update -p -y');
     } else {
       const skillsDir = path.join(projectDir, '.opencode', 'skills');
-      const skillSources = [
-        'https://github.com/nrwl/nx-ai-agents-config',
-        'abhigyanpatwari/gitnexus',
-        'rtk-ai/rtk',
-        'obra/superpowers',
-        'vercel-labs/agent-skills',
-        'shadcn/ui',
-        'kadajett/agent-nestjs-skills',
-        'prisma/skills',
-        'antfu/skills',
-        'mattpocock/skills',
-        'google-labs-code/stitch-skills',
-        'leonxlnx/taste-skill',
-        'wshobson/agents',
-        'giuseppe-trisciuoglio/developer-kit',
-        'currents-dev/playwright-best-practices-skill',
-        'julianoczkowski/designer-skills',
-        'chiroro-jr/pencil-design-skill',
-        'vercel-labs/skills',
-        'zhanghandong/rust-skills',
-        'mohitmishra786/low-level-dev-skills',
-        'nodnarbnitram/claude-code-extensions',
-        'fayazara/macos-app-skills',
-        'emilkowalski/skills',
-        'avdlee/swiftui-agent-skill',
-        'dpearson2699/swift-ios-skills',
-      ];
-
-      for (const source of skillSources) {
-        log(`  ${ICONS.arrow} ${source}...`);
-        runCommand(`npx skills add ${source} -a '*' -y --skill '*'`, { cwd: projectDir, silent: true });
+      if (!runCommand('npx -y skills update -p -y', { cwd: projectDir })) {
+        logWarn('Skill update finished with warnings or skipped unpinned sources');
       }
 
       const skillsCount = fs.existsSync(skillsDir) ? fs.readdirSync(skillsDir).length : 0;

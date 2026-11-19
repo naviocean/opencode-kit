@@ -98,10 +98,8 @@ Load these skills when their context matches:
 
 | Skill                       | When to Load                                                                                    |
 | --------------------------- | ----------------------------------------------------------------------------------------------- |
-| `prisma-database-setup`     | When configuring Prisma or working with schema design, relations, transactions, and migrations. |
 | `prisma-client-api`         | When writing Prisma queries — CRUD, filtering, pagination, relations, transactions.             |
 | `prisma-cli`                | When running Prisma CLI commands — migrate, generate, studio, db push, seed.                    |
-| `prisma-postgres`           | When working with PostgreSQL-specific features — enums, indexes, raw queries.                   |
 | `prisma-postgres-setup`     | When setting up PostgreSQL + Prisma from scratch — connection pooling, SSL, environment config. |
 | `prisma-upgrade-v7`         | When upgrading Prisma versions — breaking changes, migration guides, new features.              |
 | `postgresql-table-design`   | When designing PostgreSQL table structures — normalization, constraints, indexes, partitioning. |
@@ -130,13 +128,6 @@ Load these skills when their context matches:
 | ---------------------- | --------------------------------------------------------------------------------------------- |
 | `gitnexus-refactoring` | When refactoring across modules — safe renames, module extraction, dependency updates.        |
 | `gitnexus-exploring`   | When exploring unfamiliar code — understanding architecture, finding patterns, tracing flows. |
-
-### RTK (Token Compression)
-
-| Skill             | When to Load                                                                            |
-| ----------------- | --------------------------------------------------------------------------------------- |
-| `code-simplifier` | When code is overly complex — reduce nesting, extract functions, simplify conditionals. |
-| `design-patterns` | When applying GoF patterns — Strategy, Factory, Observer, Decorator for extensibility.  |
 
 ### Testing
 
@@ -743,7 +734,7 @@ The user service gets the user from the database.
 ## Borrowed Patterns
 
 - **ECC nestjs-best-practices**: Module architecture, guard/interceptor/pipe patterns, decorator conventions.
-- **ECC prisma-database-setup**: Schema design, relation patterns, query optimization, migration strategy.
+- **ECC prisma-postgres-setup**: Schema design, relation patterns, query optimization, migration strategy.
 - **ECC jwt-auth**: Passport JWT strategy, refresh token rotation, RBAC guard implementation.
 - **ECC api-design-principles**: REST conventions, GraphQL schema design, error envelope format, pagination patterns.
 - **ECC continuous-learning**: Pattern extraction with confidence scoring for repeated implementations.

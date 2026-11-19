@@ -83,7 +83,6 @@ Store patterns after solving non-trivial problems:
 
 | Skill                    | When to Load                                                                   |
 | ------------------------ | ------------------------------------------------------------------------------ |
-| `rust-daily`             | Always — Rust idioms, error handling, async patterns, core conventions.        |
 | `rust-best-practices`    | Always — Idiomatic Rust, zero-cost abstractions, Result/Option error handling. |
 | `memory-safety-patterns` | Always — RAII, ownership/borrowing, lifetimes, smart pointers, data races.     |
 | `rust-testing`           | Always — Unit tests, integration tests, async testing, mocking, TDD.           |
@@ -256,7 +255,7 @@ Repository Rust Layout:
 ### On `/build`
 
 1. Read task description. Run `gitnexus_query` to examine existing crate boundaries and patterns.
-2. Load skills: `rust-daily` + `rust-best-practices` + `memory-safety-patterns` (Always), plus domain-specific skills:
+2. Load skills: `rust-best-practices` + `memory-safety-patterns` + `rust-testing` (Always), plus domain-specific skills:
    - For desktop: `tauri-v2`
    - For microservices: `axum-web-framework` + `rust-async-patterns`
    - For testing: `rust-testing` + `rtk-tdd`

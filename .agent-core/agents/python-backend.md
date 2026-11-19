@@ -85,6 +85,7 @@ Load these skills when their context matches:
 | `async-python-patterns`           | When writing async/await, asyncio, concurrent request processing.                  |
 | `python-design-patterns`          | When designing services, dependency injection, repository abstractions.            |
 | `python-project-structure`        | When structuring a new Python service — uv layout, pyproject.toml.                 |
+| `uv-package-manager`              | When managing dependencies, virtualenvs, lockfiles, and workspaces with `uv`.      |
 | `python-configuration`            | When managing typed settings, pydantic-settings, environment variables.            |
 | `python-resource-management`      | When managing DB sessions, connection pools, context managers.                     |
 | `python-packaging`                | When packaging or distributing reusable Python libraries.                         |

@@ -644,13 +644,6 @@ Load these skills when their context matches:
 | `gitnexus-refactoring` | Code refactoring with GitNexus — safe renames, extract component, move file, impact analysis before changes.                         |
 | `gitnexus-exploring`   | Codebase exploration with GitNexus — find patterns, trace dependencies, understand component relationships, knowledge graph queries. |
 
-### Architecture & Optimization Skills
-
-| Skill                    | When to Load                                                                                                                                 |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `code-simplifier`        | Code simplification — reducing complexity, removing duplication, extracting utilities, improving readability.                                |
-| `design-patterns`        | Implementation design patterns — repository pattern, service layer, facade, strategy, observer for frontend architecture.                    |
-
 ### Testing Skills
 
 | Skill                         | When to Load                                                                                                           |

@@ -17,8 +17,10 @@ const FALLBACK_IMMUTABLE_PREFIXES = [
 const FALLBACK_IMMUTABLE_EXACT = new Set([
   'AGENTS.md',
   'CLAUDE.md',
+  'CODEX.md',
   'scripts/security-gate.mjs',
-  'scripts/pre-tool-guard.mjs',
+  'scripts/harness-state.mjs',
+  'scripts/harness-surface.mjs',
   'docs/verification/feature-map.md',
 ]);
 

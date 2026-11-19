@@ -93,7 +93,6 @@ Use Memories to persist mobile patterns across sessions:
 | `react-native-architecture` | Modular folder structures, offline-first sync, native service layer | When architecting new mobile modules, services, or offline synchronization |
 | `react-native-design` | Responsive mobile styling, keyboard handling, layout patterns | When building complex mobile screens, forms, or keyboard-avoiding views |
 | `react-state-management` | Zustand, Redux Toolkit, and React Query for mobile state | When setting up global state, client caching, or API query hydration |
-| `code-simplifier` | Refactoring verbose React Native code to idiomatic patterns | When simplifying complex components or reducing cognitive load |
 | `continuous-learning` | Extracting mobile patterns and storing persistent instincts | When recording reusable mobile solutions or bug resolutions |
 | `design-tokens` | Semantic color tokens, spacing scales, typography mapping | When consuming design tokens from Designer for mobile themes |
 | `gitnexus-exploring` | Deep code exploration and navigation across mobile codebase | When tracing navigation stacks, prop flows, or imported dependencies |

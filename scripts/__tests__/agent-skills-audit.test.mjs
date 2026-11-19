@@ -197,3 +197,24 @@ test('agent-skills-audit: skills resolve without dangling symlinks across harnes
     }
   }
 });
+
+test('agent-skills-audit: zero orphan skills in .agent-core/skills (every skill belongs to a pack)', () => {
+  const packsData = JSON.parse(readFileSync(PACKS_FILE, 'utf-8')).packs;
+  const packSkills = new Set();
+  for (const pack of Object.values(packsData)) {
+    for (const skill of pack.skills || []) {
+      packSkills.add(skill);
+    }
+  }
+
+  const diskSkills = readdirSync(SKILLS_DIR).filter(entry =>
+    statSync(join(SKILLS_DIR, entry)).isDirectory()
+  );
+  const orphans = diskSkills.filter(skill => !packSkills.has(skill));
+
+  assert.equal(
+    orphans.length,
+    0,
+    `Found ${orphans.length} orphan skill(s) not belonging to any pack in skill-packs.json: ${orphans.join(', ')}`
+  );
+});

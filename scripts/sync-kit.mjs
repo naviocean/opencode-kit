@@ -521,7 +521,7 @@ function syncClaudeCode(mode, dryRun) {
   const claudeMdPath = path.join(ROOT, 'CLAUDE.md');
   const claudeMdContent = `# Claude Code Project Instructions
 
-> Universal Agent Kit for SaaS Development. This project is configured with 14 specialized AI agent roles, 326+ skills, TDD enforcement, and AgentShield security gating.
+> Universal Agent Kit for SaaS Development. This project is configured with 14 specialized AI agent roles, 189+ skills, TDD enforcement, and AgentShield security gating.
 
 ## Project Rules & Guidelines
 - Primary Rules: See [AGENTS.md](AGENTS.md) for full agent trigger mapping and HARD RULES.

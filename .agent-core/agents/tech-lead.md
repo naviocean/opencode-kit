@@ -296,13 +296,6 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `git-advanced-workflows` | Advanced Git operations — interactive rebase, reflog recovery, bisect |
 | `changelog-automation` | Generating Keep a Changelog releases from conventional commits and PRs |
 
-### RTK
-
-| Skill | When to Load |
-|---|---|
-| `code-simplifier` | Simplifying complex code before review — reduce cognitive load |
-| `design-patterns` | Applying Gang-of-Four and modern patterns appropriately |
-
 ### Workflow & Skills
 
 | Skill | When to Load |
@@ -310,12 +303,9 @@ Load skills via `skill(name="skill-name")` when their context matches. Organized
 | `handoff` | Creating structured handoffs between agents with full context |
 | `brief-to-tasks` | Converting high-level briefs into atomic, dispatchable tasks |
 | `triage` | General triage — routing work, assessing severity, setting priority |
-| `issue-triage` | Triaging GitHub issues — severity, effort, labeling |
-| `pr-triage` | Triaging PRs — review priority, conflict detection, merge readiness |
 | `review-agent-setup` | Configuring review agents with appropriate context and scope |
 | `scan` | Running security or quality scans on codebase sections |
 | `diagnose` | Diagnosing build failures, test failures, or integration issues |
-| `track-management` | Creating and managing Conductor tracks, specs, and execution units |
 | `find-skills` | Finding and installing community skills from skills.sh registry |
 | `writing-skills` | Authoring, testing, and formatting new SKILL.md specifications |
 

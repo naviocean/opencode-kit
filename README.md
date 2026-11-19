@@ -407,7 +407,7 @@ npx opencode-saas-kit init --tools
 
 This will:
 - Run Brownfield repository scan (detecting Node, Python, Rust, Go, Swift, Office/PDF, LaTeX) → `.agent-memory/project-context.md`
-- Install Single Source of Truth (`.agent-core/`) with 14 agents, 9 commands, 4 rules, 326 skills, standards
+- Install Single Source of Truth (`.agent-core/`) with 14 agents, 9 commands, 4 rules, 189 skills, standards
 - Safely inject kit instructions into `AGENTS.md` and `CLAUDE.md` using safe context markers (`<!-- opencode-saas-kit:start/end -->`) preserving human custom rules
 - Set up Universal Persistent Memory in `.agent-memory/`
 - Synchronize adapters across OpenCode (`.opencode/`), Claude Code (`CLAUDE.md`), Antigravity (`.agents/`, `AGENTS.md`), and OpenAI Codex
@@ -559,16 +559,16 @@ Synthetic unit test suites can pass 100% while an application fails in reality (
 
 ## Skills & Skill Packs
 
-The kit includes **326 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
+The kit includes **189 skills** organized into modular, **agent-centric skill packs** (`.agent-core/skill-packs.json`). Each pack covers 100% of the skills required by the corresponding squad, ensuring zero missing skills:
 
-- **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 81 skills
-- **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 44 skills
-- **`nestjs-backend`**: NestJS & TypeScript Backend Squad (`nestjs`) — 24 skills
-- **`python-ai`**: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 26 skills
-- **`rust-systems`**: Rust Systems & High-Performance Squad (`rustacean`) — 11 skills
+- **`core`**: Core Leadership & Quality Gate (`tech-lead`, `pm`, `qa`, `security-auditor`) — 75 skills
+- **`web-frontend`**: Frontend & UI/UX Design Squad (`frontend`, `designer`) — 42 skills
+- **`nestjs-backend`**: NestJS & TypeScript Backend Squad (`nestjs`) — 20 skills
+- **`python-ai`**: Python & AI Engineering Squad (`ai-engineer`, `python-backend`) — 29 skills
+- **`rust-systems`**: Rust Systems & High-Performance Squad (`rustacean`) — 10 skills
 - **`devops-infra`**: DevOps & SRE Infrastructure Squad (`devops`) — 16 skills
-- **`mobile-native`**: Bare React Native & Mobile Systems Squad (`mobile`) — 18 skills
-- **`swift-macos`**: Native macOS & Apple Systems Squad (`swift-macos`) — 22 skills
+- **`mobile-native`**: Bare React Native & Mobile Systems Squad (`mobile`) — 17 skills
+- **`swift-macos`**: Native macOS & Apple Systems Squad (`swift-macos`) — 21 skills
 - **`document-office`**: Office & Document Processing Squad (`document-specialist`) — 10 skills
 
 ### Skill Pack CLI Management
@@ -662,7 +662,7 @@ opencode-kit/
 │   ├── commands/ (9)                  # Slash commands
 │   ├── rules/ (4)                     # Always-follow rules
 │   ├── standards/ (10)                # Document templates + conventions.md + engineering-principles.md
-│   ├── skills/ (326)                  # Skill library
+│   ├── skills/ (189)                  # Skill library
 │   ├── skill-packs.json               # Modular skill pack definitions (100% agent coverage)
 │   └── hooks/                         # Security hooks (pre-tool-guard.mjs)
 │

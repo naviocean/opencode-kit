@@ -98,7 +98,6 @@ Use Memories to persist Swift & macOS patterns across sessions:
 | `swiftui-navigation` | Multi-column NavigationSplitView, NavigationStack, programmatic routing, and deep links | When structuring application navigation, split views, or modal sheets |
 | `swiftlint` | SwiftLint rules, configuration (.swiftlint.yml), Xcode build plugins, and CI enforcement | When configuring lint rules, code formatting, or style checks |
 | `apple-design` | Apple Human Interface Guidelines, fluid motion, translucent materials, and design foundations | When styling macOS components, crafting micro-animations, or reviewing UX |
-| `code-simplifier` | Refactoring verbose Swift code to clean, idiomatic, and maintainable patterns | When simplifying complex functions, models, or view hierarchies |
 | `continuous-learning` | Recording reusable macOS patterns, bug resolutions, and persistent instincts | When saving learned Apple patterns or architectural insights |
 | `design-tokens` | Semantic color tokens, spacing scales, and typography hierarchies | When aligning SwiftUI themes with Designer specifications |
 | `gitnexus-exploring` | Deep code exploration and navigation across Swift codebase | When tracing symbol dependencies, call trees, or component imports |

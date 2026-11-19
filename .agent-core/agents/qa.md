@@ -291,12 +291,6 @@ Load these skills when their context matches:
 | `systematic-debugging`           | When debugging complex test failures — hypothesis-driven debugging, isolation techniques. |
 | `verification-before-completion` | When verifying work meets acceptance criteria — structured verification checklist.        |
 
-### RTK (Token Compression)
-
-| Skill     | When to Load                                                                             |
-| --------- | ---------------------------------------------------------------------------------------- |
-| `rtk-tdd` | When using RTK with TDD — test-first API slice development, mock patterns for RTK Query. |
-
 ### Custom (Project-Specific)
 
 | Skill                       | When to Load                                                                                                                   |

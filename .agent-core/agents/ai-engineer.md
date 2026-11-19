@@ -92,6 +92,8 @@ Load these skills when their context matches:
 | `pydantic-ai-harness`          | When building pydantic-ai based agents — typed agents, tool calls, structured output. |
 | `deepagents-python-quickstart` | When building DeepAgents in Python — agent orchestration, handoffs.                   |
 | `llm-evaluation`               | When evaluating LLM outputs — metrics, benchmarks, regression testing.                |
+| `rag-implementation`           | When building RAG pipelines — document chunking, retrieval, reranking, grounding.     |
+| `prompt-engineering-patterns`  | When designing system prompts, structured instructions, few-shot examples, guardrails.|
 
 ### Async & Resilience
 
